@@ -153,7 +153,7 @@ class OltController extends Controller
         };
         try {
             // Ambil data site_location_maps dari database
-            $odps = Odp::select('odp_location_maps', 'odp_id')->whereNotNull('odp_location_maps')->get();
+            $odps = Odp::select('odp_location_maps', 'odp_id', 'odp_name')->whereNotNull('odp_location_maps')->get();
 
             // Kembalikan data dalam format JSON
             return response()->json($odps, 200);
@@ -226,10 +226,11 @@ class OltController extends Controller
             $odcs = Odp::where('odc_id', $request->odc_id)
                 ->with('odc')
                 ->get();
+
             $data = $odcs->map(function ($subscription) {
                 $odpCount = $subscription->subs()->count();
                 return [
-                    'subs_name' => $subscription->subs_name,
+                    'subs_name' => $subscription->subs_name ?? '-',
                     'odp_name' => $subscription->odp_name,
                     'odc_name' => $subscription->odc->odc_name,
                     'olt_name' => $subscription->odc->olt->olt_name,
@@ -258,7 +259,7 @@ class OltController extends Controller
             });
         }
 
-        
+
 
         return response()->json(['data' => $data]);
     }

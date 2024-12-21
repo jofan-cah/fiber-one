@@ -130,13 +130,14 @@
             var coordinate = [];
     
             // Pengecekan hak akses
-            const userRole = '{{ Auth::user()->role }}'; // Pastikan ini mendapatkan role pengguna
+            const userRole = '{{ Auth::user()->user_level_id }}'; // Pastikan ini mendapatkan role pengguna
     
                 $.ajax({
                     url: "{{ route('getOdp') }}",
                     type: "GET"
                 }).then((result) => {
                     result.forEach(odpSite => {
+                        console.log(odpSite);
                         let odp = [];
                         if (odpSite.odp_location_maps.includes(", ")) {
                             odp = odpSite.odp_location_maps.split(', ');
@@ -147,7 +148,7 @@
                             icon: createMarkerIcon('violet')
                         }).addTo(map);
                         // Menambahkan popup hanya untuk Admin/Kordinator
-                        if (userRole === 'Admin' || userRole === 'Kordinator') {
+                        if (userRole === 'LVL250101001' || userRole === 'LVL241219001') {
                         odpMarker.bindPopup(
                         "<strong>ODP Terdekat:</strong> " + odpSite.odp_name +
                         "<br><a style='margin-top: 1rem' href='http://www.google.com/maps/place/" +

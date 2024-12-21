@@ -8,9 +8,11 @@ use Illuminate\Database\Eloquent\Model;
 class Olt extends Model
 {
     use HasFactory;
+
     protected $table = 'olts';
     protected $primaryKey = 'olt_id';
     public $incrementing = false;
+
     protected $fillable = [
         'olt_id',
         'olt_name',
@@ -20,8 +22,24 @@ class Olt extends Model
         'olt_port_capacity'
     ];
 
+    // Relasi ke ODC
     public function odcs()
     {
         return $this->hasMany(Odc::class, 'olt_id');
+    }
+
+    // Relasi langsung ke ODP
+    public function odps()
+    {
+        return $this->hasMany(Odp::class, 'olt_id');
+    }
+
+    // Mendapatkan semua ODP yang terhubung (baik langsung maupun melalui ODC)
+    public function allOdps()
+    {
+        return Odp::where(function ($query) {
+            $query->whereIn('odc_id', $this->odcs->pluck('odc_id'))
+                ->orWhere('olt_id', $this->olt_id);
+        });
     }
 }

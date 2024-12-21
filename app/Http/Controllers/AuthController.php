@@ -16,17 +16,18 @@ class AuthController extends Controller
     public function logged(Request $request)
     {
         $validate = $request->validate([
-            'username' => 'required',
-            'password' => 'required',
+            'username' => 'required|string|max:255',
+            'password' => 'required|string|max:255',
+            'remember' => 'nullable|boolean',
         ]);
 
-        // Mencoba login menggunakan username dan password yang divalidasi
         if (Auth::attempt([
             'username' => $validate['username'],
             'password' => $validate['password']
-        ], $request->remember)) {
+        ], $request->filled('remember'))) {
             return redirect()->intended('/');
         }
+
 
         return back()->with([
             'error' => 'Username atau Password Salah'

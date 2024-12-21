@@ -55,6 +55,17 @@
     integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 <script src="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.js"></script>
 <script>
+    // Fungsi untuk mendapatkan alamat dari koordinat
+        async function getAddress(lat, lng) {
+            try {
+                const response = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`);
+                const data = await response.json();
+                return data.display_name;
+            } catch (error) {
+                console.error('Error getting address:', error);
+                return 'Alamat tidak ditemukan';
+            }
+        }
     function createMarkerIcon(color) {
                 return new L.Icon({
                     iconUrl: 'https://cdn.jsdelivr.net/gh/pointhi/leaflet-color-markers@master/img/marker-icon-2x-' +
@@ -118,6 +129,8 @@
             }).addTo(map);
             var coordinate = [];
     
+            // Pengecekan hak akses
+            const userRole = '{{ Auth::user()->role }}'; // Pastikan ini mendapatkan role pengguna
     
                 $.ajax({
                     url: "{{ route('getOdp') }}",
@@ -133,10 +146,15 @@
                         let odpMarker = L.marker([odp[0], odp[1]], {
                             icon: createMarkerIcon('violet')
                         }).addTo(map);
+                        // Menambahkan popup hanya untuk Admin/Kordinator
+                        if (userRole === 'Admin' || userRole === 'Kordinator') {
                         odpMarker.bindPopup(
-                            "<a style='margin-top: 1rem' href='http://www.google.com/maps/place/" +
-                            odp[0] + "," + odp[1] +
-                            "' target='__blank'>Go to Google Maps</a></div>");
+                        "<strong>ODP Terdekat:</strong> " + odpSite.odp_name +
+                        "<br><a style='margin-top: 1rem' href='http://www.google.com/maps/place/" +
+                                            odp[0] + "," + odp[1] +
+                                            "' target='__blank'>Go to Google Maps</a>"
+                        );
+                        }
                         coordinate.push([odp[0], odp[1]]);
                     });
                 }).catch((err) => {
@@ -172,7 +190,7 @@
                         markerA = L.marker(waypoint.latLng, {
                             icon: createMarkerIconUrl('https://cdn.icon-icons.com/icons2/2237/PNG/512/home_safety_protection_real_estate_icon_134776.png'),
                             draggable: true
-                        }).bindPopup('Titik A (Awal)');
+                        }).bindPopup('Titik Rumah Customer');
                         return markerA;
                     } else {
                         // Hapus marker B yang lama jika ada
@@ -193,17 +211,23 @@
             }).addTo(map);
             route.addTo(map);
 
-            // Add event listener for routing results
-            route.on('routesfound', function(e) {
+            // Modifikasi event listener routing
+            route.on('routesfound', async function(e) {
                 let routes = e.routes;
                 let summary = routes[0].summary;
-                let instructions = routes[0].instructions;
                 
-                // Format and display routing information in the custom container
+                // Dapatkan koordinat awal dan akhir
+                const startPoint = routes[0].coordinates[0];
+                
+                // Dapatkan alamat untuk kedua titik
+                const startAddress = await getAddress(startPoint.lat, startPoint.lng);
+
+                
+                // Format dan tampilkan informasi rute
                 let routingHtml = `
-                    <div>
-                        <strong>Distance:</strong> ${(summary.totalDistance)} m<br>
-                        <strong>Estimated time:</strong> ${Math.round(summary.totalTime / 60)} minutes
+                    <div class="routing-info">
+                        <p><strong>Alamat Rumah:</strong> ${startAddress}</p>
+                        <p><strong>Jarak:</strong> ${(summary.totalDistance)} m</p>
                     </div>
                 `;
                 

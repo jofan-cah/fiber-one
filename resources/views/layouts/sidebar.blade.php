@@ -59,7 +59,8 @@
           </a>
         </li>
         @php
-        $activeRoutes = ['indexOlt','siteIndex', 'createOlt', 'editOltById', 'indexOdp', 'createOdp', 'editOdpById'];
+        $activeRoutes = ['indexOlt','allSite','siteIndex', 'createOlt', 'editOltById', 'indexOdp', 'createOdp',
+        'editOdpById'];
         $isActive = in_array(Request::route()->getName(), $activeRoutes);
         @endphp
         <li>
@@ -83,6 +84,12 @@
           <ul class="sub menu max-h-0 overflow-hidden transition-[max-height] duration-500 ease-in-out ml-2">
 
             <li>
+              <a href="{{route('allSite')}}"
+                class="text-gray-800 text-sm  {{ Request::route()->getName() === 'allSite' ? 'text-green-700 bg-[#d9f3ea]' : 'text-gray-800' }} block cursor-pointer hover:bg-gray-100 rounded-md px-3 py-2 transition-all duration-300">
+                <span>ALl Data</span>
+              </a>
+            </li>
+            <li>
               <a href="{{route('indexOlt')}}"
                 class="text-gray-800 text-sm  {{ Request::route()->getName() === 'indexOlt' ? 'text-green-700 bg-[#d9f3ea]' : 'text-gray-800' }} block cursor-pointer hover:bg-gray-100 rounded-md px-3 py-2 transition-all duration-300">
                 <span>OLT</span>
@@ -98,6 +105,12 @@
               <a href="{{route('indexOdp')}}"
                 class="text-gray-800 text-sm {{ Request::route()->getName() === 'indexOdp' ? 'text-green-700 bg-[#d9f3ea]' : 'text-gray-800' }}  block cursor-pointer hover:bg-gray-100 rounded-md px-3 py-2 transition-all duration-300">
                 <span>ODP</span>
+              </a>
+            </li>
+            <li>
+              <a href="{{route('topology')}}"
+                class="text-gray-800 text-sm {{ Request::route()->getName() === 'indexOdp' ? 'text-green-700 bg-[#d9f3ea]' : 'text-gray-800' }}  block cursor-pointer hover:bg-gray-100 rounded-md px-3 py-2 transition-all duration-300">
+                <span>Topology</span>
               </a>
             </li>
           </ul>

@@ -163,14 +163,177 @@ class OltController extends Controller
         }
     }
 
-
     public function allSite(Request $request)
     {
-        $olts = Olt::select('olt_name', 'olt_location_maps')->get();
-        $odcs = Odc::select('odc_name', 'odc_location_maps')->get();
-        $odps = Odp::select('odp_name', 'odp_location_maps')->get();
-        $subs = Subscription::select('subs_name', 'subs_location_maps', 'odp_id')->get();
+        $olts = OLt::all();
 
-        return view('coverage.siteAll', compact('olts', 'odcs', 'odps', 'subs'));
+        return view('coverage.siteAllData', compact('olts'));
+    }
+
+
+    // OltController.php
+    public function getOlts(Request $request)
+    {
+        // Ambil data ODC berdasarkan OLT
+        $odcs = Odc::where('olt_id', $request->olt_id)->get();
+        return response()->json(['odcs' => $odcs]);
+    }
+    public function getOdcs(Request $request)
+    {
+        // Ambil data ODC berdasarkan OLT
+        $odps = Odp::where('odc_id', $request->odc_id)->get();
+        return response()->json(['odps' => $odps]);
+    }
+
+
+    // Controller method
+    public function filterDataAll(Request $request)
+    {
+        $query = Subscription::with(['odp.odc.olt']);
+
+        // Filter berdasarkan OLT
+        if ($request->filled('olt_id')) {
+            $query->whereHas('odp.odc', function ($query) use ($request) {
+                $query->where('olt_id', $request->olt_id);
+            });
+        }
+
+        // Filter berdasarkan ODC
+        if ($request->filled('odc_id')) {
+            $query->whereHas('odp', function ($query) use ($request) {
+                $query->where('odc_id', $request->odc_id);
+            });
+        }
+
+        // Filter berdasarkan ODP
+        if ($request->filled('odp_id')) {
+            $query->where('odp_id', $request->odp_id);
+
+            $subscriptions = $query->get();
+            $data = $subscriptions->map(function ($subscription) {
+                return [
+                    'subs_name' => $subscription->subs_name,
+                    'odp_name' => $subscription->odp->odp_name,
+                    'odc_name' => $subscription->odp->odc->odc_name,
+                    'olt_name' => $subscription->odp->odc->olt->olt_name,
+                    'port_available' => $subscription->odp->odp_port_capacity - $subscription->odp->subs()->count(),
+                    'odp_id' => $subscription->odp_id,
+                    'odc_id' => $subscription->odp->odc_id
+                ];
+            });
+        } elseif ($request->filled('odc_id')) {
+            // Jika hanya OLT yang dipilih
+            $odcs = Odp::where('odc_id', $request->odc_id)
+                ->with('odc')
+                ->get();
+            $data = $odcs->map(function ($subscription) {
+                $odpCount = $subscription->subs()->count();
+                return [
+                    'subs_name' => $subscription->subs_name,
+                    'odp_name' => $subscription->odp_name,
+                    'odc_name' => $subscription->odc->odc_name,
+                    'olt_name' => $subscription->odc->olt->olt_name,
+                    'port_available' => $subscription->odc->odc_port_capacity -  $odpCount,
+                    'odp_id' => $subscription->odp_id,
+                    'odc_id' => $subscription->odc_id
+                ];
+            });
+        } else {
+            // Jika hanya OLT yang dipilih
+            $odcs = Odc::where('olt_id', $request->olt_id)
+                ->with('olt')
+                ->get();
+
+            $data = $odcs->map(function ($odc) {
+                $odpCount = $odc->odps()->count();
+                return [
+                    'subs_name' => '-',
+                    'odp_name' => '-',
+                    'odc_name' => $odc->odc_name,
+                    'olt_name' => $odc->olt->olt_name,
+                    'port_available' => $odc->odc_port_capacity - $odpCount,
+                    'odc_id' => $odc->odc_id,
+                    'odp_id' => null
+                ];
+            });
+        }
+
+        
+
+        return response()->json(['data' => $data]);
+    }
+
+
+    public function topology()
+    {
+        return view('coverage.topologi');
+    }
+
+
+    public function getTopologyData()
+    {
+        // Ambil data OLT dengan relasi ODC, ODP, dan Subs
+        $olts = Olt::with('odcs.odps.subs')->get();
+
+        // dd($olts);
+
+        $nodes = [];
+        $edges = [];
+
+        foreach ($olts as $olt) {
+            // Node untuk OLT
+            $nodes[] = [
+                'id' => "{$olt->olt_id}",
+                'label' => $olt->olt_name,
+                'group' => 'OLT'
+            ];
+
+            foreach ($olt->odcs as $odc) {
+                // Node untuk ODC
+                $nodes[] = [
+                    'id' => "{$odc->odc_id}",
+                    'label' => $odc->odc_name,
+                    'group' => 'ODC'
+                ];
+
+                // Edge dari OLT ke ODC
+                $edges[] = [
+                    'from' => "{$olt->olt_id}",
+                    'to' => "{$odc->odc_id}"
+                ];
+
+                foreach ($odc->odps as $odp) {
+                    // Node untuk ODP
+                    $nodes[] = [
+                        'id' => "{$odp->odp_id}",
+                        'label' => $odp->odp_name,
+                        'group' => 'ODP'
+                    ];
+
+                    // Edge dari ODC ke ODP
+                    $edges[] = [
+                        'from' => "{$odc->odc_id}",
+                        'to' => "{$odp->odp_id}"
+                    ];
+
+                    foreach ($odp->subs as $subs) {
+                        // Node untuk Subs
+                        $nodes[] = [
+                            'id' => $subs->subs_id,
+                            'label' => $subs->subs_name,
+                            'group' => 'Subs'
+                        ];
+
+                        // Edge dari ODP ke Subs
+                        $edges[] = [
+                            'from' => "{$odp->odp_id}",
+                            'to' => "{$subs->subs_id}"
+                        ];
+                    }
+                }
+            }
+        }
+
+        return response()->json(['nodes' => $nodes, 'edges' => $edges]);
     }
 }

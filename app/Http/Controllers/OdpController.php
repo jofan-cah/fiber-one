@@ -26,8 +26,6 @@ class OdpController extends Controller
         });
 
 
-
-
         return response()->json($data);
     }
 
@@ -57,9 +55,9 @@ class OdpController extends Controller
     public function show($id)
     {
         $odp = Odp::find($id);
-        $oodcs = Olt::all();
+        $odcs = Olt::all();
 
-        return view('odp.editOdp', compact('odp', 'oodcs'));
+        return view('odp.editOdp', compact('odp', 'odcs'));
     }
 
     // Menyimpan data Odp baru

@@ -8,6 +8,9 @@ use App\Http\Controllers\UserLevelController;
 use App\Http\Controllers\OltController;
 use App\Http\Controllers\OdpController;
 use App\Http\Controllers\OdcController;
+use App\Models\Odc;
+use App\Models\Odp;
+use Illuminate\Http\Request;
 
 /*
 |--------------------------------------------------------------------------
@@ -93,10 +96,18 @@ Route::group(['middleware' => ['auth']], function () {
     });
 
     Route::prefix('/site')->group(function () {
-        Route::get('/', [OltController::class, 'allSite'])->name('coverage');
+        Route::get('/', [OltController::class, 'allSite'])->name('allSite');
+
+
+        Route::get('/get-odcs-by-olt', [OltController::class, 'getOlts'])->name('get.odcs.by.olt');
+        Route::get('/get-odps-by-odc', [OltController::class, 'getOdcs'])->name('get.odps.by.odc');
+        Route::get('/filter-data', [OltController::class, 'filterDataALl'])->name('filterData');
+
+        Route::get('/topology', [OltController::class, 'topology'])->name('topology');
+        Route::get('/topology-data', [OltController::class, 'getTopologyData'])->name('topologyData');
     });
 });
 
 Route::get('login', [AuthController::class, 'index'])->name('login');
-Route::post('login', [AuthController::class, 'logged'])->name('logged');
+Route::post('login', [AuthController::class, 'logged'])->name('logged')->middleware('throttle:login');
 Route::delete('/logout', [AuthController::class, 'logout'])->name('logout')->middleware('auth');

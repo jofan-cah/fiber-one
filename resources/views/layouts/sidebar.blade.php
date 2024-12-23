@@ -147,7 +147,7 @@
         <li>
           <a href="{{route('coverage')}}"
             class="menu-item text-gray-800 text-sm 
-                        {{ $isActive ? 'text-green-700 bg-[#d9f3ea]' : 'text-gray-800' }} flex items-center cursor-pointer hover:bg-[#d9f3ea] rounded-md px-3 py-3 transition-all duration-300">
+                       {{ Request::route()->getName() === 'coverage' ? 'text-green-700 bg-[#d9f3ea]' : 'text-gray-800' }} flex items-center cursor-pointer hover:bg-[#d9f3ea] rounded-md px-3 py-3 transition-all duration-300">
             <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" class="mr-4" viewBox="0 0 24 24"
               style="fill: rgba(0, 0, 0, 1);transform: ;msFilter:;">
               <path

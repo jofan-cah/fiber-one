@@ -146,7 +146,7 @@
                             odp = odpSite.odp_location_maps.split(',');
                         }
                         let odpMarker = L.marker([odp[0], odp[1]], {
-                            icon: createMarkerIconUrl('https://uhuy.fiberone.net.id/ODPTOSCA.png')
+                            icon: createMarkerIconUrl('https://uhuy.fiberone.net.id/ODPIJO.png')
                         }).addTo(map);
                         // Menambahkan popup hanya untuk Admin/Kordinator
                         if (userRole === 'LVL250101001' || userRole === 'LVL241219001') {

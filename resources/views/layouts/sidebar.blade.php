@@ -61,7 +61,8 @@
         </li>
         @endif
 
-        @if (Auth::user()->user_level_id == 'LVL250101001'|| Auth::user()->user_level_id == 'LVL250101002')
+        @if (Auth::user()->user_level_id == 'LVL250101001'|| Auth::user()->user_level_id == 'LVL250101002' ||
+        Auth::user()->user_level_id == 'LVL241223002')
         @php
         $activeRoutes = ['indexOlt','allSite','siteIndex', 'createOlt', 'editOltById', 'indexOdp', 'createOdp',
         'editOdpById'];
@@ -122,7 +123,7 @@
 
 
         @php
-        $activeRoutes = [ 'coverage'];
+        $activeRoutes = ['coverage'];
         $isActive = in_array(Request::route()->getName(), $activeRoutes);
         @endphp
         <li>

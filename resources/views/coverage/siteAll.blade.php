@@ -45,7 +45,7 @@
         const googleMapsUrl = `https://www.google.com/maps?q=${coords[0]},${coords[1]}`;
         
         // Ganti URL gambar dengan URL gambar di folder public
-        const oltIconUrl = `https://uhuy.fiberone.net.id/OLT.png`; // Ganti dengan URL gambar yang sesuai
+        const oltIconUrl = `https://uhuy.fiberone.net.id/OLT5.png`; // Ganti dengan URL gambar yang sesuai
 
         L.marker(coords, {
           icon: createMarkerIcon(oltIconUrl),
@@ -67,7 +67,7 @@
         const googleMapsUrl = `https://www.google.com/maps?q=${coords[0]},${coords[1]}`;
         
         // Ganti URL gambar dengan URL gambar di folder public
-        const odcIconUrl = `https://uhuy.fiberone.net.id/ODC.png`; // Ganti dengan URL gambar yang sesuai
+        const odcIconUrl = `https://uhuy.fiberone.net.id/ODC8.png`; // Ganti dengan URL gambar yang sesuai
 
         L.marker(coords, {
           icon: createMarkerIcon(odcIconUrl),

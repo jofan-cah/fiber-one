@@ -42,7 +42,7 @@
           <div
             class="dropdown-content hidden group-hover:block shadow-md p-2 bg-white rounded-md absolute top-9 right-0 w-56">
             <div class="w-full">
-              <a href="javascript:void(0)"
+              {{-- <a href="javascript:void(0)"
                 class="text-sm text-gray-800 cursor-pointer flex items-center p-2 rounded-md hover:bg-gray-100 dropdown-item transition duration-300 ease-in-out">
                 <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 mr-3 fill-current" viewBox="0 0 512 512">
                   <path
@@ -50,9 +50,9 @@
                     data-original="#000000"></path>
                 </svg>
                 Account</a>
-              <hr class="my-2 -mx-2" />
+              <hr class="my-2 -mx-2" /> --}}
 
-              <a href="javascript:void(0)"
+              {{-- <a href="javascript:void(0)"
                 class="text-sm text-gray-800 cursor-pointer flex items-center p-2 rounded-md hover:bg-gray-100 dropdown-item transition duration-300 ease-in-out">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="w-4 h-4 mr-3 fill-current"
                   viewBox="0 0 24 24">
@@ -84,7 +84,7 @@
                     <path d="M267.75 127.5H229.5v153l132.6 81.6 20.4-33.15-114.75-68.85z" data-original="#000000" />
                   </g>
                 </svg>
-                Schedules</a>
+                Schedules</a> --}}
               <a onclick="event.preventDefault();
                                         document.getElementById('logout').submit();" class=" text-sm text-gray-800 cursor-pointer flex items-center p-2 rounded-md
                                         hover:bg-[#d9f3ea] dropdown-item transition duration-300 ease-in-out">

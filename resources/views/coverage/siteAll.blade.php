@@ -43,8 +43,12 @@
       if (olt.olt_location_maps) {
         const coords = olt.olt_location_maps.split(',').map(Number);
         const googleMapsUrl = `https://www.google.com/maps?q=${coords[0]},${coords[1]}`;
+        
+        // Ganti URL gambar dengan URL gambar di folder public
+        const oltIconUrl = `https://uhuy.fiberone.net.id/OLT.png`; // Ganti dengan URL gambar yang sesuai
+
         L.marker(coords, {
-          icon: createMarkerIcon('https://cdn.icon-icons.com/icons2/522/PNG/512/data-add_icon-icons.com_52370.png'),
+          icon: createMarkerIcon(oltIconUrl),
           title: `OLT: ${olt.olt_name}`,
         })
           .addTo(map)
@@ -61,8 +65,12 @@
       if (odc.odc_location_maps) {
         const coords = odc.odc_location_maps.split(',').map(Number);
         const googleMapsUrl = `https://www.google.com/maps?q=${coords[0]},${coords[1]}`;
+        
+        // Ganti URL gambar dengan URL gambar di folder public
+        const odcIconUrl = `https://uhuy.fiberone.net.id/ODC.png`; // Ganti dengan URL gambar yang sesuai
+
         L.marker(coords, {
-          icon: createMarkerIcon('https://cdn.icon-icons.com/icons2/585/PNG/256/HomeServer_icon-icons.com_55232.png'),
+          icon: createMarkerIcon(odcIconUrl),
           title: `ODC: ${odc.odc_name}`,
         })
           .addTo(map)
@@ -79,8 +87,12 @@
       if (odp.odp_location_maps) {
         const coords = odp.odp_location_maps.split(',').map(Number);
         const googleMapsUrl = `https://www.google.com/maps?q=${coords[0]},${coords[1]}`;
+        
+        // Ganti URL gambar dengan URL gambar di folder public
+        const odpIconUrl = `https://uhuy.fiberone.net.id/ODP.png`; // Ganti dengan URL gambar yang sesuai
+
         L.marker(coords, {
-          icon: createMarkerIcon('https://cdn.icon-icons.com/icons2/350/PNG/512/gnome-mime-x-directory-nfs-server_36146.png'),
+          icon: createMarkerIcon(odpIconUrl),
           title: `ODP: ${odp.odp_name}`,
         })
           .addTo(map)
@@ -90,6 +102,7 @@
           `);
       }
     });
+
 
     // Data Subs
     const subs = @json($subs);

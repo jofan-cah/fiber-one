@@ -94,7 +94,7 @@
                     text: 'Data has been saved successfully.',
                 }).then((result) => {
                     // Redirect ke route indexUsers setelah alert ditutup
-                    window.location.href = '/olt'; // Ubah dengan route yang sesuai
+                    window.location.href = '/subs'; // Ubah dengan route yang sesuai
                 });
             },
               error: function(xhr, status, error) {

@@ -161,6 +161,8 @@
           </a>
         </li>
 
+        @if (Auth::user()->user_level_id == 'LVL250101001'|| Auth::user()->user_level_id == 'LVL250101002' ||
+        Auth::user()->user_level_id == 'LVL241223002')
         <li>
           <a href="{{route('indexSubs')}}"
             class="menu-item  {{Request::route()->getName() == 'indexSubs' ? 'text-green-700 bg-[#d9f3ea]' : 'text-gray-800'}}  text-sm flex items-center cursor-pointer  hover:bg-[#d9f3ea] rounded-md px-3 py-3 transition-all duration-300">
@@ -176,6 +178,7 @@
             <span>Subscriptions</span>
           </a>
         </li>
+        @endif
       </ul>
 
 

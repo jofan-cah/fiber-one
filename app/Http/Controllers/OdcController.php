@@ -29,16 +29,18 @@ class OdcController extends Controller
     public function create()
     {
         $olts = Olt::all();
-        return view('odc.createOdc', compact('olts'));
+        $odcs = Odc::all();
+        return view('odc.createOdc', compact('olts', 'odcs'));
     }
 
     // Menampilkan detail Odp berdasarkan ID
     public function show($id)
     {
         $odc = Odc::find($id);
+        $odcs = Odc::all();
         $olts = Olt::all();
 
-        return view('odc.editOdc', compact('odc', 'olts'));
+        return view('odc.editOdc', compact('odc', 'olts', 'odcs'));
     }
 
     public function showOdc($id)
@@ -64,8 +66,9 @@ class OdcController extends Controller
             'odc_description' => 'nullable|string',
             'odc_location_maps' => 'nullable|string',
             'odc_addres' => 'nullable|string',
-            'olt_id' => 'required',
+            'olt_id' => 'nullable|exists:olts,olt_id',
             'odc_port_capacity' => 'required|integer|min:1',
+            'parent_odc_id' => 'nullable|string',
         ]);
 
         $OdpId = $this->generateOdcId();
@@ -75,9 +78,11 @@ class OdcController extends Controller
             'odc_description' => $validatedData['odc_description'],
             'odc_location_maps' => $validatedData['odc_location_maps'],
             'odc_addres' => $validatedData['odc_addres'],
-            'olt_id' => $validatedData['olt_id'],
+            'olt_id' => $validatedData['olt_id'] ?? null, // Tetapkan null jika tidak ada
             'odc_port_capacity' => $validatedData['odc_port_capacity'],
+            'parent_odc_id' => $validatedData['parent_odc_id'] ?? null,
         ]);
+
         return response()->json(['message' => 'Odp created successfully', 'data' => $Odp], 201);
     }
 
@@ -90,16 +95,25 @@ class OdcController extends Controller
             return response()->json(['message' => 'Odp not found'], 404);
         }
 
-        $validatedData = $request->validate([
-            'odp_name' => 'sometimes|required|string|max:255',
-            'odp_description' => 'nullable|string',
-            'odp_location_maps' => 'nullable|string',
-            'odp_addres' => 'nullable|string',
-            'olt_id' => 'required',
-            'odp_port_capacity' => 'sometimes|required|integer|min:1',
+        $validatedData = $request->validate(['odc_name' => 'required|string|max:255',
+            'odc_description' => 'nullable|string',
+            'odc_location_maps' => 'nullable|string',
+            'odc_addres' => 'nullable|string',
+            'olt_id' => 'nullable|exists:olts,olt_id',
+            'odc_port_capacity' => 'required|integer|min:1',
+            'parent_odc_id' => 'nullable|string',
         ]);
 
-        $Odp->update($validatedData);
+        $Odp->update([
+            'odc_name' => $validatedData['odc_name'],
+            'odc_description' => $validatedData['odc_description'],
+            'odc_location_maps' => $validatedData['odc_location_maps'],
+            'odc_addres' => $validatedData['odc_addres'],
+            'olt_id' => $validatedData['olt_id'] ?? null, // Tetapkan null jika tidak ada
+            'odc_port_capacity' => $validatedData['odc_port_capacity'],
+            'parent_odc_id' => $validatedData['parent_odc_id'] ?? null,
+        ]);
+
         return response()->json(['message' => 'Odp updated successfully', 'data' => $Odp]);
     }
 

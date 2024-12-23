@@ -2,8 +2,6 @@
 
 @section('content')
 <div class=" gap-6">
-
-
   <div class="bg-white shadow-[0_4px_12px_-5px_rgba(0,0,0,0.4)] p-6 max-w-screen-xl mx-auto rounded-lg overflow-hidden">
     <div class="container mx-auto px-4 py-8">
       <div class="flex justify-between">
@@ -58,7 +56,7 @@
               </div>
 
               <div>
-                <label for="olt_id" class="block text-gray-700 dark:text-gray-800 mb-1">Description</label>
+                <label for="olt_id" class="block text-gray-700 dark:text-gray-800 mb-1">Olt</label>
                 <select name="olt_id" id="olt_id"
                   class="w-full rounded-lg border py-2 px-3 dark:bg-gray-200 dark:text-gray-900 dark:border-gray-300">
                   <option value="" disabled selected>Select OLT</option>
@@ -67,6 +65,21 @@
                   @endforeach
                 </select>
               </div>
+
+            </div>
+            <div class="grid grid-cols-2 gap-4 mt-4">
+              <div>
+                <label for="parent_odc_id" class="block text-gray-700 dark:text-gray-800 mb-1">ODC Parent</label>
+                <select name="parent_odc_id" id="parent_odc_id"
+                  class="w-full rounded-lg border py-2 px-3 dark:bg-gray-200 dark:text-gray-900 dark:border-gray-300">
+                  <option value="" disabled selected>Select OLT</option>
+                  @foreach($odcs as $odc)
+                  <option value="{{ $odc->odc_id }}">{{ $odc->odc_name }}</option>
+                  @endforeach
+                </select>
+              </div>
+
+
 
             </div>
         </div>
@@ -80,7 +93,7 @@
     </div>
   </div>
 </div>
-</div>
+
 
 <script>
   $(document).ready(function() {

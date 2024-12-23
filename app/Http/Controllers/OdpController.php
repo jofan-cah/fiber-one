@@ -48,45 +48,52 @@ class OdpController extends Controller
     public function create()
     {
         $odcs = Odc::all();
-        return view('odp.createOdp', compact('odcs'));
+        $odps = Odp::all();
+        return view('odp.createOdp', compact('odps', 'odcs'));
     }
 
     // Menampilkan detail Odp berdasarkan ID
     public function show($id)
     {
         $odp = Odp::find($id);
-        $odcs = Olt::all();
+        $odps = Odp::all();
+        $odcs = Odc::all();
 
-        return view('odp.editOdp', compact('odp', 'odcs'));
+        return view('odp.editOdp', compact('odp', 'odcs', 'odps'));
     }
 
-    // Menyimpan data Odp baru
+
     public function store(Request $request)
     {
         $validatedData = $request->validate([
-
             'odp_name' => 'required|string|max:255',
             'odp_description' => 'nullable|string',
             'odp_location_maps' => 'nullable|string',
             'odp_addres' => 'nullable|string',
-            'odc_id' => 'required',
+            'parent_odp_id' => 'nullable|string',
+            'odc_id' => 'nullable|exists:odcs,odc_id', // Pastikan `odc_id` valid di tabel `odcs`
             'odp_port_capacity' => 'required|integer|min:1',
         ]);
 
+        // Generate ID untuk ODP
         $OdpId = $this->generateOdpId();
+
+        // Buat data baru di tabel ODP
         $Odp = Odp::create([
             'odp_id' => $OdpId,
             'odp_name' => $validatedData['odp_name'],
             'odp_description' => $validatedData['odp_description'],
             'odp_location_maps' => $validatedData['odp_location_maps'],
             'odp_addres' => $validatedData['odp_addres'],
-            'odc_id' => $validatedData['odc_id'],
+            'odc_id' => $validatedData['odc_id'] ?? null,
             'odp_port_capacity' => $validatedData['odp_port_capacity'],
+            'parent_odp_id' => $validatedData['parent_odp_id'] ?? null,
         ]);
+
         return response()->json(['message' => 'Odp created successfully', 'data' => $Odp], 201);
     }
 
-    // Memperbarui data Odpuse Illuminate\Support\Facades\Log;
+
     public function update(Request $request, $id)
     {
         $Odp = Odp::find($id);
@@ -100,13 +107,25 @@ class OdpController extends Controller
             'odp_description' => 'nullable|string',
             'odp_location_maps' => 'nullable|string',
             'odp_addres' => 'nullable|string',
-            'odc_id' => 'required',
+            'parent_odp_id' => 'nullable|string',
+            'odc_id' => 'sometimes|required|exists:odcs,odc_id', // Validasi `odc_id`
             'odp_port_capacity' => 'sometimes|required|integer|min:1',
         ]);
 
-        $Odp->update($validatedData);
+        // Update data ODP
+        $Odp->update([
+            'odp_name' => $validatedData['odp_name'],
+            'odp_description' => $validatedData['odp_description'],
+            'odp_location_maps' => $validatedData['odp_location_maps'],
+            'odp_addres' => $validatedData['odp_addres'],
+            'odc_id' => $validatedData['odc_id'] ?? null,
+            'odp_port_capacity' => $validatedData['odp_port_capacity'],
+            'parent_odp_id' => $validatedData['parent_odp_id'] ?? null,
+        ]);
+
         return response()->json(['message' => 'Odp updated successfully', 'data' => $Odp]);
     }
+
 
     // Menghapus data Odp
     public function destroy($id)

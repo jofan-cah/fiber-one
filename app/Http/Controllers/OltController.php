@@ -273,10 +273,8 @@ class OltController extends Controller
 
     public function getTopologyData()
     {
-        // Ambil data OLT dengan relasi ODC, ODP, dan Subs
-        $olts = Olt::with('odcs.odps.subs')->get();
-
-        // dd($olts);
+        // Ambil data OLT dengan semua relasi terkait
+        $olts = Olt::with(['odcs.childOdcs', 'odcs.odps.childOdps.subs', 'odps.subs'])->get();
 
         $nodes = [];
         $edges = [];
@@ -289,48 +287,100 @@ class OltController extends Controller
                 'group' => 'OLT'
             ];
 
+            // ODC yang langsung terhubung ke OLT
             foreach ($olt->odcs as $odc) {
-                // Node untuk ODC
                 $nodes[] = [
                     'id' => "{$odc->odc_id}",
                     'label' => $odc->odc_name,
                     'group' => 'ODC'
                 ];
 
-                // Edge dari OLT ke ODC
                 $edges[] = [
                     'from' => "{$olt->olt_id}",
                     'to' => "{$odc->odc_id}"
                 ];
 
+                // Tambahkan relasi parent-child ODC
+                foreach ($odc->childOdcs as $childOdc) {
+                    $nodes[] = [
+                        'id' => "{$childOdc->odc_id}",
+                        'label' => $childOdc->odc_name,
+                        'group' => 'ODC'
+                    ];
+
+                    $edges[] = [
+                        'from' => "{$odc->odc_id}",
+                        'to' => "{$childOdc->odc_id}"
+                    ];
+                }
+
+                // ODP yang terhubung ke ODC ini
                 foreach ($odc->odps as $odp) {
-                    // Node untuk ODP
                     $nodes[] = [
                         'id' => "{$odp->odp_id}",
                         'label' => $odp->odp_name,
                         'group' => 'ODP'
                     ];
 
-                    // Edge dari ODC ke ODP
                     $edges[] = [
                         'from' => "{$odc->odc_id}",
                         'to' => "{$odp->odp_id}"
                     ];
 
-                    foreach ($odp->subs as $subs) {
-                        // Node untuk Subs
+                    // Tambahkan relasi parent-child ODP
+                    foreach ($odp->childOdps as $childOdp) {
                         $nodes[] = [
-                            'id' => $subs->subs_id,
+                            'id' => "{$childOdp->odp_id}",
+                            'label' => $childOdp->odp_name,
+                            'group' => 'ODP'
+                        ];
+
+                        $edges[] = [
+                            'from' => "{$odp->odp_id}",
+                            'to' => "{$childOdp->odp_id}"
+                        ];
+                    }
+
+                    // Subs yang terhubung ke ODP ini
+                    foreach ($odp->subs as $subs) {
+                        $nodes[] = [
+                            'id' => "{$subs->subs_id}",
                             'label' => $subs->subs_name,
                             'group' => 'Subs'
                         ];
 
-                        // Edge dari ODP ke Subs
                         $edges[] = [
                             'from' => "{$odp->odp_id}",
                             'to' => "{$subs->subs_id}"
                         ];
                     }
+                }
+            }
+
+            // ODP yang langsung terhubung ke OLT
+            foreach ($olt->odps as $odp) {
+                $nodes[] = [
+                    'id' => "{$odp->odp_id}",
+                    'label' => $odp->odp_name,
+                    'group' => 'ODP'
+                ];
+
+                $edges[] = [
+                    'from' => "{$olt->olt_id}",
+                    'to' => "{$odp->odp_id}"
+                ];
+
+                foreach ($odp->subs as $subs) {
+                    $nodes[] = [
+                        'id' => "{$subs->subs_id}",
+                        'label' => $subs->subs_name,
+                        'group' => 'Subs'
+                    ];
+
+                    $edges[] = [
+                        'from' => "{$odp->odp_id}",
+                        'to' => "{$subs->subs_id}"
+                    ];
                 }
             }
         }

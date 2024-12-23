@@ -73,7 +73,22 @@
               </div>
 
             </div>
+            <div class="grid grid-cols-2 gap-4 mt-4">
+              <div>
+                <label for="parent_odc_id" class="block text-gray-700 dark:text-gray-800 mb-1">ODC Parent</label>
+                <select name="parent_odc_id" id="parent_odc_id"
+                  class="w-full rounded-lg border py-2 px-3 dark:bg-gray-200 dark:text-gray-900 dark:border-gray-300">
+                  <option value="" disabled selected>Select OLT</option>
+                  @foreach($odcs as $p)
+                  <option value="{{ $p->odc_id }}" {{($odc->parent_odc_id == $p->odc_id ? 'selected' : '')}}>{{
+                    $p->odc_name }}</option>
+                  @endforeach
+                </select>
+              </div>
 
+
+
+            </div>
         </div>
 
         <div class="mt-8 flex justify-end">

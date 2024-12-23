@@ -61,12 +61,13 @@
                   class="w-full rounded-lg border py-2 px-3 dark:bg-gray-200 dark:text-gray-900 dark:border-gray-300">
               </div>
               <div>
-                <label for="odc_id" class="block text-gray-700 dark:text-gray-800 mb-1">OLT Name</label>
+                <label for="odc_id" class="block text-gray-700 dark:text-gray-800 mb-1">ODC Name</label>
                 <select name="odc_id" id="odc_id"
                   class="w-full rounded-lg border py-2 px-3 dark:bg-gray-200 dark:text-gray-900 dark:border-gray-300">
-                  <option value="" disabled selected>Select OLT</option>
+                  <option value="" disabled selected>Select ODC</option>
                   @foreach($odcs as $odc)
-                  <option value="{{ $odc->odc_id }}" {{($odp->odc_id == $odc->olt_id ? 'selected' : '')}}>{{
+                  <option value="{{ $odc->odc_id }}" {{($odp->odc_id == $odc->odc_id ? 'selected' : '')}}>
+                    {{
                     $odc->odc_name }}</option>
                   @endforeach
                 </select>
@@ -74,17 +75,29 @@
 
             </div>
 
-        </div>
+            <div class="grid grid-cols-2 gap-4 mt-4">
+              <div>
+                <label for="parent_odp_id" class="block text-gray-700 dark:text-gray-800 mb-1">ODP Name</label>
+                <select name="parent_odp_id" id="parent_odp_id"
+                  class="w-full rounded-lg border py-2 px-3 dark:bg-gray-200 dark:text-gray-900 dark:border-gray-300">
+                  <option value="" disabled selected>Select ODP</option>
+                  @foreach($odps as $p)
+                  <option value="{{ $p->odp_id }}" {{($odp->parent_odp_id == $p->odp_id ? 'selected' : '')}}>{{
+                    $odp->odp_name }}</option>
+                  @endforeach
+                </select>
+              </div>
+            </div>
 
-        <div class="mt-8 flex justify-end">
-          <button type="submit"
-            class="bg-teal-500 text-white px-4 py-2 rounded-lg hover:bg-teal-700 dark:bg-teal-600 dark:text-white dark:hover:bg-teal-700">Submit</button>
+            <div class="mt-8 flex justify-end">
+              <button type="submit"
+                class="bg-teal-500 text-white px-4 py-2 rounded-lg hover:bg-teal-700 dark:bg-teal-600 dark:text-white dark:hover:bg-teal-700">Submit</button>
+            </div>
+          </form>
         </div>
-        </form>
       </div>
     </div>
   </div>
-</div>
 </div>
 
 <script>

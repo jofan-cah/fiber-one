@@ -83,12 +83,12 @@
           </a>
           <ul class="sub menu max-h-0 overflow-hidden transition-[max-height] duration-500 ease-in-out ml-2">
 
-            <li>
+            {{-- <li>
               <a href="{{route('allSite')}}"
                 class="text-gray-800 text-sm  {{ Request::route()->getName() === 'allSite' ? 'text-green-700 bg-[#d9f3ea]' : 'text-gray-800' }} block cursor-pointer hover:bg-gray-100 rounded-md px-3 py-2 transition-all duration-300">
                 <span>ALl Data</span>
               </a>
-            </li>
+            </li> --}}
             <li>
               <a href="{{route('indexOlt')}}"
                 class="text-gray-800 text-sm  {{ Request::route()->getName() === 'indexOlt' ? 'text-green-700 bg-[#d9f3ea]' : 'text-gray-800' }} block cursor-pointer hover:bg-gray-100 rounded-md px-3 py-2 transition-all duration-300">
@@ -109,7 +109,7 @@
             </li>
             <li>
               <a href="{{route('topology')}}"
-                class="text-gray-800 text-sm {{ Request::route()->getName() === 'indexOdp' ? 'text-green-700 bg-[#d9f3ea]' : 'text-gray-800' }}  block cursor-pointer hover:bg-gray-100 rounded-md px-3 py-2 transition-all duration-300">
+                class="text-gray-800 text-sm {{ Request::route()->getName() === 'topology' ? 'text-green-700 bg-[#d9f3ea]' : 'text-gray-800' }}  block cursor-pointer hover:bg-gray-100 rounded-md px-3 py-2 transition-all duration-300">
                 <span>Topology</span>
               </a>
             </li>

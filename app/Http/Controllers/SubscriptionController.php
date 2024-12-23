@@ -39,7 +39,7 @@ class SubscriptionController extends Controller
         ]);
 
         $data = Subscription::create($request->all());
-        return response()->json(['message' => 'OLT created successfully', 'data' => $data], 201);
+        return response()->json(['message' => 'Subs created successfully', 'data' => $data], 201);
     }
 
     // Menampilkan form untuk mengedit subscription
@@ -61,7 +61,7 @@ class SubscriptionController extends Controller
         $subscription = Subscription::findOrFail($subs_id);
         $subscription->update($request->all());
 
-        return redirect()->route('subs.index')->with('success', 'Subscription updated successfully');
+        return response()->json(['message' => 'Subs created successfully'], 201);
     }
 
     // Menghapus data subscription
@@ -69,7 +69,6 @@ class SubscriptionController extends Controller
     {
         $subscription = Subscription::findOrFail($subs_id);
         $subscription->delete();
-
-        return redirect()->route('subs.index')->with('success', 'Subscription deleted successfully');
+        return response()->json(['message' => 'Subs deleted successfully'], 201);
     }
 }

@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('odps', function (Blueprint $table) {
             $table->string('odp_id')->primary();
-            $table->string('odc_id');
+            $table->string('odc_id')->nullable();
             $table->foreign('odc_id')
                 ->references('odc_id')
                 ->on('odcs')

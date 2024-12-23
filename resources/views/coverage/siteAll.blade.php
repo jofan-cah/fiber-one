@@ -96,7 +96,7 @@
         const googleMapsUrl = `https://www.google.com/maps?q=${coords[0]},${coords[1]}`;
         
         // Ganti URL gambar dengan URL gambar di folder public
-        const odpIconUrl = `https://uhuy.fiberone.net.id/ODPIJO.png`; // Ganti dengan URL gambar yang sesuai
+        const odpIconUrl = `https://uhuy.fiberone.net.id/ODPIJO2.png`; // Ganti dengan URL gambar yang sesuai
 
         L.marker(coords, {
           icon: createMarkerIcon(odpIconUrl),

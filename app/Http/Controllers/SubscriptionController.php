@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Odp;
 use App\Models\Subscription;
 use Illuminate\Http\Request;
 
@@ -14,11 +15,17 @@ class SubscriptionController extends Controller
         $subscriptions = Subscription::all();
         return view('subs.indexSubs', compact('subscriptions'));
     }
+    public function getAllData()
+    {
+        $subscriptions = Subscription::all();
+        return response()->json($subscriptions);
+    }
 
     // Menampilkan form untuk membuat subscription baru
     public function create()
     {
-        return view('subs.createSubs');
+        $odps = Odp::all();
+        return view('subs.createSubs', compact('odps'));
     }
 
     // Menyimpan data subscription baru
@@ -31,8 +38,8 @@ class SubscriptionController extends Controller
             'odp_id' => 'required|string|exists:odps,odp_id',
         ]);
 
-        Subscription::create($request->all());
-        return redirect()->route('subs.index')->with('success', 'Subscription created successfully');
+        $data = Subscription::create($request->all());
+        return response()->json(['message' => 'OLT created successfully', 'data' => $data], 201);
     }
 
     // Menampilkan form untuk mengedit subscription

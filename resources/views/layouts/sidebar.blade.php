@@ -162,8 +162,8 @@
         </li>
 
         <li>
-          <a href="{{route('home')}}"
-            class="menu-item  {{Request::route()->getName() == 'home' ? 'text-green-700 bg-[#d9f3ea]' : 'text-gray-800'}}  text-sm flex items-center cursor-pointer  hover:bg-[#d9f3ea] rounded-md px-3 py-3 transition-all duration-300">
+          <a href="{{route('indexSubs')}}"
+            class="menu-item  {{Request::route()->getName() == 'indexSubs' ? 'text-green-700 bg-[#d9f3ea]' : 'text-gray-800'}}  text-sm flex items-center cursor-pointer  hover:bg-[#d9f3ea] rounded-md px-3 py-3 transition-all duration-300">
             <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="w-[18px] h-[18px] mr-4"
               viewBox="0 0 24 24">
               <path

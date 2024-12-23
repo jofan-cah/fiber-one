@@ -8,6 +8,7 @@ use App\Http\Controllers\UserLevelController;
 use App\Http\Controllers\OltController;
 use App\Http\Controllers\OdpController;
 use App\Http\Controllers\OdcController;
+use App\Http\Controllers\SubscriptionController;
 use App\Models\Odc;
 use App\Models\Odp;
 use Illuminate\Http\Request;
@@ -64,6 +65,17 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('/edit/{id}', [OltController::class, 'show'])->name('editOltById');
         Route::post('/', [OltController::class, 'store'])->name('storeOlt');
         Route::delete('/{id}', [OltController::class, 'destroy'])->name('destroyOlt');
+    });
+
+    Route::prefix('/subs')->group(function () {
+        Route::get('/', [SubscriptionController::class, 'index'])->name('indexSubs');
+        Route::get('/create', [SubscriptionController::class, 'create'])->name('createSubs');
+        Route::get('/allData', [SubscriptionController::class, 'getAllData'])->name('getAllDataSubs');
+        Route::get('/{id}', [SubscriptionController::class, 'showSubs'])->name('showSubs');
+        Route::put('/update/{id}', [SubscriptionController::class, 'update'])->name('updateSubs');
+        Route::get('/edit/{id}', [SubscriptionController::class, 'show'])->name('editSubsById');
+        Route::post('/', [SubscriptionController::class, 'store'])->name('storeSubs');
+        Route::delete('/{id}', [SubscriptionController::class, 'destroy'])->name('destroySubs');
     });
 
     Route::prefix('/odp')->group(function () {

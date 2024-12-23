@@ -5,6 +5,7 @@
     #map {
         height: 500px;
         width: 100%;
+        z-index: 1;
     }
 
     .routing-instructions {
@@ -66,14 +67,14 @@
                 return 'Alamat tidak ditemukan';
             }
         }
-    function createMarkerIcon(color) {
+            function createMarkerIcon(color) {
                 return new L.Icon({
                     iconUrl: 'https://cdn.jsdelivr.net/gh/pointhi/leaflet-color-markers@master/img/marker-icon-2x-' +
                         color +
                         '.png',
-                    iconSize: [25, 41],
-                    iconAnchor: [12, 41],
-                    popupAnchor: [1, -34],
+                    iconSize: [20, 30], // Ukuran kecil dan proporsional
+                    iconAnchor: [10, 30], // Anchor untuk memastikan titik bawah icon sesuai
+                    popupAnchor: [0, -25], // Posisi popup agar sejajar dengan marker
                 });
             }
 
@@ -81,8 +82,8 @@
             function createMarkerIconUrl(iconUrl) {
             return new L.Icon({
                 iconUrl: iconUrl,
-                iconSize: [25, 41],
-                iconAnchor: [12, 41],
+                iconSize: [40, 55],
+                iconAnchor: [35, 50],
                 popupAnchor: [1, -34],
             });
             }
@@ -145,7 +146,7 @@
                             odp = odpSite.odp_location_maps.split(',');
                         }
                         let odpMarker = L.marker([odp[0], odp[1]], {
-                            icon: createMarkerIcon('violet')
+                            icon: createMarkerIconUrl('https://uhuy.fiberone.net.id/ODP7.png')
                         }).addTo(map);
                         // Menambahkan popup hanya untuk Admin/Kordinator
                         if (userRole === 'LVL250101001' || userRole === 'LVL241219001') {

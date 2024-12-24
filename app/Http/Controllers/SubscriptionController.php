@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Odp;
 use App\Models\Subscription;
+use Illuminate\Contracts\Validation\Rule;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule as ValidationRule;
 
 class SubscriptionController extends Controller
 {
@@ -43,25 +45,34 @@ class SubscriptionController extends Controller
     }
 
     // Menampilkan form untuk mengedit subscription
-    public function edit($subs_id)
+    public function show($subs_id)
     {
-        $subscription = Subscription::findOrFail($subs_id);
-        return view('subs.editSubs', compact('subscription'));
+        $subs = Subscription::findOrFail($subs_id);
+        $odps = Odp::all();
+        return view('subs.editSubs', compact('subs', 'odps'));
     }
 
     // Memperbarui data subscription
     public function update(Request $request, $subs_id)
     {
+        // Find the subscription using subs_id as the primary key
+        $subscription = Subscription::where('subs_id', $subs_id)->firstOrFail();
+
+        // Validate the request data
         $request->validate([
             'subs_name' => 'required|string|max:255',
             'subs_location_maps' => 'required|string',
             'odp_id' => 'required|string|exists:odps,odp_id',
+            'subs_id' => [
+                'required',
+                ValidationRule::unique('subscriptions', 'subs_id')->ignore($subscription->subs_id, 'subs_id'),
+            ],
         ]);
 
-        $subscription = Subscription::findOrFail($subs_id);
+        // Update the subscription
         $subscription->update($request->all());
 
-        return response()->json(['message' => 'Subs created successfully'], 201);
+        return response()->json(['message' => 'Subscription updated successfully'], 200);
     }
 
     // Menghapus data subscription

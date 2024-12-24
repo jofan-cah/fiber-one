@@ -60,8 +60,7 @@
               onclick="editOlt('${row.subs_id}')">
               <i class='bx bx-xs bx-edit'></i>
             </a>
-            <a class="cursor-pointer flex items-center px-2 py-1 rounded-full bg-green-500 text-white"
-              onclick="showOlt('${row.subs_id}')"><i class='bx bx-xs bx-show-alt'></i></a>
+            
             <a class="cursor-pointer flex items-center px-2 py-1 rounded-full bg-red-500 text-white"
              onclick="deleteOlt('${row.subs_id}')">
              <i class='bx bx-xs bx-trash'></i>

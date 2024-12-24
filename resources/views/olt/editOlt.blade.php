@@ -79,7 +79,9 @@
   $(document).ready(function() {
     $('#userForm').on('submit', function(e) {
         e.preventDefault(); // Mencegah form disubmit secara default
-
+        // Disable tombol submit dan ubah teksnya menjadi "Loading"
+            const submitButton = $(this).find('button[type="submit"]');
+            submitButton.prop('disabled', true).text('Loading...');
         // Mengambil data dari form
         var formData = $(this).serialize();
         var userId = $('#olt_id').val(); // Ambil ID user dari form (pastikan input ini ada di form)

@@ -14,7 +14,7 @@
 
           <a href="{{ route('createOlt') }}"
             class="px-5 py-2.5 rounded-lg text-sm tracking-wider font-medium border border-blue-700 outline-none bg-transparent hover:bg-blue-700 text-blue-700 hover:text-white transition-all duration-300">
-            Add Olt
+            Add OLT
           </a>
         </div>
 
@@ -23,8 +23,8 @@
         <table id="user-table" class="min-w-full bg-white">
           <thead class="whitespace-nowrap bg-gray-700">
             <tr>
-              <th class="p-4 text-left text-sm font-semibold text-white">Olt ID</th>
-              <th class="p-4 text-left text-sm font-semibold text-white">Olt Name</th>
+
+              <th class="p-4 text-left text-sm font-semibold text-white">OLT Name</th>
               <th class="p-4 text-left text-sm font-semibold text-white">Available Port</th>
               <th class="p-4 text-left text-sm font-semibold text-white">Port</th>
               <th class="p-4 text-left text-sm font-semibold text-white">Description</th>
@@ -49,7 +49,6 @@
         },
         scrollX: true,
         columns: [
-            { data: 'olt_id' },
             { data: 'olt_name' },
             { data: 'available_ports' },
             { data: 'olt_port_capacity' },

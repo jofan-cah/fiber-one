@@ -7,7 +7,7 @@
   <div class="bg-white shadow-[0_4px_12px_-5px_rgba(0,0,0,0.4)] p-6 max-w-screen-xl mx-auto rounded-lg overflow-hidden">
     <div class="container mx-auto px-4 py-8">
       <div class="flex justify-between">
-        <h2 class="text-2xl font-bold mb-6">Add Olt</h2>
+        <h2 class="text-2xl font-bold mb-6">Edit OLT</h2>
         <div>
 
           <a href="javascript:history.back()"
@@ -27,12 +27,12 @@
             <div class="grid grid-cols-2 gap-4">
               <input type="hidden" id="olt_id" name="olt_id" value="{{$olt->olt_id}}">
               <div>
-                <label for="olt_name" class="block text-gray-700 dark:text-gray-800 mb-1">Olt Name</label>
+                <label for="olt_name" class="block text-gray-700 dark:text-gray-800 mb-1">OLT Name</label>
                 <input type="text" value="{{$olt->olt_name}}" placeholder="input name" id="olt_name" name="olt_name"
                   class="w-full rounded-lg border py-2 px-3 dark:bg-gray-200 dark:text-gray-900 dark:border-gray-300">
               </div>
               <div>
-                <label for="olt_location_maps" class="block text-gray-700 dark:text-gray-800 mb-1">Maps Olt</label>
+                <label for="olt_location_maps" class="block text-gray-700 dark:text-gray-800 mb-1">Maps OLT</label>
                 <input placeholder="input latitude longitude" type="text" id="olt_location_maps"
                   name="olt_location_maps" value="{{$olt->olt_location_maps}}"
                   class="w-full rounded-lg border py-2 px-3 dark:bg-gray-200 dark:text-gray-900 dark:border-gray-300">
@@ -126,6 +126,9 @@
                         text: 'Something went wrong, please try again.', // Pesan fallback jika tidak ada error detail
                     });
                 }
+                // Mengaktifkan tombol submit kembali jika terjadi error
+                  submitButton.prop('disabled', false).text('Submit');
+                  console.log("Button re-enabled and text changed back to 'Submit'");
             }
         });
     });

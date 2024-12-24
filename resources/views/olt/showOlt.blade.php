@@ -89,8 +89,16 @@
     // Buat URL untuk membuka koordinat di Google Maps
     var googleMapsUrl = `https://www.google.com/maps?q=${latitude},${longitude}`;
 
-    // Tambahkan marker
-    var marker = L.marker([latitude, longitude]).addTo(map);
+    // Buat ikon khusus menggunakan gambar
+    var customIcon = L.icon({
+      iconUrl: 'https://uhuy.fiberone.net.id/OLT5.png',  // URL gambar ikon
+       iconSize: [25, 41],
+        iconAnchor: [12, 41],
+        popupAnchor: [1, -34],
+    });
+
+    // Tambahkan marker dengan ikon khusus
+    var marker = L.marker([latitude, longitude], { icon: customIcon }).addTo(map);
 
     // Buat popup untuk marker
     var popupContent = `

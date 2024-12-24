@@ -14,7 +14,7 @@
 
           <a href="{{ route('createOdp') }}"
             class="px-5 py-2.5 rounded-lg text-sm tracking-wider font-medium border border-blue-700 outline-none bg-transparent hover:bg-blue-700 text-blue-700 hover:text-white transition-all duration-300">
-            Add Odp
+            Add ODP
           </a>
         </div>
 
@@ -23,9 +23,8 @@
         <table id="user-table" class="min-w-full bg-white">
           <thead class="whitespace-nowrap bg-gray-700">
             <tr>
-              <th class="p-4 text-left text-sm font-semibold text-white">Odp ID</th>
-              <th class="p-4 text-left text-sm font-semibold text-white">Olt</th>
-              <th class="p-4 text-left text-sm font-semibold text-white">Odp Name</th>
+              <th class="p-4 text-left text-sm font-semibold text-white">ODP Name</th>
+              <th class="p-4 text-left text-sm font-semibold text-white">ODC</th>
               <th class="p-4 text-left text-sm font-semibold text-white">Avalaible Port</th>
               <th class="p-4 text-left text-sm font-semibold text-white">Port</th>
               <th class="p-4 text-left text-sm font-semibold text-white">Description</th>
@@ -50,9 +49,8 @@
         },
         scrollX: true,
         columns: [
-            { data: 'odp_id' },
+          { data: 'odp_name' },
             { data: 'odc.odc_name' },
-            { data: 'odp_name' },
             { data: 'available_ports' },
             { data: 'odp_port_capacity' },
             { data: 'odp_description' },

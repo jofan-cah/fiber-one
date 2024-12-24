@@ -38,7 +38,7 @@
             <h3 class="text-2xl font-bold text-gray-800">{{$odp->odp_name }}</h3>
 
             <div class="mt-4">
-              <p class="text-sm text-gray-600"><strong>OLT ID:</strong> {{$odp->odp_id }}</p>
+              <p class="text-sm text-gray-600"><strong>ODP ID:</strong> {{$odp->odp_id }}</p>
               <p class="mt-2 text-sm text-gray-600"><strong>Deskripsi:</strong> {{$odp->odp_description }}</p>
               <p class="mt-2 text-sm text-gray-600"><strong>Alamat:</strong> {{$odp->odp_addres }}</p>
               <p class="mt-2 text-sm text-gray-600"><strong>Lokasi:</strong> {{$odp->odp_location_maps }}</p>

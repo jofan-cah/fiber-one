@@ -64,7 +64,7 @@
                 <label for="olt_id" class="block text-gray-700 dark:text-gray-800 mb-1">OLT Name</label>
                 <select name="olt_id" id="olt_id"
                   class="w-full rounded-lg border py-2 px-3 dark:bg-gray-200 dark:text-gray-900 dark:border-gray-300">
-                  <option value="" disabled selected>Select OLT</option>
+                  <option value="" selected>Select OLT</option>
                   @foreach($olts as $olt)
                   <option value="{{ $olt->olt_id }}" {{($odc->olt_id == $olt->olt_id ? 'selected' : '')}}>{{
                     $olt->olt_name }}</option>

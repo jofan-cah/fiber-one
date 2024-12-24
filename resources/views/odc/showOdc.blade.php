@@ -38,7 +38,7 @@
             <h3 class="text-2xl font-bold text-gray-800">{{$odc->odc_name }}</h3>
 
             <div class="mt-4">
-              <p class="text-sm text-gray-600"><strong>OLT ID:</strong> {{$odc->odc_id }}</p>
+              <p class="text-sm text-gray-600"><strong>ODC ID:</strong> {{$odc->odc_id }}</p>
               <p class="mt-2 text-sm text-gray-600"><strong>Deskripsi:</strong> {{$odc->odc_description }}</p>
               <p class="mt-2 text-sm text-gray-600"><strong>Alamat:</strong> {{$odc->odc_addres }}</p>
               <p class="mt-2 text-sm text-gray-600"><strong>Lokasi:</strong> {{$odc->odc_location_maps }}</p>
@@ -89,8 +89,16 @@
     // Buat URL untuk membuka koordinat di Google Maps
     var googleMapsUrl = `https://www.google.com/maps?q=${latitude},${longitude}`;
 
-    // Tambahkan marker
-    var marker = L.marker([latitude, longitude]).addTo(map);
+   // Buat ikon khusus menggunakan gambar
+    var customIcon = L.icon({
+      iconUrl: 'https://uhuy.fiberone.net.id/ODCVIOLET.png', // URL gambar ikon
+      iconSize: [25, 41],
+      iconAnchor: [12, 41],
+      popupAnchor: [1, -34],
+    });
+    
+    // Tambahkan marker dengan ikon khusus
+    var marker = L.marker([latitude, longitude], { icon: customIcon }).addTo(map);
 
     // Buat popup untuk marker
     var popupContent = `

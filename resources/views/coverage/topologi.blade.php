@@ -21,77 +21,102 @@
   </div>
 </div>
 
-
 <script>
   document.addEventListener('DOMContentLoaded', () => {
-    const container = document.getElementById('network');
-    const options = {
-      nodes: {
-        shape: 'box',
-        font: { size: 14 },
-        borderWidth: 2,
+  const container = document.getElementById('network');
+  const options = {
+    nodes: {
+      shape: 'box',
+      font: { size: 14 },
+      margin: 20,
+      widthConstraint: {
+        minimum: 100
       },
-      edges: {
-        arrows: { to: { enabled: true, scaleFactor: 0.5 } },
-        color: { color: '#848484', hover: '#ff6b6b' },
-        smooth: { type: 'continuous' },
+      fixed: {
+        x: false,     // Lock horizontal position
+        y: false     // Allow vertical movement
+      }
+    },
+    edges: {
+      arrows: { to: true },
+      smooth: {
+        type: 'straightCross',
+        roundness: 0.2
+      }
+    },
+    groups: {
+      OLT: { color: { background: '#ff6b6b' } },
+      ODC: { color: { background: '#4dabf7' } },
+      ODP: { color: { background: '#f39c12' } },
+      Subs: { color: { background: '#2ecc71' } }
       },
-      groups: {
-        OLT: { color: { background: '#ff6b6b' } },
-        ODC: { color: { background: '#4dabf7' } },
-        ODP: { color: { background: '#f39c12' } },
-        Subs: { color: { background: '#2ecc71' } },
-      },
-      physics: {
+    layout: {
+      improvedLayout: true,
+      hierarchical: {
         enabled: true,
-        solver: 'barnesHut',
-        barnesHut: {
-          gravitationalConstant: -2000, // Mengurangi kemungkinan tumpang tindih
-          centralGravity: 0.3, // Menjaga node tetap terpusat tetapi dengan ruang
-          springLength: 250, // Jarak minimum antar node
-          springConstant: 0.04,
-          avoidOverlap: 1, // Menghindari overlap node
-        },
-        stabilization: {
-          enabled: true,
-          iterations: 500, // Meningkatkan iterasi untuk memastikan node tidak menumpuk
-        },
+        direction: 'UD',
+        sortMethod: 'directed',
+        levelSeparation: 200,
+        nodeSpacing: 250,
+        treeSpacing: 300
+      }
+    },
+    physics: {
+      enabled: true,
+      hierarchicalRepulsion: {
+        nodeDistance: 200,    // Minimum distance between nodes
+        centralGravity: 0.1,  // How much nodes are attracted to their level
+        springLength: 200,    // Preferred edge length
+        springConstant: 0.01, // How much edges pull nodes together
+        damping: 0.5         // Damping factor for node movement
       },
-      layout: {
-        randomSeed: 42, // Memastikan layout konsisten
-        improvedLayout: true,
-      },
-    };
+      solver: 'hierarchicalRepulsion'
+    },
+    interaction: {
+      dragNodes: true,        // Enable node dragging
+      dragView: true,         // Enable view dragging
+      zoomView: true,         // Enable zooming
+      hover: true,
+      multiselect: true      // Allow selecting multiple nodes
+    },
+    manipulation: {
+      enabled: false         // Disable editing capabilities
+    }
+  };
 
-    // Fetch topology data
-    fetch('/site/topology-data')
-      .then((response) => response.json())
-      .then((data) => {
-        const network = new vis.Network(container, data, options);
+  // Fetch data and create network
+  fetch('/site/topology-data')
+    .then(response => response.json())
+    .then(data => {
+      const network = new vis.Network(container, data, options);
+      
+      // Event saat node mulai di-drag
+      network.on("dragStart", function (params) {
+        if (params.nodes.length > 0) {
+          // Lock horizontal position while dragging
+          params.nodes.forEach(nodeId => {
+            const node = network.body.nodes[nodeId];
+            if (node) {
+              node.options.fixed.x = true;
+              node.options.fixed.y = false;
+            }
+          });
+        }
+      });
 
-        // Event listener untuk melihat apakah jaringan sudah stabil
-        network.on('stabilized', () => {
-          console.log('Network layout stabilized.');
-        });
+      // Event saat drag selesai
+      network.on("dragEnd", function (params) {
+        // Maintain the vertical position but snap back horizontally
+        network.setOptions({physics: {enabled: true}});
+      });
 
-        // Atur ulang posisi node untuk memastikan jarak antar node cukup
-        network.on('afterDrawing', () => {
-          const positions = network.getPositions();
-          const newPositions = {};
-          const padding = 50; // Menambahkan jarak minimum antar node
-          for (const [nodeId, position] of Object.entries(positions)) {
-            newPositions[nodeId] = {
-              x: position.x + Math.random() * padding,
-              y: position.y + Math.random() * padding,
-            };
-          }
-          network.setData({ nodes: data.nodes, edges: data.edges }); // Reset posisi untuk mengurangi tumpang tindih
-        });
-      })
-      .catch((error) => console.error('Error fetching topology data:', error));
-  });
+      network.once('afterDrawing', () => {
+        network.fit();
+      });
+    })
+    .catch(error => console.error('Error:', error));
+});
 </script>
-
 
 
 @endsection

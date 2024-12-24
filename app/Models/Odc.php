@@ -36,10 +36,10 @@ class Odc extends Model
 
     public function childOdcs()
     {
-        return $this->hasMany(Odc::class, 'parent_odc_id');
+        return $this->hasMany(Odc::class, 'parent_odc_id')->with('odpss');
     }
 
-    public function odps()
+    public function odpss()
     {
         return $this->hasMany(Odp::class, 'odc_id');
     }

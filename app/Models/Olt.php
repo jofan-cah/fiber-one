@@ -37,9 +37,7 @@ class Olt extends Model
     // Mendapatkan semua ODP yang terhubung (baik langsung maupun melalui ODC)
     public function allOdps()
     {
-        return Odp::where(function ($query) {
-            $query->whereIn('odc_id', $this->odcs->pluck('odc_id'))
-                ->orWhere('olt_id', $this->olt_id);
-        });
+        return Odp::whereIn('odc_id', $this->odcs->pluck('odc_id')->toArray())
+            ->orWhere('olt_id', $this->olt_id);
     }
 }

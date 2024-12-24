@@ -57,7 +57,11 @@
   $(document).ready(function() {
     $('#userForm').on('submit', function(e) {
         e.preventDefault(); // Mencegah form disubmit secara default
-
+const submitButton = $(this).find('button[type="submit"]');
+  console.log("Submit Button found:", submitButton); // Cek apakah tombol ditemukan
+  
+  submitButton.prop('disabled', true).text('Loading...');
+  console.log("Button disabled and text changed to 'Loading'"); // Pastikan tombol disabled
         // Mengambil data dari form
         var formData = $(this).serialize();
 
@@ -102,6 +106,9 @@
                     });
                 }
             }
+            // Mengaktifkan tombol submit kembali jika terjadi error
+            submitButton.prop('disabled', false).text('Submit');
+            console.log("Button re-enabled and text changed back to 'Submit'");
         });
     });
 });

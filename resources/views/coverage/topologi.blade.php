@@ -44,22 +44,22 @@
       },
       physics: {
         enabled: true,
-        solver: 'forceAtlas2Based', // Menggunakan solver yang lebih baik untuk jarak node
-        forceAtlas2Based: {
-          gravitationalConstant: -50, // Mengatur gaya tarik menarik antar node
-          centralGravity: 0.005, // Mengatur gravitasi pusat
-          springLength: 200, // Mengatur panjang pegas (jarak antar node)
-          springConstant: 0.08, // Kekakuan pegas
+        solver: 'barnesHut',
+        barnesHut: {
+          gravitationalConstant: -2000, // Mengurangi kemungkinan tumpang tindih
+          centralGravity: 0.3, // Menjaga node tetap terpusat tetapi dengan ruang
+          springLength: 250, // Jarak minimum antar node
+          springConstant: 0.04,
+          avoidOverlap: 1, // Menghindari overlap node
         },
         stabilization: {
           enabled: true,
-          iterations: 200, // Iterasi stabilisasi untuk memastikan posisi stabil
-          updateInterval: 50,
+          iterations: 500, // Meningkatkan iterasi untuk memastikan node tidak menumpuk
         },
       },
       layout: {
-        improvedLayout: true, // Menambahkan perbaikan layout untuk mencegah tumpang tindih
-        hierarchical: false, // Tidak menggunakan layout hierarkis
+        randomSeed: 42, // Memastikan layout konsisten
+        improvedLayout: true,
       },
     };
 
@@ -69,9 +69,23 @@
       .then((data) => {
         const network = new vis.Network(container, data, options);
 
-        // Event listener untuk mencegah node menumpuk saat stabilisasi
-        network.on("stabilized", function () {
-          console.log("Network stabilized");
+        // Event listener untuk melihat apakah jaringan sudah stabil
+        network.on('stabilized', () => {
+          console.log('Network layout stabilized.');
+        });
+
+        // Atur ulang posisi node untuk memastikan jarak antar node cukup
+        network.on('afterDrawing', () => {
+          const positions = network.getPositions();
+          const newPositions = {};
+          const padding = 50; // Menambahkan jarak minimum antar node
+          for (const [nodeId, position] of Object.entries(positions)) {
+            newPositions[nodeId] = {
+              x: position.x + Math.random() * padding,
+              y: position.y + Math.random() * padding,
+            };
+          }
+          network.setData({ nodes: data.nodes, edges: data.edges }); // Reset posisi untuk mengurangi tumpang tindih
         });
       })
       .catch((error) => console.error('Error fetching topology data:', error));

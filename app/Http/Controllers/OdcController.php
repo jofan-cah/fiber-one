@@ -18,7 +18,7 @@ class OdcController extends Controller
     public function getAllData()
     {
         // $data =  Odc::with('olt')->get();
-        $data = Odc::withCount('odps as odp_ports_count')->with('olt')->get();
+        $data = Odc::withCount('odpss as odp_ports_count')->with('olt')->get();
         $data->map(function ($odp) {
             $odp->available_ports = $odp->odc_port_capacity - $odp->odp_ports_count;
         });
@@ -95,7 +95,8 @@ class OdcController extends Controller
             return response()->json(['message' => 'Odp not found'], 404);
         }
 
-        $validatedData = $request->validate(['odc_name' => 'required|string|max:255',
+        $validatedData = $request->validate([
+            'odc_name' => 'required|string|max:255',
             'odc_description' => 'nullable|string',
             'odc_location_maps' => 'nullable|string',
             'odc_addres' => 'nullable|string',

@@ -7,7 +7,7 @@
   <div class="bg-white shadow-[0_4px_12px_-5px_rgba(0,0,0,0.4)] p-6 max-w-screen-xl mx-auto rounded-lg overflow-hidden">
     <div class="container mx-auto px-4 py-8">
       <div class="flex justify-between">
-        <h2 class="text-2xl font-bold mb-6">Add odp</h2>
+        <h2 class="text-2xl font-bold mb-6">Edit odp</h2>
         <div>
 
           <a href="javascript:history.back()"
@@ -104,7 +104,9 @@
   $(document).ready(function() {
     $('#userForm').on('submit', function(e) {
         e.preventDefault(); // Mencegah form disubmit secara default
-
+        // Disable tombol submit dan ubah teksnya menjadi "Loading"
+        const submitButton = $(this).find('button[type="submit"]');
+        submitButton.prop('disabled', true).text('Loading...');
         // Mengambil data dari form
         var formData = $(this).serialize();
         var userId = $('#odp_id').val(); // Ambil ID user dari form (pastikan input ini ada di form)

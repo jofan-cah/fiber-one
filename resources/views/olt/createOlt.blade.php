@@ -73,59 +73,73 @@
 
 <script>
   $(document).ready(function() {
-    $('#userForm').on('submit', function(e) {
-        e.preventDefault(); // Mencegah form disubmit secara default
-      // Disable tombol submit dan ubah teksnya menjadi "Loading"
-        const submitButton = $(this).find('button[type="submit"]');
-        submitButton.prop('disabled', true).text('Loading...');
-        
-        // Mengambil data dari form
-        var formData = $(this).serialize();
-        console.log(formData);
+  console.log("Document ready"); // Memastikan jQuery berhasil dimuat
 
-        $.ajax({
-            url: '{{ route('storeOlt') }}', // Ubah dengan route yang sesuai
-            method: 'POST',
-            data: formData,
-            success: function(response) {
-                // Menampilkan alert jika berhasil
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Success!',
-                    text: 'Data has been saved successfully.',
-                }).then((result) => {
-                    // Redirect ke route indexUsers setelah alert ditutup
-                    window.location.href = '/olt'; // Ubah dengan route yang sesuai
-                });
-            },
-              error: function(xhr, status, error) {
-                // Menangani error validasi yang dikirim oleh server
-                if (xhr.responseJSON && xhr.responseJSON.errors) {
-                    var errors = xhr.responseJSON.errors;
-                    var errorMessages = '';
+  $('#userForm').on('submit', function(e) {
+    e.preventDefault(); // Mencegah form disubmit secara default
+    console.log("Form submitted"); // Cek apakah form disubmit
 
-                    // Menggabungkan pesan error dari respons
-                    $.each(errors, function(field, messages) {
-                        errorMessages += messages.join(', ') + '\n';
-                    });
+    // Disable tombol submit dan ubah teksnya menjadi "Loading"
+    const submitButton = $(this).find('button[type="submit"]');
+    console.log("Submit Button found:", submitButton); // Cek apakah tombol ditemukan
 
-                    // Menampilkan alert error dengan pesan kesalahan
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Oops...',
-                        text: errorMessages, // Menampilkan pesan error
-                    });
-                } else {
-                    // Jika ada error lain (misalnya server error)
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Oops...',
-                        text: 'Something went wrong, please try again.', // Pesan fallback jika tidak ada error detail
-                    });
-                }
-            }
+    submitButton.prop('disabled', true).text('Loading...');
+    console.log("Button disabled and text changed to 'Loading'"); // Pastikan tombol disabled
+
+    // Mengambil data dari form
+    var formData = $(this).serialize();
+    console.log("Form Data:", formData); // Cek data yang disubmit
+
+    $.ajax({
+      url: '{{ route('storeOlt') }}', // Ubah dengan route yang sesuai
+      method: 'POST',
+      data: formData,
+      success: function(response) {
+        console.log("Success Response:", response); // Cek respons sukses
+        Swal.fire({
+          icon: 'success',
+          title: 'Success!',
+          text: 'Data has been saved successfully.',
+        }).then((result) => {
+          console.log("Redirecting to /olt");
+          window.location.href = '/olt'; // Ubah dengan route yang sesuai
         });
+      },
+      error: function(xhr, status, error) {
+        console.log("Error Response:", xhr.responseJSON); // Cek respons error
+
+        // Menangani error validasi yang dikirim oleh server
+        if (xhr.responseJSON && xhr.responseJSON.errors) {
+          var errors = xhr.responseJSON.errors;
+          var errorMessages = '';
+
+          // Menggabungkan pesan error dari respons
+          $.each(errors, function(field, messages) {
+            errorMessages += messages.join(', ') + '\n';
+          });
+
+          // Menampilkan alert error dengan pesan kesalahan
+          Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: errorMessages, // Menampilkan pesan error
+          });
+        } else {
+          // Jika ada error lain (misalnya server error)
+          Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: 'Something went wrong, please try again.', // Pesan fallback jika tidak ada error detail
+          });
+        }
+
+        // Mengaktifkan tombol submit kembali jika terjadi error
+        submitButton.prop('disabled', false).text('Submit');
+        console.log("Button re-enabled and text changed back to 'Submit'");
+      }
     });
+  });
 });
+
 </script>
 @endsection

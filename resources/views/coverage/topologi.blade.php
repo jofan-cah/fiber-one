@@ -30,43 +30,51 @@
         shape: 'box',
         font: { size: 14 },
         borderWidth: 2,
-        margin: 20,  // Menambahkan jarak antar node lebih banyak
       },
       edges: {
         arrows: { to: { enabled: true, scaleFactor: 0.5 } },
         color: { color: '#848484', hover: '#ff6b6b' },
-        smooth: { type: 'continuous' }
+        smooth: { type: 'continuous' },
       },
       groups: {
         OLT: { color: { background: '#ff6b6b' } },
         ODC: { color: { background: '#4dabf7' } },
         ODP: { color: { background: '#f39c12' } },
-        Subs: { color: { background: '#2ecc71' } }
+        Subs: { color: { background: '#2ecc71' } },
       },
       physics: {
-        enabled: false, // Mematikan fisika agar node lebih statis
+        enabled: true,
+        solver: 'forceAtlas2Based', // Menggunakan solver yang lebih baik untuk jarak node
+        forceAtlas2Based: {
+          gravitationalConstant: -50, // Mengatur gaya tarik menarik antar node
+          centralGravity: 0.005, // Mengatur gravitasi pusat
+          springLength: 200, // Mengatur panjang pegas (jarak antar node)
+          springConstant: 0.08, // Kekakuan pegas
+        },
+        stabilization: {
+          enabled: true,
+          iterations: 200, // Iterasi stabilisasi untuk memastikan posisi stabil
+          updateInterval: 50,
+        },
       },
       layout: {
-        hierarchical: {
-          enabled: true,  // Mengaktifkan layout hierarkis untuk mencegah tumpang tindih
-          levelSeparation: 150,  // Menambah jarak antar level
-          nodeSpacing: 200,  // Menambah jarak antar node
-          treeSpacing: 300,  // Menambah jarak antar cabang pohon
-          direction: 'UD',  // Menuju arah atas ke bawah (Up-Down)
-          sortMethod: 'directed'  // Menjaga urutan yang lebih teratur
-        },
-        randomSeed: 2,  // Tentukan seed random untuk posisi node
-        improvedLayout: true,  // Mengaktifkan layout yang lebih baik untuk mencegah node bertumpuk
-      }
+        improvedLayout: true, // Menambahkan perbaikan layout untuk mencegah tumpang tindih
+        hierarchical: false, // Tidak menggunakan layout hierarkis
+      },
     };
 
     // Fetch topology data
     fetch('/site/topology-data')
-      .then(response => response.json())
-      .then(data => {
+      .then((response) => response.json())
+      .then((data) => {
         const network = new vis.Network(container, data, options);
+
+        // Event listener untuk mencegah node menumpuk saat stabilisasi
+        network.on("stabilized", function () {
+          console.log("Network stabilized");
+        });
       })
-      .catch(error => console.error('Error fetching topology data:', error));
+      .catch((error) => console.error('Error fetching topology data:', error));
   });
 </script>
 

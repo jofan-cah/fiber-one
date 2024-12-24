@@ -7,7 +7,7 @@
   <div class="bg-white shadow-[0_4px_12px_-5px_rgba(0,0,0,0.4)] p-6 max-w-screen-xl mx-auto rounded-lg overflow-hidden">
     <div class="container mx-auto px-4 py-8">
       <div class="flex justify-between">
-        <h2 class="text-2xl font-bold mb-6">Add odp</h2>
+        <h2 class="text-2xl font-bold mb-6">Edit ODC</h2>
         <div>
 
           <a href="javascript:history.back()"
@@ -27,12 +27,12 @@
             <div class="grid grid-cols-2 gap-4">
               <input type="hidden" id="odc_id" name="odc_id" value="{{$odc->odc_id}}">
               <div>
-                <label for="odc_name" class="block text-gray-700 dark:text-gray-800 mb-1">odp Name</label>
+                <label for="odc_name" class="block text-gray-700 dark:text-gray-800 mb-1">ODC Name</label>
                 <input type="text" value="{{$odc->odc_name}}" placeholder="input name" id="odc_name" name="odc_name"
                   class="w-full rounded-lg border py-2 px-3 dark:bg-gray-200 dark:text-gray-900 dark:border-gray-300">
               </div>
               <div>
-                <label for="odc_location_maps" class="block text-gray-700 dark:text-gray-800 mb-1">Maps odp</label>
+                <label for="odc_location_maps" class="block text-gray-700 dark:text-gray-800 mb-1">Maps ODC</label>
                 <input placeholder="input latitude longitude" type="text" id="odc_location_maps"
                   name="odc_location_maps" value="{{$odc->odc_location_maps}}"
                   class="w-full rounded-lg border py-2 px-3 dark:bg-gray-200 dark:text-gray-900 dark:border-gray-300">

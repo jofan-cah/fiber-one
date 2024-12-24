@@ -23,9 +23,8 @@
         <table id="user-table" class="min-w-full bg-white">
           <thead class="whitespace-nowrap bg-gray-700">
             <tr>
-              <th class="p-4 text-left text-sm font-semibold text-white">ODC ID</th>
-              <th class="p-4 text-left text-sm font-semibold text-white">Olt</th>
               <th class="p-4 text-left text-sm font-semibold text-white">ODC Name</th>
+              <th class="p-4 text-left text-sm font-semibold text-white">OLT</th>
               <th class="p-4 text-left text-sm font-semibold text-white">Avalaible Port</th>
               <th class="p-4 text-left text-sm font-semibold text-white">Port</th>
               <th class="p-4 text-left text-sm font-semibold text-white">Description</th>
@@ -50,9 +49,8 @@
         },
         scrollX: true,
         columns: [
-            { data: 'odc_id' },
-            { data: 'olt.olt_name' },
             { data: 'odc_name' },
+            { data: 'olt.olt_name' },
             { data: 'available_ports' },
             { data: 'odc_port_capacity' },
             { data: 'odc_description' },

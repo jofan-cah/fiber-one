@@ -64,7 +64,8 @@
         @if (Auth::user()->user_level_id == 'LVL250101001'|| Auth::user()->user_level_id == 'LVL250101002' ||
         Auth::user()->user_level_id == 'LVL241223002')
         @php
-        $activeRoutes = ['indexOlt','allSite','siteIndex', 'indexOdc', 'createOlt', 'editOltById', 'indexOdp',
+        $activeRoutes = ['indexOlt','allSite','siteIndex', 'createOdc' ,'indexOdc', 'createOlt', 'editOltById',
+        'indexOdp',
         'createOdp',
         'editOdpById'];
         $isActive = in_array(Request::route()->getName(), $activeRoutes);
@@ -97,19 +98,19 @@
             </li> --}}
             <li class="my-2">
               <a href="{{route('indexOlt')}}"
-                class="text-gray-800 text-sm  {{ Request::route()->getName() === 'indexOlt' ? 'text-green-700 bg-[#d9f3ea]' : 'text-gray-800' }} block cursor-pointer hover:bg-gray-100 rounded-md px-3 py-2 transition-all duration-300">
+                class="text-gray-800 text-sm  {{ Request::route()->getName() === 'indexOlt' || Request::route()->getName() === 'createOlt' ? 'text-green-700 bg-[#d9f3ea]' : 'text-gray-800' }} block cursor-pointer hover:bg-gray-100 rounded-md px-3 py-2 transition-all duration-300">
                 <span>OLT</span>
               </a>
             </li>
             <li class="my-2">
               <a href="{{route('indexOdc')}}"
-                class=" text-gray-800 text-sm  {{ Request::route()->getName() === 'indexOdc' ? 'text-green-700 bg-[#d9f3ea]' : 'text-gray-800' }} block cursor-pointer hover:bg-gray-100 rounded-md px-3 py-2 transition-all duration-300">
+                class=" text-gray-800 text-sm  {{ Request::route()->getName() === 'indexOdc' || Request::route()->getName() === 'createOdc' ? 'text-green-700 bg-[#d9f3ea]' : 'text-gray-800' }} block cursor-pointer hover:bg-gray-100 rounded-md px-3 py-2 transition-all duration-300">
                 <span>ODC</span>
               </a>
             </li>
             <li class="my-2">
               <a href="{{route('indexOdp')}}"
-                class="text-gray-800 text-sm {{ Request::route()->getName() === 'indexOdp' ? 'text-green-700 bg-[#d9f3ea]' : 'text-gray-800' }}  block cursor-pointer hover:bg-gray-100 rounded-md px-3 py-2 transition-all duration-300">
+                class="text-gray-800 text-sm {{ Request::route()->getName() === 'indexOdp' || Request::route()->getName() === 'createOdp' ? 'text-green-700 bg-[#d9f3ea]' : 'text-gray-800' }}  block cursor-pointer hover:bg-gray-100 rounded-md px-3 py-2 transition-all duration-300">
                 <span>ODP</span>
               </a>
             </li>

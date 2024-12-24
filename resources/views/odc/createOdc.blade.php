@@ -56,7 +56,7 @@
               </div>
 
               <div>
-                <label for="olt_id" class="block text-gray-700 dark:text-gray-800 mb-1">Olt</label>
+                <label for="olt_id" class="block text-gray-700 dark:text-gray-800 mb-1">OLT</label>
                 <select name="olt_id" id="olt_id"
                   class="w-full rounded-lg border py-2 px-3 dark:bg-gray-200 dark:text-gray-900 dark:border-gray-300">
                   <option value="" disabled selected>Select OLT</option>
@@ -72,7 +72,7 @@
                 <label for="parent_odc_id" class="block text-gray-700 dark:text-gray-800 mb-1">ODC Parent</label>
                 <select name="parent_odc_id" id="parent_odc_id"
                   class="w-full rounded-lg border py-2 px-3 dark:bg-gray-200 dark:text-gray-900 dark:border-gray-300">
-                  <option value="" disabled selected>Select OLT</option>
+                  <option value="" disabled selected>Select ODC</option>
                   @foreach($odcs as $odc)
                   <option value="{{ $odc->odc_id }}">{{ $odc->odc_name }}</option>
                   @endforeach

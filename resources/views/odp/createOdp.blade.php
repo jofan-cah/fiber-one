@@ -26,12 +26,12 @@
             @csrf
             <div class="grid grid-cols-2 gap-4">
               <div>
-                <label for="odp_name" class="block text-gray-700 dark:text-gray-800 mb-1">odp Name</label>
+                <label for="odp_name" class="block text-gray-700 dark:text-gray-800 mb-1">ODP Name</label>
                 <input type="text" placeholder="input name" id="odp_name" name="odp_name"
                   class="w-full rounded-lg border py-2 px-3 dark:bg-gray-200 dark:text-gray-900 dark:border-gray-300">
               </div>
               <div>
-                <label for="odp_location_maps" class="block text-gray-700 dark:text-gray-800 mb-1">Maps odp</label>
+                <label for="odp_location_maps" class="block text-gray-700 dark:text-gray-800 mb-1">Maps ODP</label>
                 <input placeholder="input latitude longitude" type="text" id="odp_location_maps"
                   name="odp_location_maps"
                   class="w-full rounded-lg border py-2 px-3 dark:bg-gray-200 dark:text-gray-900 dark:border-gray-300">
@@ -58,7 +58,7 @@
               </div>
 
               <div>
-                <label for="odc_id" class="block text-gray-700 dark:text-gray-800 mb-1">Description</label>
+                <label for="odc_id" class="block text-gray-700 dark:text-gray-800 mb-1"> Select ODC</label>
                 <select name="odc_id" id="odc_id"
                   class="w-full rounded-lg border py-2 px-3 dark:bg-gray-200 dark:text-gray-900 dark:border-gray-300">
                   <option value="" disabled selected>Select ODC</option>

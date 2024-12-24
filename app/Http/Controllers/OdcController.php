@@ -61,7 +61,6 @@ class OdcController extends Controller
     public function store(Request $request)
     {
         $validatedData = $request->validate([
-
             'odc_name' => 'required|string|max:255',
             'odc_description' => 'nullable|string',
             'odc_location_maps' => 'nullable|string',

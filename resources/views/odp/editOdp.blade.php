@@ -7,7 +7,7 @@
   <div class="bg-white shadow-[0_4px_12px_-5px_rgba(0,0,0,0.4)] p-6 max-w-screen-xl mx-auto rounded-lg overflow-hidden">
     <div class="container mx-auto px-4 py-8">
       <div class="flex justify-between">
-        <h2 class="text-2xl font-bold mb-6">Edit odp</h2>
+        <h2 class="text-2xl font-bold mb-6">Edit ODP</h2>
         <div>
 
           <a href="javascript:history.back()"
@@ -27,12 +27,12 @@
             <div class="grid grid-cols-2 gap-4">
               <input type="hidden" id="odp_id" name="odp_id" value="{{$odp->odp_id}}">
               <div>
-                <label for="odp_name" class="block text-gray-700 dark:text-gray-800 mb-1">odp Name</label>
+                <label for="odp_name" class="block text-gray-700 dark:text-gray-800 mb-1">ODP Name</label>
                 <input type="text" value="{{$odp->odp_name}}" placeholder="input name" id="odp_name" name="odp_name"
                   class="w-full rounded-lg border py-2 px-3 dark:bg-gray-200 dark:text-gray-900 dark:border-gray-300">
               </div>
               <div>
-                <label for="odp_location_maps" class="block text-gray-700 dark:text-gray-800 mb-1">Maps odp</label>
+                <label for="odp_location_maps" class="block text-gray-700 dark:text-gray-800 mb-1">Maps ODP</label>
                 <input placeholder="input latitude longitude" type="text" id="odp_location_maps"
                   name="odp_location_maps" value="{{$odp->odp_location_maps}}"
                   class="w-full rounded-lg border py-2 px-3 dark:bg-gray-200 dark:text-gray-900 dark:border-gray-300">
@@ -80,7 +80,7 @@
                 <label for="parent_odp_id" class="block text-gray-700 dark:text-gray-800 mb-1">ODP Name</label>
                 <select name="parent_odp_id" id="parent_odp_id"
                   class="w-full rounded-lg border py-2 px-3 dark:bg-gray-200 dark:text-gray-900 dark:border-gray-300">
-                  <option value="" disabled selected>Select ODP</option>
+                  <option value="" selected>Select ODP</option>
                   @foreach($odps as $p)
                   <option value="{{ $p->odp_id }}" {{($odp->parent_odp_id == $p->odp_id ? 'selected' : '')}}>{{
                     $odp->odp_name }}</option>

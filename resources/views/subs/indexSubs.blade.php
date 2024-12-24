@@ -9,12 +9,12 @@
     <div class="container mx-auto px-4 py-8">
 
       <div class="flex justify-between">
-        <h2 class="text-2xl font-bold mb-6">Data Subs</h2>
+        <h2 class="text-2xl font-bold mb-6">Data Pelangan</h2>
         <div>
 
           <a href="{{ route('createSubs') }}"
             class="px-5 py-2.5 rounded-lg text-sm tracking-wider font-medium border border-blue-700 outline-none bg-transparent hover:bg-blue-700 text-blue-700 hover:text-white transition-all duration-300">
-            Add Subs
+            Tambah Pelangan
           </a>
         </div>
 
@@ -23,8 +23,8 @@
         <table id="user-table" class="min-w-full bg-white">
           <thead class="whitespace-nowrap bg-gray-700">
             <tr>
-              <th class="p-4 text-left text-sm font-semibold text-white">Subs ID</th>
-              <th class="p-4 text-left text-sm font-semibold text-white">Subs Name</th>
+              <th class="p-4 text-left text-sm font-semibold text-white">Pelangan ID</th>
+              <th class="p-4 text-left text-sm font-semibold text-white">Pelangan Name</th>
               <th class="p-4 text-left text-sm font-semibold text-white">ODP ID</th>
               {{-- <th class="p-4 text-left text-sm font-semibold text-white">Address</th> --}}
               <th class="p-4 text-left text-sm font-semibold text-white">Actions</th>

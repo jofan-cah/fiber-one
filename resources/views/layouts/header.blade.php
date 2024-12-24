@@ -3,13 +3,8 @@
     class='flex flex-wrap items-center px-6 py-2 bg-white shadow-md min-h-[56px] rounded-md w-full relative tracking-wide'>
     <div class='flex items-center flex-wrap gap-x-8 gap-y-4 z-50 w-full'>
       <div class='flex items-center gap-4 py-1 outline-none border-none'>
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 192.904 192.904" class="w-5 cursor-pointer fill-current">
-          <path
-            d="m190.707 180.101-47.078-47.077c11.702-14.072 18.752-32.142 18.752-51.831C162.381 36.423 125.959 0 81.191 0 36.422 0 0 36.423 0 81.193c0 44.767 36.422 81.187 81.191 81.187 19.688 0 37.759-7.049 51.831-18.751l47.079 47.078a7.474 7.474 0 0 0 5.303 2.197 7.498 7.498 0 0 0 5.303-12.803zM15 81.193C15 44.694 44.693 15 81.191 15c36.497 0 66.189 29.694 66.189 66.193 0 36.496-29.692 66.187-66.189 66.187C44.693 147.38 15 117.689 15 81.193z">
-          </path>
-        </svg>
-        <input type='text' placeholder='Search something...'
-          class='w-full text-sm bg-transparent rounded outline-none' />
+
+
       </div>
       <div class="flex items-center gap-8 ml-auto">
         <div class='flex items-center space-x-6'>
@@ -35,12 +30,14 @@
           </svg>
         </div>
 
-        <div class="dropdown-menu relative flex shrink-0 group">
+        <div class="dropdown-menu relative flex shrink-0">
+          <!-- Trigger (Image) -->
           <img src="https://readymadeui.com/team-1.webp" alt="profile-pic"
-            class="w-9 h-9 rounded-full border-2 border-gray-300 cursor-pointer" />
+            class="w-9 h-9 rounded-full border-2 border-gray-300 cursor-pointer" id="dropdownTrigger" />
 
-          <div
-            class="dropdown-content hidden group-hover:block shadow-md p-2 bg-white rounded-md absolute top-9 right-0 w-56">
+          <!-- Dropdown Content -->
+          <div id="dropdownContent"
+            class="hidden shadow-md p-2 bg-white rounded-md absolute top-10 right-0 w-56 z-10 transition-all duration-200 ease-in-out z-10">
             <div class="w-full">
               <div class="text-center p-2 text-gray-800">
                 <p class="font-semibold">{{ Auth::user()->full_name }}</p>
@@ -110,4 +107,21 @@
       </div>
     </div>
   </div>
+
+  <script>
+    const dropdownTrigger = document.getElementById('dropdownTrigger');
+    const dropdownContent = document.getElementById('dropdownContent');
+    
+    // Toggle dropdown on image click
+    dropdownTrigger.addEventListener('click', () => {
+    dropdownContent.classList.toggle('hidden');
+    });
+    
+    // Hide dropdown if clicked outside
+    document.addEventListener('click', (event) => {
+    if (!dropdownTrigger.contains(event.target) && !dropdownContent.contains(event.target)) {
+    dropdownContent.classList.add('hidden');
+    }
+    });
+  </script>
 </header>

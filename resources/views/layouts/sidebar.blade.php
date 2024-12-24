@@ -162,6 +162,24 @@
             <span>Coverage</span>
           </a>
         </li>
+        @if ( Auth::user()->user_level_id == 'LVL241223002'|| Auth::user()->user_level_id == 'LVL250101001' ||
+        Auth::user()->user_level_id == 'LVL250101003')
+        <li>
+          <a href="{{route('uncoverage')}}"
+            class="menu-item text-gray-800 text-sm 
+                                         {{ Request::route()->getName() === 'uncoverage' ? 'text-green-700 bg-[#d9f3ea]' : 'text-gray-800' }} flex items-center cursor-pointer hover:bg-[#d9f3ea] rounded-md px-3 py-3 transition-all duration-300">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" class="mr-4" viewBox="0 0 24 24"
+              style="fill: rgba(0, 0, 0, 1);transform: ;msFilter:;">
+              <path
+                d="M3 16h2v5H3zm4-3h2v8H7zM21 3h-2v14.59l-2-2V7h-2v6.59l-2-2V10h-1.59l-7.7-7.71-1.42 1.42 18 18 1.42-1.42-.71-.7V3zm-6 18h1.88L15 19.12V21zm-4 0h2v-3.88l-2-2V21z">
+              </path>
+            </svg>
+            </svg>
+            <span>Un Coverage</span>
+          </a>
+        </li>
+        @endif
+
 
         @if (Auth::user()->user_level_id == 'LVL250101001'|| Auth::user()->user_level_id == 'LVL250101002' ||
         Auth::user()->user_level_id == 'LVL241223002')

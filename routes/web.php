@@ -9,6 +9,7 @@ use App\Http\Controllers\OltController;
 use App\Http\Controllers\OdpController;
 use App\Http\Controllers\OdcController;
 use App\Http\Controllers\SubscriptionController;
+use App\Http\Controllers\UncoverageController;
 use App\Models\Odc;
 use App\Models\Odp;
 use Illuminate\Http\Request;
@@ -105,6 +106,11 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('/site', [OltController::class, 'site'])->name('site');
         Route::post('/coverage/search', [OltController::class, 'searchNearest'])->name('coverageSearch');
         Route::get('/getOdp',  [OltController::class, 'getOdp'])->name('getOdp');
+    });
+    Route::prefix('/uncoverage')->group(function () {
+        Route::get('/', [UncoverageController::class, 'index'])->name('uncoverage');
+        Route::get('/getMapsLocations', [UncoverageController::class, 'getMapsLocations'])->name('getMapsLocations');
+        Route::post('/uncoverage', [UncoverageController::class, 'store'])->name('storeUncoverage');
     });
 
     Route::prefix('/site')->group(function () {

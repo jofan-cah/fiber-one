@@ -148,10 +148,11 @@
                         text: 'Something went wrong, please try again.', // Pesan fallback jika tidak ada error detail
                     });
                 }
+                // Mengaktifkan tombol submit kembali jika terjadi error
+                  submitButton.prop('disabled', false).text('Submit');
+                  console.log("Button re-enabled and text changed back to 'Submit'");
             }
-            // Mengaktifkan tombol submit kembali jika terjadi error
-            submitButton.prop('disabled', false).text('Submit');
-            console.log("Button re-enabled and text changed back to 'Submit'");
+           
         });
     });
   });

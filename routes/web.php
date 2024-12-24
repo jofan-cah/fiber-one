@@ -36,8 +36,8 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::prefix('/users')->group(function () {
         Route::get('/', [UserController::class, 'index'])->name('indexUsers');
-        Route::post('/', [UserController::class, 'store'])->name('storeUsers');
         Route::get('/create', [UserController::class, 'create'])->name('createUsers');
+        Route::post('/', [UserController::class, 'store'])->name('storeUsers');
         Route::get('/allData', [UserController::class, 'getAllData'])->name('getAllDataUsers');
         Route::get('/edit/{id}', [UserController::class, 'show'])->name('editUsersById');
         Route::put('/update/{id}', [UserController::class, 'update'])->name('updateUsers');

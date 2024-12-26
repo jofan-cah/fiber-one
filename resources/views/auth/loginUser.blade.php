@@ -18,7 +18,7 @@
     <div class="flex flex-col items-center justify-center lg:w-[500px] px-6 py-4 mx-auto md:h-screen lg:py-0">
 
       <a href="#" class="flex items-center mb-6 text-2xl font-semibold text-gray-900 dark:text-white">
-        <img class="w-45 h-16 mr-2" src="https://fiberone.net.id/wp-content/uploads/2023/03/cropped-Logo-Fiberone.png"
+        <img class="w-45 h-16 mr-2" src="{{ asset('fiberOne.png') }}"
           alt="logo">
 
       </a>

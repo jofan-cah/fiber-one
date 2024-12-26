@@ -3,7 +3,7 @@
     class=" bg-white shadow-lg h-screen fixed top-0 left-0 overflow-auto z-[99] lg:min-w-[250px] lg:w-max max-lg:w-0 max-lg:invisible transition-all duration-500">
     <div class="pt-8 pb-2 px-6 sticky top-0 bg-slate-100 min-h-[80px] z-[100]">
       <a href="javascript:void(0)" class="outline-none"><img
-          src="https://fiberone.net.id/wp-content/uploads/2023/03/cropped-Logo-Fiberone.png" alt="logo"
+          src="{{ asset('fiberOne.png') }}" alt="logo"
           class='w-[170px]' />
       </a>
     </div>

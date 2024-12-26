@@ -5,12 +5,16 @@ namespace App\Http\Controllers;
 use App\Models\UserLevel;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 
 class UserLevelController extends Controller
 {
     // Menampilkan daftar User Levels
     public function index()
     {
+        if (Gate::denies('isAdmin')) {
+            abort(403, 'Unauthorized action.');
+        }
         $userLevels = UserLevel::all();
         return view('usersLevel.index', compact('userLevels'));
     }
@@ -18,6 +22,9 @@ class UserLevelController extends Controller
     // Menampilkan daftar User Levels
     public function getAllData()
     {
+        if (Gate::denies('isAdmin')) {
+            abort(403, 'Unauthorized action.');
+        }
         $userLevels = UserLevel::all();
         return response()->json(
             $userLevels
@@ -27,11 +34,17 @@ class UserLevelController extends Controller
     // Menampilkan form untuk menambahkan User Level baru
     public function create()
     {
+        if (Gate::denies('isAdmin')) {
+            abort(403, 'Unauthorized action.');
+        }
         return view('usersLevel.createUserLevel');
     }
 
     public function store(Request $request)
     {
+        if (Gate::denies('isAdmin')) {
+            abort(403, 'Unauthorized action.');
+        }
         // Validasi data input
         $request->validate([
             'user_name' => 'required|unique:user_levels,user_name',
@@ -59,6 +72,9 @@ class UserLevelController extends Controller
     // Mengupdate data User Level yang sudah ada
     public function update(Request $request, $id)
     {
+        if (Gate::denies('isAdmin')) {
+            abort(403, 'Unauthorized action.');
+        }
         // Validasi data input
         $request->validate([
             'user_name' => 'required|unique:user_levels,user_name,' .  $id . ',user_level_id',
@@ -85,6 +101,9 @@ class UserLevelController extends Controller
     // Menampilkan form untuk mengedit User Level
     public function edit($id)
     {
+        if (Gate::denies('isAdmin')) {
+            abort(403, 'Unauthorized action.');
+        }
         $userLevel = UserLevel::findOrFail($id);
         return view('usersLevel.edit', compact('userLevel'));
     }
@@ -92,6 +111,9 @@ class UserLevelController extends Controller
     // Menghapus User Level
     public function destroy($id)
     {
+        if (Gate::denies('isAdmin')) {
+            abort(403, 'Unauthorized action.');
+        }
         $userLevel = UserLevel::findOrFail($id);
         $userLevel->delete();
         return response()->json(

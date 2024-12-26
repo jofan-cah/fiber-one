@@ -6,17 +6,24 @@ use App\Models\Odc;
 use App\Models\Odp;
 use App\Models\Olt;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 
 class OdcController extends Controller
 {
     // Menampilkan semua data Odp
     public function index()
     {
+        if (Gate::denies('isAdminOrNoc')) {
+            abort(403, 'Unauthorized action.');
+        }
         return view('odc.indexOdc');
     }
 
     public function getAllData()
     {
+        if (Gate::denies('isAdminOrNoc')) {
+            abort(403, 'Unauthorized action.');
+        }
         // $data =  Odc::with('olt')->get();
         $data = Odc::withCount('odpss as odp_ports_count')->with('olt')->get();
         $data->map(function ($odp) {
@@ -28,6 +35,9 @@ class OdcController extends Controller
 
     public function create()
     {
+        if (Gate::denies('isAdminOrNoc')) {
+            abort(403, 'Unauthorized action.');
+        }
         $olts = Olt::all();
         $odcs = Odc::all();
         return view('odc.createOdc', compact('olts', 'odcs'));
@@ -36,6 +46,9 @@ class OdcController extends Controller
     // Menampilkan detail Odp berdasarkan ID
     public function show($id)
     {
+        if (Gate::denies('isAdminOrNoc')) {
+            abort(403, 'Unauthorized action.');
+        }
         $odc = Odc::find($id);
         $odcs = Odc::all();
         $olts = Olt::all();
@@ -45,6 +58,9 @@ class OdcController extends Controller
 
     public function showOdc($id)
     {
+        if (Gate::denies('isAdminOrNoc')) {
+            abort(403, 'Unauthorized action.');
+        }
         // Ambil data OLT berdasarkan olt_id
         $odc = Odc::find($id);
 
@@ -60,6 +76,9 @@ class OdcController extends Controller
     // Menyimpan data Odp baru
     public function store(Request $request)
     {
+        if (Gate::denies('isAdminOrNoc')) {
+            abort(403, 'Unauthorized action.');
+        }
         $validatedData = $request->validate([
             'odc_name' => 'required|string|max:255',
             'odc_description' => 'nullable|string',
@@ -88,6 +107,9 @@ class OdcController extends Controller
     // Memperbarui data Odpuse Illuminate\Support\Facades\Log;
     public function update(Request $request, $id)
     {
+        if (Gate::denies('isAdminOrNoc')) {
+            abort(403, 'Unauthorized action.');
+        }
         $Odp = Odc::find($id);
 
         if (!$Odp) {
@@ -120,6 +142,9 @@ class OdcController extends Controller
     // Menghapus data Odp
     public function destroy($id)
     {
+        if (Gate::denies('isAdminOrNoc')) {
+            abort(403, 'Unauthorized action.');
+        }
         $Odp = Odc::find($id);
 
         if (!$Odp) {

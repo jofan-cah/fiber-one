@@ -8,17 +8,24 @@ use App\Models\Olt;
 use App\Models\Subscription;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Gate;
 
 class OltController extends Controller
 {
     // Menampilkan semua data OLT
     public function index()
     {
+        if (Gate::denies('isAdminOrNoc')) {
+            abort(403, 'Unauthorized action.');
+        }
         return view('olt.indexOlt');
     }
 
     public function getAllData()
     {
+        if (Gate::denies('isAdminOrNoc')) {
+            abort(403, 'Unauthorized action.');
+        }
         // Ambil semua data OLT dan hitung jumlah ODC yang terhubung dengan setiap OLT
         $data = Olt::withCount('odcs as odc_ports_count')->get();
         // Menambahkan kolom available_ports berdasarkan perhitungan
@@ -33,11 +40,16 @@ class OltController extends Controller
 
     public function create()
     {
-
+        if (Gate::denies('isAdminOrNoc')) {
+            abort(403, 'Unauthorized action.');
+        }
         return view('olt.createOlt');
     }
     public function showOlt($id)
     {
+        if (Gate::denies('isAdminOrNoc')) {
+            abort(403, 'Unauthorized action.');
+        }
         // Ambil data OLT berdasarkan olt_id
         $olt = Olt::find($id);
 
@@ -53,6 +65,9 @@ class OltController extends Controller
     // Menampilkan detail OLT berdasarkan ID
     public function show($id)
     {
+        if (Gate::denies('isAdminOrNoc')) {
+            abort(403, 'Unauthorized action.');
+        }
         $olt = Olt::find($id);
 
         return view('olt.editOlt', compact('olt'));
@@ -61,6 +76,9 @@ class OltController extends Controller
     // Menyimpan data OLT baru
     public function store(Request $request)
     {
+        if (Gate::denies('isAdminOrNoc')) {
+            abort(403, 'Unauthorized action.');
+        }
         $validatedData = $request->validate([
 
             'olt_name' => 'required|string|max:255',
@@ -85,6 +103,9 @@ class OltController extends Controller
     // Memperbarui data OLTuse Illuminate\Support\Facades\Log;
     public function update(Request $request, $id)
     {
+        if (Gate::denies('isAdminOrNoc')) {
+            abort(403, 'Unauthorized action.');
+        }
         $olt = Olt::find($id);
 
         if (!$olt) {
@@ -106,6 +127,9 @@ class OltController extends Controller
     // Menghapus data OLT
     public function destroy($id)
     {
+        if (Gate::denies('isAdminOrNoc')) {
+            abort(403, 'Unauthorized action.');
+        }
         $olt = Olt::find($id);
 
         if (!$olt) {

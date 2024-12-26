@@ -127,5 +127,5 @@ Route::group(['middleware' => ['auth']], function () {
 });
 
 Route::get('login', [AuthController::class, 'index'])->name('login');
-Route::post('login', [AuthController::class, 'logged'])->name('logged')->middleware('throttle:1,1');
+Route::post('login', [AuthController::class, 'logged'])->name('logged')->middleware('throttle:20,1');
 Route::delete('/logout', [AuthController::class, 'logout'])->name('logout')->middleware('auth');

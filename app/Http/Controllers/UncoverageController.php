@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 
 use App\Models\Uncoverage;
 
@@ -10,6 +11,10 @@ class UncoverageController extends Controller
 {
     public function index()
     {
+        if (Gate::denies('isSales')) {
+            abort(403, 'Unauthorized action.');
+        }
+    
         $uncoverages = Uncoverage::all();
         return view('uncoverage.indexUncoverage', compact('uncoverages'));
     }

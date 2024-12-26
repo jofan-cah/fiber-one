@@ -6,29 +6,42 @@ use App\Models\User;
 use App\Models\UserLevel;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Gate;
 
 
 class UserController extends Controller
 {
     public function index()
     {
+        if (Gate::denies('isAdmin')) {
+            abort(403, 'Unauthorized action.');
+        }
         return view('users.index');
     }
 
     public function create()
     {
+        if (Gate::denies('isAdmin')) {
+            abort(403, 'Unauthorized action.');
+        }
         $userLevel = UserLevel::all();
         return view('users.userCreate', compact('userLevel'));
     }
 
     public function getAllData()
     {
+        if (Gate::denies('isAdmin')) {
+            abort(403, 'Unauthorized action.');
+        }
         $users = User::with('userLevel')->get(); // Menggunakan get() untuk mendapatkan data
         return response()->json($users);
     }
 
     public function store(Request $request)
     {
+        if (Gate::denies('isAdmin')) {
+            abort(403, 'Unauthorized action.');
+        }
         $request->validate([
             'full_name' => 'required',
             'username' => 'required|unique:users',
@@ -56,6 +69,9 @@ class UserController extends Controller
     }
     public function update(Request $request, $id)
     {
+        if (Gate::denies('isAdmin')) {
+            abort(403, 'Unauthorized action.');
+        }
         // Validasi input
         $request->validate([
             'full_name' => 'sometimes|required',
@@ -90,6 +106,9 @@ class UserController extends Controller
     // show user by id 
     public function show($id)
     {
+        if (Gate::denies('isAdmin')) {
+            abort(403, 'Unauthorized action.');
+        }
         $user = User::find($id);
         $userLevel = UserLevel::all();
         if (!$user) {
@@ -100,6 +119,9 @@ class UserController extends Controller
 
     function generateUserId()
     {
+        if (Gate::denies('isAdmin')) {
+            abort(403, 'Unauthorized action.');
+        }
         // Ambil tanggal hari ini
         $today = Carbon::today();
 
@@ -129,6 +151,9 @@ class UserController extends Controller
 
     public function destroy($id)
     {
+        if (Gate::denies('isAdmin')) {
+            abort(403, 'Unauthorized action.');
+        }
         $user = User::find($id);
         if (!$user) {
             return response()->json(['message' => 'User not found'], 404);

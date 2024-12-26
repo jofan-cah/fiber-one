@@ -9,7 +9,7 @@ class Port extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['olt_id', 'odc_id', 'odp_id', 'port_number', 'status'];
+    protected $fillable = ['olt_id', 'odc_id', 'odp_id', 'port_number', 'status','directions'];
 
     public function olt()
     {

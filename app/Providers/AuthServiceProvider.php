@@ -38,5 +38,10 @@ class AuthServiceProvider extends ServiceProvider
         Gate::define('isKoor', function ($user) {
             return $user->user_level_id === 'LVL241223002';
         });
+         // Gate untuk admin dan noc saja
+        Gate::define('isAdminOrNoc', function ($user) {
+            $allowedLevels = ['LVL250101001', 'LVL250101002']; // Admin dan NOC
+            return in_array($user->user_level_id, $allowedLevels);
+        });
     }
 }

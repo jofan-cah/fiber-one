@@ -7,17 +7,24 @@ use App\Models\Odp;
 use App\Models\Olt;
 use App\Models\Subscription;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 
 class OdpController extends Controller
 {
     // Menampilkan semua data Odp
     public function index()
     {
+        if (Gate::denies('isAdminOrNoc')) {
+            abort(403, 'Unauthorized action.');
+        }
         return view('odp.indexOdp');
     }
 
     public function getAllData()
     {
+        if (Gate::denies('isAdminOrNoc')) {
+            abort(403, 'Unauthorized action.');
+        }
         // $data =  Odp::with('odc')->get();
         // $data =  Odc::with('olt')->get();
         $data = Odp::withCount('subs as odp_ports_count')->with('odc')->get();
@@ -31,6 +38,9 @@ class OdpController extends Controller
 
     public function showOdp($id)
     {
+        if (Gate::denies('isAdminOrNoc')) {
+            abort(403, 'Unauthorized action.');
+        }
         // Ambil data OLT berdasarkan odc_id
         $odp = Odp::find($id);
         $odc = Subscription::where('odp_id', $odp->odp_id)->get();
@@ -47,6 +57,9 @@ class OdpController extends Controller
 
     public function create()
     {
+        if (Gate::denies('isAdminOrNoc')) {
+            abort(403, 'Unauthorized action.');
+        }
         $odcs = Odc::all();
         $odps = Odp::all();
         return view('odp.createOdp', compact('odps', 'odcs'));
@@ -55,6 +68,9 @@ class OdpController extends Controller
     // Menampilkan detail Odp berdasarkan ID
     public function show($id)
     {
+        if (Gate::denies('isAdminOrNoc')) {
+            abort(403, 'Unauthorized action.');
+        }
         $odp = Odp::find($id);
         $odps = Odp::all();
         $odcs = Odc::all();
@@ -65,6 +81,9 @@ class OdpController extends Controller
 
     public function store(Request $request)
     {
+        if (Gate::denies('isAdminOrNoc')) {
+            abort(403, 'Unauthorized action.');
+        }
         $validatedData = $request->validate([
             'odp_name' => 'required|string|max:255',
             'odp_description' => 'nullable|string',
@@ -96,6 +115,9 @@ class OdpController extends Controller
 
     public function update(Request $request, $id)
     {
+        if (Gate::denies('isAdminOrNoc')) {
+            abort(403, 'Unauthorized action.');
+        }
         $Odp = Odp::find($id);
 
         if (!$Odp) {
@@ -130,6 +152,9 @@ class OdpController extends Controller
     // Menghapus data Odp
     public function destroy($id)
     {
+        if (Gate::denies('isAdminOrNoc')) {
+            abort(403, 'Unauthorized action.');
+        }
         $Odp = Odp::find($id);
 
         if (!$Odp) {

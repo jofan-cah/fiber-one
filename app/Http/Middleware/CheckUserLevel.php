@@ -17,11 +17,11 @@ class CheckUserLevel
     public function handle(Request $request, Closure $next)
     {
 
-        $user = Auth::user();
+        // $user = Auth::user();
 
-        if (!$user || !in_array($user->user_level_id, $levels)) {
-            abort(403, 'Unauthorized action.');
-        }
+        // if (!$user || !in_array($user->user_level_id, $levels)) {
+        //     abort(403, 'Unauthorized action.');
+        // }
         return $next($request);
     }
 }

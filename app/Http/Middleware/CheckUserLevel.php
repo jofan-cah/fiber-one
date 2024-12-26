@@ -22,6 +22,7 @@ class CheckUserLevel
         // if (!$user || !in_array($user->user_level_id, $levels)) {
         //     abort(403, 'Unauthorized action.');
         // }
+        
         return $next($request);
     }
 }

@@ -14,15 +14,18 @@ return new class extends Migration
     public function up()
     {
         Schema::create('splitters', function (Blueprint $table) {
-            $table->id('splitter_id');
-            $table->string('odc_id');
-            $table->foreign('odc_id')
-                ->references('odc_id')
-                ->on('odcs')
-                ->onDelete('cascade');
-            $table->string('type');  // Jenis splitter (misalnya 1:2, 1:4)
-            $table->integer('port_count');  // Jumlah port yang tersedia pada splitter
+            $table->id(); // Primary key
+            $table->string('odc_id')->nullable(); // Foreign key to ODC
+            $table->integer('port_start'); // Start of the port range
+            $table->integer('port_end'); // End of the port range
+            $table->string('odp_id')->nullable(); // Foreign key to ODP
+            $table->integer('port_number'); // Specific port number
+            $table->string('direction'); // Direction for the port
             $table->timestamps();
+
+            // Adding foreign key constraints if needed
+            $table->foreign('odc_id')->references('odc_id')->on('odcs')->onDelete('cascade');
+            $table->foreign('odp_id')->references('odp_id')->on('odps')->onDelete('cascade');
         });
     }
 

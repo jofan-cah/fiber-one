@@ -9,19 +9,20 @@ class Port extends Model
 {
     use HasFactory;
 
-    protected $table = 'ports';
+    protected $fillable = ['olt_id', 'odc_id', 'odp_id', 'port_number', 'status'];
 
-    protected $fillable = [
-        'odp_id', 'port_number', 'status',
-    ];
+    public function olt()
+    {
+        return $this->belongsTo(Olt::class, 'olt_id');
+    }
+
+    public function odc()
+    {
+        return $this->belongsTo(Odc::class, 'odc_id');
+    }
 
     public function odp()
     {
         return $this->belongsTo(Odp::class, 'odp_id');
-    }
-
-    public function subscriptions()
-    {
-        return $this->hasMany(Subscription::class, 'port');
     }
 }

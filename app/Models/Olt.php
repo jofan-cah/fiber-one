@@ -40,4 +40,10 @@ class Olt extends Model
         return Odp::whereIn('odc_id', $this->odcs->pluck('odc_id')->toArray())
             ->orWhere('olt_id', $this->olt_id);
     }
+
+     // Relasi ke Port
+     public function ports()
+     {
+         return $this->hasMany(Port::class, 'olt_id');
+     }
 }

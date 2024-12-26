@@ -43,4 +43,8 @@ class Odc extends Model
     {
         return $this->hasMany(Odp::class, 'odc_id');
     }
+    public function ports()
+    {
+        return $this->hasMany(Port::class, 'odc_id');
+    }
 }

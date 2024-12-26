@@ -55,4 +55,10 @@ class Odp extends Model
         return $this->hasMany(Subscription::class, 'odp_id');
     }
 
+    // Relasi dengan port (misalnya jika ingin track port di ODP)
+    public function getPortForSubscription($subscriptionId)
+    {
+        return $this->subscriptions()->where('subs_id', $subscriptionId)->first()->port;
+    }
+
 }

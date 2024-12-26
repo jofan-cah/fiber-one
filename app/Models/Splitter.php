@@ -9,20 +9,16 @@ class Splitter extends Model
 {
     use HasFactory;
 
-    protected $table = 'splitters';
-
-    protected $fillable = [
-        'odc_id', 'type', 'port_count',
-    ];
+    protected $fillable = ['odc_id', 'port_start', 'port_end', 'odp_id', 'port_number', 'direction'];
 
     public function odc()
     {
         return $this->belongsTo(Odc::class, 'odc_id');
     }
 
-    // Relasi ke ODP berdasarkan splitter (misalnya mengarah ke ODP yang dibagi)
-    public function odps()
+    public function odp()
     {
-        return $this->hasMany(Odp::class);
+        return $this->belongsTo(Odp::class, 'odp_id');
     }
 }
+

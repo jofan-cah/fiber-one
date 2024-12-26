@@ -17,11 +17,16 @@ class Subscription extends Model
         'subs_id',
         'subs_name',
         'subs_location_maps',
-        'odp_id'
+        'odp_id',
+        'port'
     ];
 
     public function odp()
     {
         return $this->belongsTo(Odp::class, 'odp_id');
+    }
+    public function port()
+    {
+        return $this->belongsTo(Port::class, 'port');
     }
 }

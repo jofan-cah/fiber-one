@@ -88,9 +88,8 @@
             <label for="port_${i}" class="block text-gray-700 dark:text-gray-800 mb-1">Port ${i} - Status</label>
             <select name="port_${i}" id="port_${i}"
               class="w-full rounded-lg border py-2 px-3 dark:bg-gray-200 dark:text-gray-900 dark:border-gray-300">
-              <option value="available">Aktive</option>
-              <option value="occupied">Terisi</option>
-              <option value="inactive">TidakAktif</option>
+              <option value="enabled">Enabled</option>
+              <option value="disabled">Disabled</option>
             </select>
           </div>
           <div class="mb-4">

@@ -86,8 +86,8 @@ class OltController extends Controller
             'olt_location_maps' => 'nullable|string',
             'olt_addres' => 'nullable|string',
             'olt_port_capacity' => 'required|integer|min:1',
-            'ports' => 'required|array', // Validasi array ports
-            'directions' => 'required|array', // Validasi array directions
+            'ports' => 'array', // Validasi array ports
+            'directions' => 'array', // Validasi array directions
         ]);
 
       // Loop untuk menyimpan data port

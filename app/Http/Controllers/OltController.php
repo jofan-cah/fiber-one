@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Odc;
 use App\Models\Odp;
 use App\Models\Olt;
+use App\Models\Port;
 use App\Models\Subscription;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -45,84 +46,122 @@ class OltController extends Controller
         }
         return view('olt.createOlt');
     }
+    // Fungsi untuk menampilkan detail Olt beserta Ports terkait
     public function showOlt($id)
     {
-        if (Gate::denies('isAdminOrNoc')) {
-            abort(403, 'Unauthorized action.');
+        // Ambil data Olt berdasarkan ID dan relasi Ports
+        $olt = Olt::with('ports')->find($id);
+
+        if (!$olt) {
+            return redirect()->route('olts.index')->with('error', 'OLT tidak ditemukan');
         }
-        // Ambil data OLT berdasarkan olt_id
-        $olt = Olt::find($id);
 
-        $odp = Odc::where('olt_id', $olt->olt_id)->get();
+        // Hitung jumlah port berdasarkan status
+        $availablePorts = $olt->ports->where('status', 'available')->count();
+        $occupiedPorts = $olt->ports->where('status', 'occupied')->count();
+        $inactivePorts = $olt->ports->where('status', 'inactive')->count();
 
-        // Hitung jumlah port yang sudah digunakan
-        $usedPorts = $odp->count();
-        $availablePorts = $olt->olt_port_capacity - $usedPorts;
-
-        return view('olt.showOlt', compact('olt', 'availablePorts'));
+        return view('olt.showOlt', compact('olt', 'availablePorts', 'occupiedPorts', 'inactivePorts'));
     }
-
     // Menampilkan detail OLT berdasarkan ID
     public function show($id)
     {
         if (Gate::denies('isAdminOrNoc')) {
             abort(403, 'Unauthorized action.');
         }
-        $olt = Olt::find($id);
+      // Find the OLT and eager load related ports
+      $olt = Olt::with('ports')->find($id);
+
+        // dd($olt);
 
         return view('olt.editOlt', compact('olt'));
     }
-
     // Menyimpan data OLT baru
     public function store(Request $request)
     {
-        if (Gate::denies('isAdminOrNoc')) {
-            abort(403, 'Unauthorized action.');
-        }
+        // Validasi data
         $validatedData = $request->validate([
-
             'olt_name' => 'required|string|max:255',
             'olt_description' => 'nullable|string',
             'olt_location_maps' => 'nullable|string',
             'olt_addres' => 'nullable|string',
             'olt_port_capacity' => 'required|integer|min:1',
+            'ports' => 'required|array', // Validasi array ports
+            'directions' => 'required|array', // Validasi array directions
         ]);
 
-        $oltId = $this->generateOltId();
+      // Loop untuk menyimpan data port
+        $ports = $validatedData['ports'];
+        $directions = $validatedData['directions'];
+
+        // Pastikan data ports dan directions memiliki jumlah yang sama
+        if (count($ports) !== count($directions)) {
+            return response()->json(['error' => 'Ports and directions count mismatch'], 400);
+        }
+
+        // Proses pembuatan OLT
         $olt = Olt::create([
-            'olt_id' => $oltId,
+            'olt_id' => $this->generateOltId(),
             'olt_name' => $validatedData['olt_name'],
             'olt_description' => $validatedData['olt_description'],
             'olt_location_maps' => $validatedData['olt_location_maps'],
             'olt_addres' => $validatedData['olt_addres'],
             'olt_port_capacity' => $validatedData['olt_port_capacity'],
         ]);
+
+        // Simpan data port dan description sesuai dengan capacity
+      
+
+       foreach ($request->ports as $index => $status) {
+        $port = $olt->ports()->updateOrCreate(
+            ['port_number' => $index + 1],
+            ['status' => $status, 'directions' => $request->directions[$index]]
+        );
+    }
+
         return response()->json(['message' => 'OLT created successfully', 'data' => $olt], 201);
     }
+
 
     // Memperbarui data OLTuse Illuminate\Support\Facades\Log;
     public function update(Request $request, $id)
     {
-        if (Gate::denies('isAdminOrNoc')) {
-            abort(403, 'Unauthorized action.');
-        }
-        $olt = Olt::find($id);
-
-        if (!$olt) {
-            return response()->json(['message' => 'OLT not found'], 404);
-        }
-
-        $validatedData = $request->validate([
-            'olt_name' => 'sometimes|required|string|max:255',
+        $request->validate([
+            'olt_name' => 'required|string|max:255',
             'olt_description' => 'nullable|string',
             'olt_location_maps' => 'nullable|string',
             'olt_addres' => 'nullable|string',
-            'olt_port_capacity' => 'sometimes|required|integer|min:1',
+            'olt_port_capacity' => 'required|integer|min:0',
+            'ports' => 'required|array',
+            'directions' => 'required|array',
         ]);
-
-        $olt->update($validatedData);
-        return response()->json(['message' => 'OLT updated successfully', 'data' => $olt]);
+    
+        try {
+            $olt = Olt::findOrFail($id);
+    
+            // Update OLT fields
+            $olt->olt_name = $request->olt_name;
+            $olt->olt_description = $request->olt_description;
+            $olt->olt_location_maps = $request->olt_location_maps;
+            $olt->olt_addres = $request->olt_addres;
+            $olt->olt_port_capacity = $request->olt_port_capacity;
+            $olt->save();
+    
+            // Update port data
+            foreach ($request->ports as $index => $status) {
+                $port = $olt->ports()->updateOrCreate(
+                    ['port_number' => $index + 1],
+                    ['status' => $status,
+                     'directions' => $request->directions[$index]]
+                );
+            }
+    
+            return response()->json(['message' => 'Data has been updated successfully.'], 200);
+        } catch (\Exception $e) {
+            return response()->json(['errors' => ['error' => [$e->getMessage()]]], 500);
+        }
     }
+    
 
     // Menghapus data OLT
     public function destroy($id)

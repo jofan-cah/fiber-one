@@ -33,31 +33,42 @@
             <div id="map" class="absolute inset-0 w-full h-full rounded-lg"></div>
           </div>
 
-          <!-- Content Section -->
-          <div class="p-6 lg:p-8 bg-white rounded-lg ">
+          <div class="p-6 lg:p-8 bg-white rounded-lg shadow-lg">
             <h3 class="text-2xl font-bold text-gray-800">{{ $olt->olt_name }}</h3>
 
             <div class="mt-4">
-              <p class="text-sm text-gray-600"><strong>OLT ID:</strong> {{ $olt->olt_id }}</p>
-              <p class="mt-2 text-sm text-gray-600"><strong>Deskripsi:</strong> {{ $olt->olt_description }}</p>
-              <p class="mt-2 text-sm text-gray-600"><strong>Alamat:</strong> {{ $olt->olt_addres }}</p>
-              <p class="mt-2 text-sm text-gray-600"><strong>Lokasi:</strong> {{ $olt->olt_location_maps }}</p>
-              <p class="mt-2 text-sm text-gray-600"><strong>Kapasitas Port:</strong> {{ $availablePorts }} / {{
-                $olt->olt_port_capacity }}</p>
+                <p class="text-sm text-gray-600"><strong>OLT ID:</strong> {{ $olt->olt_id }}</p>
+                <p class="mt-2 text-sm text-gray-600"><strong>Deskripsi:</strong> {{ $olt->olt_description }}</p>
+                <p class="mt-2 text-sm text-gray-600"><strong>Alamat:</strong> {{ $olt->olt_addres }}</p>
+                <p class="mt-2 text-sm text-gray-600"><strong>Lokasi:</strong> {{ $olt->olt_location_maps }}</p>
+                <p class="mt-2 text-sm text-gray-600"><strong>Kapasitas Port:</strong> {{ $olt->olt_port_capacity }}</p>
             </div>
-            <br>
             <br>
             <hr>
+            <br>
+            <h4 class="text-xl font-bold text-gray-800">Daftar Port</h4>
+            <table class="min-w-full table-auto mt-4">
+                <thead>
+                    <tr class="bg-gray-100">
+                        <th class="px-4 py-2 text-left text-gray-600">Status</th>
+                        <th class="px-4 py-2 text-left text-gray-600">Direction</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach($olt->ports as $port)
+                        <tr class="border-b">
+                            <td class="px-4 py-2">{{ $port->status }}</td>
+                            <td class="px-4 py-2">{{ $port->directions }}</td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
 
-            <div class="mt-4">
-              <p class="text-sm text-gray-600"><strong>Informasi Lainnya:</strong></p>
-              <ul class="list-disc pl-5 text-sm text-gray-600">
-                <li>Port yang tersedia: {{ $availablePorts }}</li>
-                <li>Total kapasitas: {{ $olt->olt_port_capacity }}</li>
-                <!-- Bisa ditambah informasi lainnya jika diperlukan -->
-              </ul>
-            </div>
-          </div>
+      
+    
+        <!-- Port List -->
+     
         </div>
       </div>
     </div>

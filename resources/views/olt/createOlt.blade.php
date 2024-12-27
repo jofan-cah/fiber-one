@@ -59,6 +59,8 @@
 
             </div>
         </div>
+           <!-- Port Dynamic Inputs -->
+           <div id="portFields" class="mt-6"></div>
 
         <div class="mt-8 flex justify-end">
           <button type="submit"
@@ -73,73 +75,120 @@
 
 <script>
   $(document).ready(function() {
+
+
+    $('#olt_port_capacity').on('input', function() {
+    let portCapacity = $(this).val(); // Ambil jumlah port yang dimasukkan
+    $('#portFields').empty(); // Kosongkan div portFields sebelum menambahkan input baru
+
+    // Tambahkan input port sesuai dengan jumlah yang dimasukkan
+    for (let i = 1; i <= portCapacity; i++) {
+        $('#portFields').append(`
+          <div class="mb-4">
+            <label for="port_${i}" class="block text-gray-700 dark:text-gray-800 mb-1">Port ${i} - Status</label>
+            <select name="port_${i}" id="port_${i}"
+              class="w-full rounded-lg border py-2 px-3 dark:bg-gray-200 dark:text-gray-900 dark:border-gray-300">
+              <option value="available">Aktive</option>
+              <option value="occupied">Terisi</option>
+              <option value="inactive">TidakAktif</option>
+            </select>
+          </div>
+          <div class="mb-4">
+            <label for="directions_${i}" class="block text-gray-700 dark:text-gray-800 mb-1">Port ${i} - Direction</label>
+           <input type="text" name="directions[]" placeholder="Description For OLT" id="directions_${i}"
+              class="w-full rounded-lg border py-2 px-3 dark:bg-gray-200 dark:text-gray-900 dark:border-gray-300">
+          </div>
+        `);
+    }
+});
+
+
   console.log("Document ready"); // Memastikan jQuery berhasil dimuat
 
   $('#userForm').on('submit', function(e) {
-    e.preventDefault(); // Mencegah form disubmit secara default
-    console.log("Form submitted"); // Cek apakah form disubmit
+    event.preventDefault(); // Mencegah pengiriman form standar
+
+        let ports = [];
+        let directions = [];
+        const portCapacity = $('#olt_port_capacity').val(); // Kapasitas port yang diinput
+
+        for (let i = 1; i <= portCapacity; i++) {
+            const portValue = $(`#port_${i}`).val();
+            const directionValue = $(`#directions_${i}`).val();
+
+            if (portValue) ports.push(portValue);
+            if (directionValue) directions.push(directionValue);
+
+            console.log(`Port ${i}:`, portValue);
+            console.log(`Direction ${i}:`, directionValue);
+        }
+        console.log('Collected Ports:', ports);
+        console.log('Collected Directions:', directions);
+
+
+        // Create the form data object
+        const formData = {
+            olt_name: $('#olt_name').val(),
+            olt_description: $('#olt_description').val(),
+            olt_location_maps: $('#olt_location_maps').val(),
+            olt_addres: $('#olt_addres').val(),
+            olt_port_capacity: portCapacity,
+            'ports[]': ports,  // Array data
+            'directions[]': directions
+        };
+
+
 
     // Disable tombol submit dan ubah teksnya menjadi "Loading"
     const submitButton = $(this).find('button[type="submit"]');
-    console.log("Submit Button found:", submitButton); // Cek apakah tombol ditemukan
-
     submitButton.prop('disabled', true).text('Loading...');
-    console.log("Button disabled and text changed to 'Loading'"); // Pastikan tombol disabled
 
-    // Mengambil data dari form
-    var formData = $(this).serialize();
-    console.log("Form Data:", formData); // Cek data yang disubmit
+
 
     $.ajax({
       url: '{{ route('storeOlt') }}', // Ubah dengan route yang sesuai
       method: 'POST',
       data: formData,
+      headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
       success: function(response) {
-        console.log("Success Response:", response); // Cek respons sukses
         Swal.fire({
           icon: 'success',
           title: 'Success!',
           text: 'Data has been saved successfully.',
         }).then((result) => {
-          console.log("Redirecting to /olt");
           window.location.href = '/olt'; // Ubah dengan route yang sesuai
         });
       },
       error: function(xhr, status, error) {
-        console.log("Error Response:", xhr.responseJSON); // Cek respons error
-
-        // Menangani error validasi yang dikirim oleh server
         if (xhr.responseJSON && xhr.responseJSON.errors) {
           var errors = xhr.responseJSON.errors;
           var errorMessages = '';
-
-          // Menggabungkan pesan error dari respons
           $.each(errors, function(field, messages) {
             errorMessages += messages.join(', ') + '\n';
           });
 
-          // Menampilkan alert error dengan pesan kesalahan
           Swal.fire({
             icon: 'error',
             title: 'Oops...',
-            text: errorMessages, // Menampilkan pesan error
+            text: errorMessages,
           });
         } else {
-          // Jika ada error lain (misalnya server error)
           Swal.fire({
             icon: 'error',
             title: 'Oops...',
-            text: 'Something went wrong, please try again.', // Pesan fallback jika tidak ada error detail
+            text: 'Something went wrong, please try again.',
           });
         }
 
         // Mengaktifkan tombol submit kembali jika terjadi error
         submitButton.prop('disabled', false).text('Submit');
-        console.log("Button re-enabled and text changed back to 'Submit'");
       }
     });
   });
 });
+
 
 </script>
 @endsection

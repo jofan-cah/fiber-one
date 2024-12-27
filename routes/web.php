@@ -84,6 +84,7 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('/create', [OdpController::class, 'create'])->name('createOdp');
         Route::get('/allData', [OdpController::class, 'getAllData'])->name('getAllDataOdp');
         Route::get('/{id}', [OdpController::class, 'showOdp'])->name('showOdp');
+        Route::get('/splitter/{id}', [OdpController::class, 'splitterOdp'])->name('splitterOdp');
         Route::put('/update/{id}', [OdpController::class, 'update'])->name('updateOdp');
         Route::get('/edit/{id}', [OdpController::class, 'show'])->name('editOdpById');
         Route::post('/', [OdpController::class, 'store'])->name('storeOdp');

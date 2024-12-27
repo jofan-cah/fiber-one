@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Odc;
 use App\Models\Odp;
 use App\Models\Olt;
+use App\Models\Splitter;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 
@@ -100,6 +101,16 @@ class OdcController extends Controller
             'odc_port_capacity' => $validatedData['odc_port_capacity'],
             'parent_odc_id' => $validatedData['parent_odc_id'] ?? null,
         ]);
+
+        for ($i = 1; $i <= $validatedData['odc_port_capacity']; $i++) {
+            Splitter::create([
+                'odc_id' =>   $OdpId,
+                'port_start' => 1,
+                'port_end' => $i,
+                'port_number' => $i,
+                'direction' => 'Arah ODP '
+            ]);
+        }
 
         return response()->json(['message' => 'Odp created successfully', 'data' => $Odp], 201);
     }

@@ -2,10 +2,10 @@
   <div id="sidebar-collapse-menu"
     class=" bg-white shadow-lg h-screen fixed top-0 left-0 overflow-auto z-[99] lg:min-w-[250px] lg:w-max max-lg:w-0 max-lg:invisible transition-all duration-500">
     <div class="pt-8 pb-2 px-6 sticky top-0 bg-slate-100 min-h-[80px] z-[100]">
-      {{-- <a href="javascript:void(0)" class="outline-none"><img
+      <a href="javascript:void(0)" class="outline-none"><img
           src="{{ asset('fiberOne.png') }}" alt="logo"
           class='w-[170px]' />
-      </a> --}}
+      </a>
     </div>
 
     @php
@@ -66,6 +66,7 @@
         @php
         $activeRoutes = ['indexOlt','allSite','siteIndex', 'createOdc' ,'indexOdc', 'createOlt', 'editOltById',
         'indexOdp',
+        'showOdp',
         'createOdp',
         'editOdpById'];
         $isActive = in_array(Request::route()->getName(), $activeRoutes);
@@ -110,7 +111,7 @@
             </li>
             <li class="my-2">
               <a href="{{route('indexOdp')}}"
-                class="text-gray-800 text-sm {{ Request::route()->getName() === 'indexOdp' || Request::route()->getName() === 'createOdp' ? 'text-green-700 bg-[#d9f3ea]' : 'text-gray-800' }}  block cursor-pointer hover:bg-gray-100 rounded-md px-3 py-2 transition-all duration-300">
+                class="text-gray-800 text-sm {{ Request::route()->getName() === 'indexOdp' || Request::route()->getName() === 'createOdp' || Request::route()->getName() === 'showOdp' ? 'text-green-700 bg-[#d9f3ea]' : 'text-gray-800' }}  block cursor-pointer hover:bg-gray-100 rounded-md px-3 py-2 transition-all duration-300">
                 <span>ODP</span>
               </a>
             </li>

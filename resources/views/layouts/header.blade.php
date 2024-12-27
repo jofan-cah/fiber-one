@@ -43,7 +43,9 @@
                 <p class="font-semibold">{{ Auth::user()->full_name }}</p>
                 <p class="text-sm text-gray-500">{{ AUth::user()->userLevel->user_name }}</p>
               </div>
-              {{-- <a href="javascript:void(0)"
+              <hr class="my-2 -mx-2" />
+
+              <a href="{{ route('showbyID', Auth::user()->user_id) }}"
                 class="text-sm text-gray-800 cursor-pointer flex items-center p-2 rounded-md hover:bg-gray-100 dropdown-item transition duration-300 ease-in-out">
                 <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 mr-3 fill-current" viewBox="0 0 512 512">
                   <path
@@ -51,7 +53,7 @@
                     data-original="#000000"></path>
                 </svg>
                 Account</a>
-              <hr class="my-2 -mx-2" /> --}}
+              <hr class="my-2 -mx-2" />
 
               {{-- <a href="javascript:void(0)"
                 class="text-sm text-gray-800 cursor-pointer flex items-center p-2 rounded-md hover:bg-gray-100 dropdown-item transition duration-300 ease-in-out">

@@ -101,14 +101,53 @@ class UserController extends Controller
             'user' => $user,
         ]);
     }
+    public function showbyID($id)
+    {
+       
+        $user = User::find($id);
+        $userLevel = UserLevel::all();
+        if (!$user) {
+            return response()->json(['message' => 'User not found'], 404);
+        }
+        return view('users.editUserByID', compact('user', 'userLevel'));
+    }
 
+    public function updateByID(Request $request, $id)
+    {
+     
+        // Validasi input
+        $request->validate([
+            'full_name' => 'sometimes|required',
+            'username' => 'sometimes|required|unique:users,username,' . $id . ',user_id',
+            'email' => 'sometimes|required|email|unique:users,email,' . $id . ',user_id',
+            'password' => 'nullable|min:6',
+            'user_level_id' => 'sometimes|required|exists:user_levels,user_level_id',
+        ]);
 
+        // Cari user berdasarkan ID
+        $user = User::findOrFail($id);
+
+        // Perbarui hanya data yang valid
+        $dataToUpdate = $request->only(['full_name', 'username', 'email', 'user_level_id']);
+
+        // Jika password diisi, hash dan Addkan ke data yang akan diperbarui
+        if ($request->filled('password')) {
+            $dataToUpdate['password'] = bcrypt($request->password);
+        }
+
+        // Lakukan pembaruan
+        $user->update($dataToUpdate);
+
+        // Backkan respons
+        return response()->json([
+            'message' => 'User updated successfully',
+            'user' => $user,
+        ]);
+    }
     // show user by id 
     public function show($id)
     {
-        if (Gate::denies('isAdmin')) {
-            abort(403, 'Unauthorized action.');
-        }
+       
         $user = User::find($id);
         $userLevel = UserLevel::all();
         if (!$user) {

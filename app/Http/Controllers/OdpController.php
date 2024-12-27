@@ -50,9 +50,11 @@ class OdpController extends Controller
         $usedPorts = $odc->count();
         $availablePorts = $odp->odp_port_capacity - $usedPorts;
 
+
         return view('odp.showOdp', compact(
             'odp',
-            'availablePorts'
+            'availablePorts',
+            'odc'
         ));
     }
 

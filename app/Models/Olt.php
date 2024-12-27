@@ -46,4 +46,14 @@ class Olt extends Model
      {
          return $this->hasMany(Port::class, 'olt_id');
      }
+
+        // Di model Olt
+    public function getPortsArrayAttribute()
+    {
+        // Decode JSON menjadi array asosiatif
+        $ports = json_decode($this->ports, true);
+
+        // Pastikan JSON valid dan kembalikan arraynya
+        return is_array($ports) ? $ports : [];
+    }
 }

@@ -38,6 +38,7 @@ class SubscriptionController extends Controller
             'subs_name' => 'required|string|max:255',
             'subs_location_maps' => 'required|string',
             'odp_id' => 'required|string|exists:odps,odp_id',
+            'port' => 'required',
         ]);
 
         $data = Subscription::create($request->all());
@@ -67,6 +68,7 @@ class SubscriptionController extends Controller
                 'required',
                 ValidationRule::unique('subscriptions', 'subs_id')->ignore($subscription->subs_id, 'subs_id'),
             ],
+            'port' => 'required',
         ]);
 
         // Update the subscription

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Odc;
 use App\Models\Odp;
 use App\Models\Olt;
+use App\Models\Splitter;
 use App\Models\Subscription;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
@@ -62,7 +63,18 @@ class OdpController extends Controller
         }
         $odcs = Odc::all();
         $odps = Odp::all();
+     
         return view('odp.createOdp', compact('odps', 'odcs'));
+    }
+
+
+    public function splitterOdp($id){
+        if (Gate::denies('isAdminOrNoc')) {
+            abort(403, 'Unauthorized action.');
+        }
+         $splitters = Splitter::where('odc_id', $id)->get();
+         return response()->json($splitters, 200);
+
     }
 
     // Menampilkan detail Odp berdasarkan ID
@@ -109,6 +121,8 @@ class OdpController extends Controller
             'parent_odp_id' => $validatedData['parent_odp_id'] ?? null,
         ]);
 
+        Splitter::where('id', $request->splitter_id)->update(['odp_id' => $Odp->odp_id]);
+
         return response()->json(['message' => 'Odp created successfully', 'data' => $Odp], 201);
     }
 
@@ -144,6 +158,7 @@ class OdpController extends Controller
             'odp_port_capacity' => $validatedData['odp_port_capacity'],
             'parent_odp_id' => $validatedData['parent_odp_id'] ?? null,
         ]);
+        Splitter::where('id', $request->splitter_id)->update(['odp_id' => $Odp->odp_id]);
 
         return response()->json(['message' => 'Odp updated successfully', 'data' => $Odp]);
     }

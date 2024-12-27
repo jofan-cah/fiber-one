@@ -87,6 +87,14 @@
                   @endforeach
                 </select>
               </div>
+
+              <div id="splitter-container" class="hidden">
+                <label for="splitter_id" class="block text-gray-700 dark:text-gray-800 mb-1">Select Splitter</label>
+                <select name="splitter_id" id="splitter_id"
+                    class="w-full rounded-lg border py-2 px-3 dark:bg-gray-200 dark:text-gray-900 dark:border-gray-300">
+                    <option value="" disabled selected>Select Splitter</option>
+                </select>
+              </div>
             </div>
 
             <div class="mt-8 flex justify-end">
@@ -102,6 +110,56 @@
 
 <script>
   $(document).ready(function() {
+
+
+
+
+    $('#odc_id').on('change', function() {
+    var odcId = $(this).val();
+
+    if (odcId) {
+        // Tampilkan div splitter setelah memilih ODC
+        $('#splitter-container').removeClass('hidden');
+
+        $.ajax({
+            url: '/odp/splitter/' + odcId, // URL ke route splitterOdp
+            method: 'GET',
+            success: function(response) {
+                var splitterSelect = $('#splitter_id');
+                splitterSelect.empty(); // Hapus semua opsi sebelumnya
+
+                // Tambahkan opsi pertama (Select Splitter)
+                splitterSelect.append('<option value="" disabled selected>Select Splitter</option>');
+
+                // Tambahkan opsi splitter dari respons
+                response.forEach(function(splitter) {
+                    var option = $('<option></option>').attr('value', splitter.id).text(splitter.port_start + ' : ' + splitter.port_end);
+
+                    // Cek jika splitter.odp_id !== null dan disable opsi
+                    if (splitter.odp_id !== null && splitter.odp_id !== `{{ $odp->odp_id }}`) {
+                        option.prop('disabled', true);  // Menonaktifkan opsi jika odp_id tidak null
+                    }
+
+                    if (splitter.odp_id == `{{ $odp->odp_id }}`) {
+                        option.prop('selected', true);  // Menonaktifkan opsi jika odp_id tidak null
+                    }
+
+                    splitterSelect.append(option);
+                });
+            },
+            error: function(xhr, status, error) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Something went wrong, please try again.',
+                });
+            }
+        });
+    } else {
+        // Sembunyikan div splitter jika ODC tidak dipilih
+        $('#splitter-container').addClass('hidden');
+    }
+});
     $('#userForm').on('submit', function(e) {
         e.preventDefault(); // Mencegah form disubmit secara default
         // Disable tombol submit dan ubah teksnya menjadi "Loading"

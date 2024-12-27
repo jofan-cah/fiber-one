@@ -71,7 +71,7 @@
             </div>
             <div class="grid grid-cols-2 gap-4 mt-4">
               <div>
-                <label for="parent_odp_id" class="block text-gray-700 dark:text-gray-800 mb-1">ODP Name</label>
+                <label for="parent_odp_id" class="block text-gray-700 dark:text-gray-800 mb-1">ODP Name Parent</label>
                 <select name="parent_odp_id" id="parent_odp_id"
                   class="w-full rounded-lg border py-2 px-3 dark:bg-gray-200 dark:text-gray-900 dark:border-gray-300">
                   <option value="" disabled selected>Select ODP</option>
@@ -82,8 +82,17 @@
                   @endforeach
                 </select>
               </div>
+
+               <!-- Input Splitter yang akan muncul setelah memilih ODC -->
+              <div id="splitter-container" class="hidden">
+                <label for="splitter_id" class="block text-gray-700 dark:text-gray-800 mb-1">Select Splitter</label>
+                <select name="splitter_id" id="splitter_id"
+                    class="w-full rounded-lg border py-2 px-3 dark:bg-gray-200 dark:text-gray-900 dark:border-gray-300">
+                    <option value="" disabled selected>Select Splitter</option>
+                </select>
             </div>
-        </div>
+            </div>
+</div>
 
         <div class="mt-8 flex justify-end">
           <button type="submit"
@@ -98,57 +107,102 @@
 
 <script>
   $(document).ready(function() {
-    $('#userForm').on('submit', function(e) {
-        e.preventDefault(); // Mencegah form disubmit secara default
-// Disable tombol submit dan ubah teksnya menjadi "Loading"
-    const submitButton = $(this).find('button[type="submit"]');
-    submitButton.prop('disabled', true).text('Loading...');
-        // Mengambil data dari form
-        var formData = $(this).serialize();
-        console.log(formData);
+    $('#odc_id').on('change', function() {
+        var odcId = $(this).val();
 
-        $.ajax({
-            url: '{{ route('storeOdp') }}', // Ubah dengan route yang sesuai
-            method: 'POST',
-            data: formData,
-            success: function(response) {
-                // Menampilkan alert jika berhasil
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Success!',
-                    text: 'Data has been saved successfully.',
-                }).then((result) => {
-                    // Redirect ke route indexUsers setelah alert ditutup
-                    window.location.href = '/odp'; // Ubah dengan route yang sesuai
+        if (odcId) {
+            // Tampilkan div splitter setelah memilih ODC
+            $('#splitter-container').removeClass('hidden');
+
+            $.ajax({
+                url: '/odp/splitter/' + odcId, // URL ke route splitterOdp
+                method: 'GET',
+                success: function(response) {
+                    var splitterSelect = $('#splitter_id');
+                    splitterSelect.empty(); // Hapus semua opsi sebelumnya
+
+                    // Tambahkan opsi pertama (Select Splitter)
+                    splitterSelect.append('<option value="" disabled selected>Select Splitter</option>');
+
+              // Tambahkan opsi splitter dari respons
+                response.forEach(function(splitter) {
+                    var option = $('<option></option>').attr('value', splitter.id).text(splitter.port_start + ' : ' + splitter.port_end);
+
+                    // Cek jika splitter.odp_id !== null dan disable opsi
+                    if (splitter.odp_id !== null) {
+                        option.prop('disabled', true);  // Menonaktifkan opsi jika odp_id tidak null
+                    }
+
+                    splitterSelect.append(option);
                 });
-            },
-              error: function(xhr, status, error) {
-                // Menangani error validasi yang dikirim oleh server
-                if (xhr.responseJSON && xhr.responseJSON.errors) {
-                    var errors = xhr.responseJSON.errors;
-                    var errorMessages = '';
 
-                    // Menggabungkan pesan error dari respons
-                    $.each(errors, function(field, messages) {
-                        errorMessages += messages.join(', ') + '\n';
-                    });
-
-                    // Menampilkan alert error dengan pesan kesalahan
+                },
+                error: function(xhr, status, error) {
                     Swal.fire({
                         icon: 'error',
                         title: 'Oops...',
-                        text: errorMessages, // Menampilkan pesan error
-                    });
-                } else {
-                    // Jika ada error lain (misalnya server error)
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Oops...',
-                        text: 'Something went wrong, please try again.', // Pesan fallback jika tidak ada error detail
+                        text: 'Something went wrong, please try again.',
                     });
                 }
-            }
-        });
+            });
+        } else {
+            // Sembunyikan div splitter jika ODC tidak dipilih
+            $('#splitter-container').addClass('hidden');
+        }
+    });
+
+
+    $('#userForm').on('submit', function(e) {
+      e.preventDefault(); // Mencegah form disubmit secara default
+      // Disable tombol submit dan ubah teksnya menjadi "Loading"
+      const submitButton = $(this).find('button[type="submit"]');
+      submitButton.prop('disabled', true).text('Loading...');
+          // Mengambil data dari form
+          var formData = $(this).serialize();
+          console.log(formData);
+
+          $.ajax({
+              url: '{{ route('storeOdp') }}', // Ubah dengan route yang sesuai
+              method: 'POST',
+              data: formData,
+              success: function(response) {
+                  // Menampilkan alert jika berhasil
+                  Swal.fire({
+                      icon: 'success',
+                      title: 'Success!',
+                      text: 'Data has been saved successfully.',
+                  }).then((result) => {
+                      // Redirect ke route indexUsers setelah alert ditutup
+                      window.location.href = '/odp'; // Ubah dengan route yang sesuai
+                  });
+              },
+                error: function(xhr, status, error) {
+                  // Menangani error validasi yang dikirim oleh server
+                  if (xhr.responseJSON && xhr.responseJSON.errors) {
+                      var errors = xhr.responseJSON.errors;
+                      var errorMessages = '';
+
+                      // Menggabungkan pesan error dari respons
+                      $.each(errors, function(field, messages) {
+                          errorMessages += messages.join(', ') + '\n';
+                      });
+
+                      // Menampilkan alert error dengan pesan kesalahan
+                      Swal.fire({
+                          icon: 'error',
+                          title: 'Oops...',
+                          text: errorMessages, // Menampilkan pesan error
+                      });
+                  } else {
+                      // Jika ada error lain (misalnya server error)
+                      Swal.fire({
+                          icon: 'error',
+                          title: 'Oops...',
+                          text: 'Something went wrong, please try again.', // Pesan fallback jika tidak ada error detail
+                      });
+                  }
+              }
+          });
     });
 });
 </script>

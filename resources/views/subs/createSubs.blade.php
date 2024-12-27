@@ -60,6 +60,15 @@
                 </select>
               </div>
             </div>
+            <div class="grid grid-cols-2 gap-4 mt-4">
+              <div>
+                <label for="port" class="block text-gray-700 dark:text-gray-800 mb-1">Port</label>
+                <input placeholder="Input Port" type="number" min="0" id="port"
+                  name="port"
+                  class="w-full rounded-lg border py-2 px-3 dark:bg-gray-200 dark:text-gray-900 dark:border-gray-300">
+              </div>
+         
+            </div>
         </div>
 
         <div class="mt-8 flex justify-end">

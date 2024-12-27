@@ -18,8 +18,8 @@ return new class extends Migration
             $table->string('olt_id')->nullable(); // Foreign key to OLT
             $table->string('odc_id')->nullable(); // Foreign key to ODC
             $table->string('odp_id')->nullable(); // Foreign key to ODP
-            $table->integer('port_number'); // Port number
-            $table->enum('status', ['available', 'occupied', 'inactive']); // Status of the port
+            $table->integer('port_number')->nullable(); // Port number
+            $table->string('status'); // Status of the port
             $table->timestamps();
 
             // Adding foreign key constraints if needed

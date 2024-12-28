@@ -13,7 +13,6 @@ class UncoverageController extends Controller
     public function index()
     {
 
-
         $uncoverages = Uncoverage::all();
         return view('uncoverage.indexUncoverage', compact('uncoverages'));
     }

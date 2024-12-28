@@ -6,6 +6,7 @@ use App\Models\User;
 use App\Models\UserLevel;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 
 
@@ -61,6 +62,8 @@ class UserController extends Controller
             'password' => bcrypt($request->password),
             'user_level_id' => $request->user_level_id,
         ]);
+        logActivity('create', Auth::user()->full_name .' Created a new User with ID: ' . $userId);
+
 
         return response()->json([
             'message' => 'User created successfully',
@@ -94,6 +97,7 @@ class UserController extends Controller
 
         // Lakukan pembaruan
         $user->update($dataToUpdate);
+        logActivity('update', Auth::user()->full_name .' Updated a new User with ID: ' . $id);
 
         // Backkan respons
         return response()->json([
@@ -103,7 +107,7 @@ class UserController extends Controller
     }
     public function showbyID($id)
     {
-       
+
         $user = User::find($id);
         $userLevel = UserLevel::all();
         if (!$user) {
@@ -114,7 +118,7 @@ class UserController extends Controller
 
     public function updateByID(Request $request, $id)
     {
-     
+
         // Validasi input
         $request->validate([
             'full_name' => 'sometimes|required',
@@ -137,6 +141,7 @@ class UserController extends Controller
 
         // Lakukan pembaruan
         $user->update($dataToUpdate);
+        logActivity('update', Auth::user()->full_name .' Updated a new User with ID: ' . $id);
 
         // Backkan respons
         return response()->json([
@@ -144,10 +149,10 @@ class UserController extends Controller
             'user' => $user,
         ]);
     }
-    // show user by id 
+    // show user by id
     public function show($id)
     {
-       
+
         $user = User::find($id);
         $userLevel = UserLevel::all();
         if (!$user) {
@@ -198,6 +203,7 @@ class UserController extends Controller
             return response()->json(['message' => 'User not found'], 404);
         }
         $user->delete();
+        logActivity('delete', Auth::user()->full_name .' Deleted a new User with ID: ' . $id);
         return response()->json(['message' => 'User deleted successfully'], 200);
     }
 }

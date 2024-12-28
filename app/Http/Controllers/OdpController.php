@@ -8,6 +8,7 @@ use App\Models\Olt;
 use App\Models\Splitter;
 use App\Models\Subscription;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 
 class OdpController extends Controller
@@ -65,7 +66,7 @@ class OdpController extends Controller
         }
         $odcs = Odc::all();
         $odps = Odp::all();
-     
+
         return view('odp.createOdp', compact('odps', 'odcs'));
     }
 
@@ -124,6 +125,7 @@ class OdpController extends Controller
         ]);
 
         Splitter::where('id', $request->splitter_id)->update(['odp_id' => $Odp->odp_id]);
+        logActivity('create', Auth::user()->full_name .' Created a new ODP with ID: ' . $OdpId);
 
         return response()->json(['message' => 'Odp created successfully', 'data' => $Odp], 201);
     }
@@ -161,6 +163,7 @@ class OdpController extends Controller
             'parent_odp_id' => $validatedData['parent_odp_id'] ?? null,
         ]);
         Splitter::where('id', $request->splitter_id)->update(['odp_id' => $Odp->odp_id]);
+        logActivity('update', Auth::user()->full_name .' Update a new ODP with ID: ' . $id);
 
         return response()->json(['message' => 'Odp updated successfully', 'data' => $Odp]);
     }
@@ -179,6 +182,7 @@ class OdpController extends Controller
         }
 
         $Odp->delete();
+        logActivity('delete', Auth::user()->full_name .' Deleted a new ODP with ID: ' . $id);
         return response()->json(['message' => 'Odp deleted successfully']);
     }
 

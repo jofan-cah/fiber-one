@@ -7,6 +7,7 @@ use App\Models\Odp;
 use App\Models\Olt;
 use App\Models\Splitter;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 
 class OdcController extends Controller
@@ -111,6 +112,7 @@ class OdcController extends Controller
                 'direction' => 'Arah ODP '
             ]);
         }
+        logActivity('create', Auth::user()->full_name .' Created a new ODC with ID: ' . $OdpId);
 
         return response()->json(['message' => 'Odp created successfully', 'data' => $Odp], 201);
     }
@@ -147,6 +149,8 @@ class OdcController extends Controller
             'parent_odc_id' => $validatedData['parent_odc_id'] ?? null,
         ]);
 
+        logActivity('update', Auth::user()->full_name .' Updated a new ODC with ID: ' . $id);
+
         return response()->json(['message' => 'Odp updated successfully', 'data' => $Odp]);
     }
 
@@ -163,6 +167,7 @@ class OdcController extends Controller
         }
 
         $Odp->delete();
+        logActivity('delete', Auth::user()->full_name .' Deleted a new ODC with ID: ' . $id);
         return response()->json(['message' => 'Odp deleted successfully']);
     }
 

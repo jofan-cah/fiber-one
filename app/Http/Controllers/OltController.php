@@ -364,6 +364,7 @@ class OltController extends Controller
                     'from' => "{$olt->olt_id}",
                     'to' => "{$odc->odc_id}",
                     'label' => "PON $olt->olt_port_capacity"
+
                 ];
 
                 // ODC child

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ActivityLogController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Route;
@@ -127,6 +128,8 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('/topology', [OltController::class, 'topology'])->name('topology');
         Route::get('/topology-data', [OltController::class, 'getTopologyData'])->name('topologyData');
     });
+
+    Route::get('/admin/logs', [ActivityLogController::class, 'index'])->name('adminLogs');
 });
 
 Route::get('login', [AuthController::class, 'index'])->name('login');

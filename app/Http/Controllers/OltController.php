@@ -8,6 +8,7 @@ use App\Models\Olt;
 use App\Models\Port;
 use App\Models\Subscription;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 
@@ -99,9 +100,10 @@ class OltController extends Controller
             return response()->json(['error' => 'Ports and directions count mismatch'], 400);
         }
 
+        $oltid = $this->generateOltId();
         // Proses pembuatan OLT
         $olt = Olt::create([
-            'olt_id' => $this->generateOltId(),
+            'olt_id' => $oltid,
             'olt_name' => $validatedData['olt_name'],
             'olt_description' => $validatedData['olt_description'],
             'olt_location_maps' => $validatedData['olt_location_maps'],
@@ -117,6 +119,9 @@ class OltController extends Controller
             ['port_number' => $index + 1],
             ['status' => $status, 'directions' => $request->directions[$index]]
         );
+
+
+        logActivity('create', Auth::user()->full_name .' Created a new OLT with ID: ' . $oltid);
     }
 
         return response()->json(['message' => 'OLT created successfully', 'data' => $olt], 201);
@@ -156,6 +161,8 @@ class OltController extends Controller
                 );
             }
 
+            logActivity('update', Auth::user()->full_name .' Updated a new OLT with ID: ' . $id);
+
             return response()->json(['message' => 'Data has been updated successfully.'], 200);
         } catch (\Exception $e) {
             return response()->json(['errors' => ['error' => [$e->getMessage()]]], 500);
@@ -176,6 +183,7 @@ class OltController extends Controller
         }
 
         $olt->delete();
+        logActivity('delete', Auth::user()->full_name .' Deleted a new OLT with ID: ' . $id);
         return response()->json(['message' => 'OLT deleted successfully']);
     }
 

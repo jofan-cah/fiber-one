@@ -6,6 +6,7 @@ use App\Models\Odp;
 use App\Models\Subscription;
 use Illuminate\Contracts\Validation\Rule;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule as ValidationRule;
 
 class SubscriptionController extends Controller
@@ -42,6 +43,8 @@ class SubscriptionController extends Controller
         ]);
 
         $data = Subscription::create($request->all());
+        logActivity('create', Auth::user()->full_name .' Created a new Pelanggan with ID: ' . $request->subs_id);
+
         return response()->json(['message' => 'Subs created successfully', 'data' => $data], 201);
     }
 
@@ -73,6 +76,7 @@ class SubscriptionController extends Controller
 
         // Update the subscription
         $subscription->update($request->all());
+        logActivity('update', Auth::user()->full_name .' Updated a new Pelanggan with ID: ' . $subs_id);
 
         return response()->json(['message' => 'Subscription updated successfully'], 200);
     }
@@ -82,6 +86,7 @@ class SubscriptionController extends Controller
     {
         $subscription = Subscription::findOrFail($subs_id);
         $subscription->delete();
+        logActivity('delete', Auth::user()->full_name .' Deleted a new Pelanggan with ID: ' . $subs_id);
         return response()->json(['message' => 'Subs deleted successfully'], 201);
     }
 }

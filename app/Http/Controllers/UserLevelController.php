@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\UserLevel;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 
 class UserLevelController extends Controller
@@ -62,6 +63,8 @@ class UserLevelController extends Controller
             'user_name' => $userLevelName,
             'user_description' => $userLevelDescription,
         ]);
+        logActivity('create', Auth::user()->full_name .' Created a new UserLevel with ID: ' . $userLvlId);
+
 
         return response()->json([
             'message' => 'User created successfully',
@@ -91,6 +94,8 @@ class UserLevelController extends Controller
             'user_name' => $userLevelName,
             'user_description' => $userLevelDescription,
         ]);
+        logActivity('update', Auth::user()->full_name .' Updated a new UserLevel with ID: ' . $id);
+
 
         return response()->json([
             'message' => 'User updated successfully',
@@ -116,6 +121,7 @@ class UserLevelController extends Controller
         }
         $userLevel = UserLevel::findOrFail($id);
         $userLevel->delete();
+        logActivity('delete', Auth::user()->full_name .' Deleted a new UserLevel with ID: ' . $id);
         return response()->json(
             [
                 'message' => 'User deleted successfully'
@@ -153,7 +159,7 @@ class UserLevelController extends Controller
         return $userId;
     }
 
-    // show user by id 
+    // show user by id
     public function show($id)
     {
         $userLevel = UserLevel::find($id);

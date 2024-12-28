@@ -6,12 +6,12 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 
 use App\Models\Uncoverage;
+use Illuminate\Support\Facades\Auth;
 
 class UncoverageController extends Controller
 {
     public function index()
     {
-    
 
         $uncoverages = Uncoverage::all();
         return view('uncoverage.indexUncoverage', compact('uncoverages'));
@@ -47,13 +47,16 @@ class UncoverageController extends Controller
             'no_hp' => 'required',
             'maps_locations' => 'required',
         ]);
+        $idUncover = $this->generateIdSubs();
 
         Uncoverage::create([
-            'subs_id_uncover' => $this->generateIdSubs(),
+            'subs_id_uncover' =>$idUncover,
             'nama_subs' => $request->nama_subs,
             'no_hp' => $request->no_hp,
             'maps_locations' => $request->maps_locations
         ]);
+        logActivity('create', Auth::user()->full_name .' Created a new Uncoverage with ID: ' . $idUncover);
+
         return redirect()->route('uncoverage')->with('success', 'Data berhasil disimpan.');
     }
     public function getMapsLocations()

@@ -149,7 +149,7 @@
 
         <li>
           <a href="{{route('coverage')}}"
-            class="menu-item text-gray-800 text-sm 
+            class="menu-item text-gray-800 text-sm
                        {{ Request::route()->getName() === 'coverage' ? 'text-green-700 bg-[#d9f3ea]' : 'text-gray-800' }} flex items-center cursor-pointer hover:bg-[#d9f3ea] rounded-md px-3 py-3 transition-all duration-300">
             <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" class="mr-4" viewBox="0 0 24 24"
               style="fill: rgba(0, 0, 0, 1);transform: ;msFilter:;">
@@ -167,7 +167,7 @@
         Auth::user()->user_level_id == 'LVL250101003')
         <li>
           <a href="{{route('uncoverage')}}"
-            class="menu-item text-gray-800 text-sm 
+            class="menu-item text-gray-800 text-sm
                                          {{ Request::route()->getName() === 'uncoverage' ? 'text-green-700 bg-[#d9f3ea]' : 'text-gray-800' }} flex items-center cursor-pointer hover:bg-[#d9f3ea] rounded-md px-3 py-3 transition-all duration-300">
             <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" class="mr-4" viewBox="0 0 24 24"
               style="fill: rgba(0, 0, 0, 1);transform: ;msFilter:;">
@@ -200,6 +200,19 @@
           </a>
         </li>
         @endif
+
+
+    @can('isAdmin')
+    <li>
+        <a href="{{route('adminLogs')}}"
+          class="menu-item  {{Request::route()->getName() == 'adminLogs' ? 'text-green-700 bg-[#d9f3ea]' : 'text-gray-800'}}  text-sm flex items-center cursor-pointer  hover:bg-[#d9f3ea] rounded-md px-3 py-3 transition-all duration-300">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" class="mr-4" height="18" viewBox="0 0 24 24" style="fill: rgba(0, 0, 0, 1);transform: ;msFilter:;"><path d="M20 3H4c-1.103 0-2 .897-2 2v14c0 1.103.897 2 2 2h16c1.103 0 2-.897 2-2V5c0-1.103-.897-2-2-2zM4 19V5h16l.002 14H4z"></path><path d="M6 7h12v2H6zm0 4h12v2H6zm0 4h6v2H6z"></path></svg>
+          <span>Log</span>
+        </a>
+      </li>
+    @endcan
+
+
       </ul>
 
 

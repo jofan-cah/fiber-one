@@ -40,8 +40,8 @@
 
             <div class="grid grid-cols-2 gap-4 mt-4">
               <div>
-                <label for="olt_port_capacity" class="block text-gray-700 dark:text-gray-800 mb-1">Port</label>
-                <input type="number" min="0" name="olt_port_capacity" id="olt_port_capacity" placeholder="input port"
+                <label for="olt_port_capacity" class="block text-gray-700 dark:text-gray-800 mb-1">PON</label>
+                <input type="number" min="0" name="olt_port_capacity" id="olt_port_capacity" placeholder="input PON"
                   class="w-full rounded-lg border py-2 px-3 dark:bg-gray-200 dark:text-gray-900 dark:border-gray-300">
               </div>
               <div>
@@ -85,16 +85,16 @@
     for (let i = 1; i <= portCapacity; i++) {
         $('#portFields').append(`
           <div class="mb-4">
-            <label for="port_${i}" class="block text-gray-700 dark:text-gray-800 mb-1">Port ${i} - Status</label>
+            <label for="port_${i}" class="block text-gray-700 dark:text-gray-800 mb-1">PON ${i} - Status</label>
             <select name="port_${i}" id="port_${i}"
               class="w-full rounded-lg border py-2 px-3 dark:bg-gray-200 dark:text-gray-900 dark:border-gray-300">
               <option value="enabled">Enabled</option>
-              <option value="disabled">Disabled</option>
+              <option value="disabled" selected >Disabled</option>
             </select>
           </div>
           <div class="mb-4">
-            <label for="directions_${i}" class="block text-gray-700 dark:text-gray-800 mb-1">Port ${i} - Direction</label>
-           <input type="text" name="directions[]" placeholder="Description For OLT" id="directions_${i}"
+            <label for="directions_${i}" class="block text-gray-700 dark:text-gray-800 mb-1">PON ${i} - Direction</label>
+           <input type="text" name="directions[]" value="-" placeholder="Description For OLT" id="directions_${i}"
               class="w-full rounded-lg border py-2 px-3 dark:bg-gray-200 dark:text-gray-900 dark:border-gray-300">
           </div>
         `);

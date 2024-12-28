@@ -363,7 +363,8 @@ class OltController extends Controller
                 $edges[] = [
                     'from' => "{$olt->olt_id}",
                     'to' => "{$odc->odc_id}",
-                    'label' => "Splliter $olt->olt_port_capacity"
+                    'label' => "PON $olt->olt_port_capacity"
+
                 ];
 
                 // ODC child

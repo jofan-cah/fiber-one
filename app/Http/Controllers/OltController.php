@@ -110,7 +110,7 @@ class OltController extends Controller
         ]);
 
         // Simpan data port dan description sesuai dengan capacity
-      
+
 
        foreach ($request->ports as $index => $status) {
         $port = $olt->ports()->updateOrCreate(
@@ -135,10 +135,10 @@ class OltController extends Controller
             'ports' => 'required|array',
             'directions' => 'required|array',
         ]);
-    
+
         try {
             $olt = Olt::findOrFail($id);
-    
+
             // Update OLT fields
             $olt->olt_name = $request->olt_name;
             $olt->olt_description = $request->olt_description;
@@ -146,7 +146,7 @@ class OltController extends Controller
             $olt->olt_addres = $request->olt_addres;
             $olt->olt_port_capacity = $request->olt_port_capacity;
             $olt->save();
-    
+
             // Update port data
             foreach ($request->ports as $index => $status) {
                 $port = $olt->ports()->updateOrCreate(
@@ -155,13 +155,13 @@ class OltController extends Controller
                      'directions' => $request->directions[$index]]
                 );
             }
-    
+
             return response()->json(['message' => 'Data has been updated successfully.'], 200);
         } catch (\Exception $e) {
             return response()->json(['errors' => ['error' => [$e->getMessage()]]], 500);
         }
     }
-    
+
 
     // Menghapus data OLT
     public function destroy($id)
@@ -337,7 +337,8 @@ class OltController extends Controller
     public function getTopologyData()
     {
         // Ambil data OLT dengan semua relasi terkait
-        $olts = Olt::with(['odcs.childOdcs.odpss.subs', 'odps.subs'])->get();
+        $olts = Olt::with(['odcs.childOdcs.odpss.subs', 'odps.subs','ports'])->get();
+        // dd($olts);
 
         $nodes = [];
         $edges = [];
@@ -347,7 +348,8 @@ class OltController extends Controller
             $nodes[] = [
                 'id' => "{$olt->olt_id}",
                 'label' => $olt->olt_name,
-                'group' => 'OLT'
+                'group' => 'OLT',
+                'splliter'=> $olt->olt_port_capacity
             ];
 
             // ODC yang langsung terhubung ke OLT
@@ -360,7 +362,8 @@ class OltController extends Controller
 
                 $edges[] = [
                     'from' => "{$olt->olt_id}",
-                    'to' => "{$odc->odc_id}"
+                    'to' => "{$odc->odc_id}",
+                    'label' => "Splliter $olt->olt_port_capacity"
                 ];
 
                 // ODC child
@@ -373,7 +376,8 @@ class OltController extends Controller
 
                     $edges[] = [
                         'from' => "{$odc->odc_id}",
-                        'to' => "{$childOdc->odc_id}"
+                        'to' => "{$childOdc->odc_id}",
+                        'label' => "ODC to ODC"
                     ];
 
                     // ODP yang terhubung ke child ODC
@@ -386,7 +390,9 @@ class OltController extends Controller
 
                         $edges[] = [
                             'from' => "{$childOdc->odc_id}",
-                            'to' => "{$odp->odp_id}"
+                            'to' => "{$odp->odp_id}",
+                            'label' => "ODC to ODP"
+
                         ];
 
                         // Subs yang terhubung ke ODP ini
@@ -399,7 +405,8 @@ class OltController extends Controller
 
                             $edges[] = [
                                 'from' => "{$odp->odp_id}",
-                                'to' => "{$subs->subs_id}"
+                                'to' => "{$subs->subs_id}",
+                                'label' => "ODP to Subs"
                             ];
                         }
                     }
@@ -415,7 +422,8 @@ class OltController extends Controller
 
                     $edges[] = [
                         'from' => "{$odc->odc_id}",
-                        'to' => "{$odp->odp_id}"
+                        'to' => "{$odp->odp_id}",
+                        'label' =>"Splliter $odc->odc_port_capacity"
                     ];
 
                     // Subs yang terhubung ke ODP ini
@@ -428,7 +436,8 @@ class OltController extends Controller
 
                         $edges[] = [
                             'from' => "{$odp->odp_id}",
-                            'to' => "{$subs->subs_id}"
+                            'to' => "{$subs->subs_id}",
+                            'label' => "ODP to Subs"
                         ];
                     }
                 }

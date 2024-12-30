@@ -26,7 +26,7 @@
             @csrf
             <div class="grid grid-cols-2 gap-4">
               <div>
-                <label for="olt_name" class="block text-gray-700 dark:text-gray-800 mb-1">OLT Name</label>
+                <label for="olt_name" class="block text-gray-700 dark:text-gray-800 mb-1">Name OLT</label>
                 <input type="text" placeholder="input name" id="olt_name" name="olt_name"
                   class="w-full rounded-lg border py-2 px-3 dark:bg-gray-200 dark:text-gray-900 dark:border-gray-300">
               </div>
@@ -41,7 +41,7 @@
             <div class="grid grid-cols-2 gap-4 mt-4">
               <div>
                 <label for="olt_port_capacity" class="block text-gray-700 dark:text-gray-800 mb-1">PON</label>
-                <input type="number" min="0" name="olt_port_capacity" id="olt_port_capacity" placeholder="input PON"
+                <input type="number" min="0" name="olt_port_capacity" id="olt_port_capacity" placeholder="Jumlah PON"
                   class="w-full rounded-lg border py-2 px-3 dark:bg-gray-200 dark:text-gray-900 dark:border-gray-300">
               </div>
               <div>
@@ -106,6 +106,10 @@
 
   $('#userForm').on('submit', function(e) {
     event.preventDefault(); // Mencegah pengiriman form standar
+     // Disable tombol submit dan ubah teksnya menjadi "Loading"
+        const submitButton = $(this).find('button[type="submit"]');
+        submitButton.prop('disabled', true).text('Loading...');
+
 
         let ports = [];
         let directions = [];
@@ -138,9 +142,6 @@
 
 
 
-    // Disable tombol submit dan ubah teksnya menjadi "Loading"
-    const submitButton = $(this).find('button[type="submit"]');
-    submitButton.prop('disabled', true).text('Loading...');
 
 
 

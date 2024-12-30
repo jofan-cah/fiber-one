@@ -14,11 +14,11 @@
     color: #1a56db;
     border-bottom: 2px solid #1a56db;
   }
-  
+
   .tab-pane {
     display: none;
   }
-  
+
   .tab-pane.active {
     display: block;
   }
@@ -36,7 +36,7 @@
         </a>
       </div>
     </div>
-    
+
     <div class="bg-white p-4 max-w-screen-xl mx-auto rounded-lg overflow-hidden">
       <div class="border-b border-gray-200 dark:border-gray-700 my-4">
         <ul class="flex flex-wrap -mb-px text-sm font-medium text-center text-gray-500 dark:text-gray-400">
@@ -57,32 +57,31 @@
           </li>
         </ul>
       </div>
-      
+
       <!-- Tab Content -->
       <div class="tab-content">
         <div id="detail" class="tab-pane active">
           <!-- Detail Content -->
           <div class="bg-white grid lg:grid-cols-2 sm:grid-cols-1 items-center shadow-[0_4px_12px_-5px_rgba(0,0,0,0.4)] w-full max-w-full mx-auto rounded-lg font-[sans-serif] overflow-hidden">
-        
+
             <!-- Map Section -->
             <div class="w-full h-[300px] lg:h-[400px] relative">
               <div id="map" class="absolute inset-0 w-full h-full rounded-lg"></div>
             </div>
-        
+
             <!-- Content Section -->
             <div class="p-6 lg:p-8 bg-white rounded-lg">
               <h3 class="text-2xl font-bold text-gray-800">{{$odp->odp_name }}</h3>
-        
+
               <div class="mt-4">
-                <p class="text-sm text-gray-600"><strong>ODP ID:</strong> {{$odp->odp_id }}</p>
                 <p class="mt-2 text-sm text-gray-600"><strong>Deskripsi:</strong> {{$odp->odp_description }}</p>
                 <p class="mt-2 text-sm text-gray-600"><strong>Alamat:</strong> {{$odp->odp_addres }}</p>
                 <p class="mt-2 text-sm text-gray-600"><strong>Lokasi:</strong> {{$odp->odp_location_maps }}</p>
                 <p class="mt-2 text-sm text-gray-600"><strong>Kapasitas Port:</strong> {{ $availablePorts ?? 0 }} / {{$odp->odp_port_capacity }}</p>
               </div>
-        
+
               <hr class="my-4">
-        
+
               <div class="mt-4">
                 <p class="text-sm text-gray-600"><strong>Informasi Lainnya:</strong></p>
                 <ul class="list-disc pl-5 text-sm text-gray-600">
@@ -92,10 +91,10 @@
                 </ul>
               </div>
             </div>
-        
+
           </div>
         </div>
-        
+
         <div id="pelanggan" class="tab-pane hidden">
           <div class="overflow-x-auto mt-6">
             <table class="min-w-full border-collapse border border-gray-200 shadow-lg rounded-lg">
@@ -104,7 +103,7 @@
                         <th class="border border-gray-300 px-4 py-2 text-left font-semibold text-gray-700">No</th>
                         <th class="border border-gray-300 px-4 py-2 text-left font-semibold text-gray-700">Subscription ID</th>
                         <th class="border border-gray-300 px-4 py-2 text-left font-semibold text-gray-700">Subscription Name</th>
-                    
+
                         <th class="border border-gray-300 px-4 py-2 text-left font-semibold text-gray-700">ODP Name</th>
                         <th class="border border-gray-300 px-4 py-2 text-left font-semibold text-gray-700">Port</th>
                     </tr>
@@ -115,7 +114,7 @@
                             <td class="border border-gray-300 px-4 py-2 text-sm text-gray-700">{{ $index + 1 }}</td>
                             <td class="border border-gray-300 px-4 py-2 text-sm text-gray-700">{{ $subscription->subs_id }}</td>
                             <td class="border border-gray-300 px-4 py-2 text-sm text-gray-700">{{ $subscription->subs_name }}</td>
-                          
+
                             <td class="border border-gray-300 px-4 py-2 text-sm text-gray-700">{{ $subscription->odp->odp_name }}</td>
                             <td class="border border-gray-300 px-4 py-2 text-sm text-gray-700">{{ $subscription->port }}</td>
                         </tr>
@@ -123,8 +122,8 @@
                 </tbody>
             </table>
         </div>
-        
-       
+
+
         </div>
       </div>
     </div>
@@ -145,7 +144,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Add active class to selected button and pane
     const selectedButton = document.querySelector(`[data-tab="${tabId}"]`);
     const selectedPane = document.getElementById(tabId);
-    
+
     selectedButton.classList.add('active');
     selectedPane.classList.remove('hidden');
     selectedPane.classList.add('active', 'block');
@@ -168,7 +167,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
 <script>
-  
+
 
   document.addEventListener("DOMContentLoaded", function() {
     // Ambil koordinat dari database
@@ -193,15 +192,24 @@ document.addEventListener('DOMContentLoaded', function() {
     // Buat URL untuk membuka koordinat di Google Maps
     var googleMapsUrl = `https://www.google.com/maps?q=${latitude},${longitude}`;
 
-    // Tambahkan marker
-    var marker = L.marker([latitude, longitude]).addTo(map);
+    // Buat ikon khusus menggunakan gambar
+    var customIcon = L.icon({
+        iconUrl: 'https://uhuy.fiberone.net.id/ODPIJO2.png', // URL gambar ikon
+        iconSize: [25, 41],
+        iconAnchor: [12, 41],
+        popupAnchor: [1, -34],
+        });
+
+    // Tambahkan marker dengan ikon khusus
+    var marker = L.marker([latitude, longitude], { icon: customIcon }).addTo(map);
+
 
     // Buat popup untuk marker
     var popupContent = `
       <b>${nameOlt}</b><br>
       <a href="${googleMapsUrl}" target="_blank" class="text-blue-500">Buka di Google Maps</a>
     `;
-    
+
     // Event hover untuk menampilkan popup dengan link ke Google Maps
     marker.on('mouseover', function() {
       marker.bindPopup(popupContent).openPopup();

@@ -26,13 +26,13 @@
             @csrf
             <div class="grid grid-cols-2 gap-4">
               <div>
-                <label for="subs_id" class="block text-gray-700 dark:text-gray-800 mb-1">Pelangan ID
+                <label for="subs_id" class="block text-gray-700 dark:text-gray-800 mb-1"> ID Pelangan
                 </label>
                 <input placeholder="input Subs ID" type="text" id="subs_id" name="subs_id"
                   class="w-full rounded-lg border py-2 px-3 dark:bg-gray-200 dark:text-gray-900 dark:border-gray-300">
               </div>
               <div>
-                <label for="subs_name" class="block text-gray-700 dark:text-gray-800 mb-1">Pelangan Name</label>
+                <label for="subs_name" class="block text-gray-700 dark:text-gray-800 mb-1"> Nama Pelangan</label>
                 <input type="text" placeholder="input name" id="subs_name" name="subs_name"
                   class="w-full rounded-lg border py-2 px-3 dark:bg-gray-200 dark:text-gray-900 dark:border-gray-300">
               </div>
@@ -48,7 +48,7 @@
                   class="w-full rounded-lg border py-2 px-3 dark:bg-gray-200 dark:text-gray-900 dark:border-gray-300">
               </div>
               <div>
-                <label for="odp_id" class="block text-gray-700 dark:text-gray-800 mb-1">ODP ID</label>
+                <label for="odp_id" class="block text-gray-700 dark:text-gray-800 mb-1">ODP Nama</label>
                 <select name="odp_id" id="odp_id"
                   class="w-full rounded-lg border py-2 px-3 dark:bg-gray-200 dark:text-gray-900 dark:border-gray-300">
                   <option value="" disabled selected>Select ODP</option>

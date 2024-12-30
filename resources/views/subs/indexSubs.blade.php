@@ -25,7 +25,7 @@
             <tr>
               <th class="p-4 text-left text-sm font-semibold text-white">Pelangan ID</th>
               <th class="p-4 text-left text-sm font-semibold text-white">Pelangan Name</th>
-              <th class="p-4 text-left text-sm font-semibold text-white">ODP ID</th>
+              <th class="p-4 text-left text-sm font-semibold text-white">Nama Odp</th>
               {{-- <th class="p-4 text-left text-sm font-semibold text-white">Address</th> --}}
               <th class="p-4 text-left text-sm font-semibold text-white">Actions</th>
             </tr>
@@ -49,8 +49,8 @@
         columns: [
             { data: 'subs_id' },
             { data: 'subs_name' },
-            { data: 'odp_id' },
-        
+            { data: 'odp_name' },
+
            {
           data: null,
           render: function (data, type, row) {
@@ -60,12 +60,12 @@
               onclick="editOlt('${row.subs_id}')">
               <i class='bx bx-xs bx-edit'></i>
             </a>
-            
+
             <a class="cursor-pointer flex items-center px-2 py-1 rounded-full bg-red-500 text-white"
              onclick="deleteOlt('${row.subs_id}')">
              <i class='bx bx-xs bx-trash'></i>
              </a>
-           
+
           </div>
           `;
           },

@@ -33,7 +33,7 @@
 <div class="gap-6">
   <div class="p-4 bg-white rounded-md shadow-lg w-full overflow-x-auto">
     <div class="justify-between mb-4 flex items-center">
-      <p class="text-lg font-medium text-slate-500 tracking-wider">Coverage Maps</p>
+      <p class="text-lg font-medium text-slate-500 tracking-wider">UnCoverage Maps</p>
       <!-- Button to open the modal -->
       <button
         class="px-4 py-2 bg-blue-600 text-white font-medium text-sm rounded-lg shadow hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -135,33 +135,33 @@
                 popupAnchor: [1, -34],
             });
             }
-    
+
             function findCoorNearestMaker(coorMarkers, coorLocation) {
                 if (!coorMarkers || coorMarkers.length === 0) {
                     return null; // Return null jika tidak ada marker
                 }
-    
+
                 // Fungsi untuk menghitung jarak Euclidean antara dua koordinat
                 function getDistance(coor1, coor2) {
                     const lat1 = coor1[0];
                     const lon1 = coor1[1];
                     const lat2 = coor2[0];
                     const lon2 = coor2[1];
-    
+
                     const dLat = lat2 - lat1;
                     const dLon = lon2 - lon1;
-    
+
                     return Math.sqrt(dLat * dLat + dLon * dLon);
                 }
                 // Inisialisasi marker terdekat dan jarak awal
                 let nearestMarker = coorMarkers[0];
                 let nearestDistance = getDistance(coorLocation, coorMarkers[0]);
-    
+
                 // Iterasi melalui semua marker dan perbarui marker terdekat jika ditemukan yang lebih dekat
                 for (let i = 1; i < coorMarkers.length; i++) {
                     const currentMarker = coorMarkers[i];
                     const distance = getDistance(coorLocation, currentMarker);
-    
+
                     if (distance < nearestDistance) {
                         nearestMarker = currentMarker;
                         nearestDistance = distance;
@@ -169,7 +169,7 @@
                 }
                 return nearestMarker;
             }
-    
+
             // Inisialisasi peta
             var map = L.map('map').setView([-7.710826, 110.605360], 13);
             L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -177,7 +177,7 @@
                 attribution: '© OpenStreetMap'
             }).addTo(map);
             var coordinate = [];
-    
+
               // Pengecekan hak akses
               const userRole = '{{ Auth::user()->user_level_id }}'; // Pastikan ini mendapatkan role pengguna
 
@@ -246,7 +246,7 @@
                   }).catch((err) => {
                       console.error(err);
                   });
-    
+
             let userCoor = $('#user-coor');
             let btnFind = $('#find');
             let btnGps = $('#gps');
@@ -259,7 +259,7 @@
             // Buat marker berbeda untuk titik A dan B
             let markerA = null;
             let markerB = null;
-            
+
             // Modifikasi routing control
             let route = L.Routing.control({
                 show: false,
@@ -300,14 +300,14 @@
             route.on('routesfound', async function(e) {
                 let routes = e.routes;
                 let summary = routes[0].summary;
-                
+
                 // Dapatkan koordinat awal dan akhir
                 const startPoint = routes[0].coordinates[0];
-                
+
                 // Dapatkan alamat untuk kedua titik
                 const startAddress = await getAddress(startPoint.lat, startPoint.lng);
 
-                
+
                 // Format dan tampilkan informasi rute
                 let routingHtml = `
                     <div class="routing-info">
@@ -315,7 +315,7 @@
                         <p><strong>Jarak:</strong> ${(summary.totalDistance)} m</p>
                     </div>
                 `;
-                
+
                 $('#routing-container').html(routingHtml);
             });
 
@@ -331,7 +331,7 @@
                     route.show();
                 }
             });
-    
+
             btnGps.on('click', function() {
                 const gps = map.locate({setView: true, maxZoom: 16})._lastCenter;
                 coorNearest = findCoorNearestMaker(coordinate, [gps.lat, gps.lng]);

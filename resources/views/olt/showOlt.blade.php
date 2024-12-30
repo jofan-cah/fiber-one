@@ -37,7 +37,7 @@
             <h3 class="text-2xl font-bold text-gray-800">{{ $olt->olt_name }}</h3>
 
             <div class="mt-4">
-                <p class="text-sm text-gray-600"><strong>OLT ID:</strong> {{ $olt->olt_id }}</p>
+
                 <p class="mt-2 text-sm text-gray-600"><strong>Deskripsi:</strong> {{ $olt->olt_description }}</p>
                 <p class="mt-2 text-sm text-gray-600"><strong>Alamat:</strong> {{ $olt->olt_addres }}</p>
                 <p class="mt-2 text-sm text-gray-600"><strong>Lokasi:</strong> {{ $olt->olt_location_maps }}</p>
@@ -50,6 +50,7 @@
             <table class="min-w-full table-auto mt-4">
                 <thead>
                     <tr class="bg-gray-100">
+                        <th class="px-4 py-2 text-left text-gray-600">PON</th>
                         <th class="px-4 py-2 text-left text-gray-600">Status</th>
                         <th class="px-4 py-2 text-left text-gray-600">Direction</th>
                     </tr>
@@ -57,6 +58,7 @@
                 <tbody>
                     @foreach($olt->ports as $port)
                         <tr class="border-b">
+                            <td class="px-4 py-2">{{ $port->port_number }}</td>
                             <td class="px-4 py-2">{{ $port->status }}</td>
                             <td class="px-4 py-2">{{ $port->directions }}</td>
                         </tr>
@@ -65,10 +67,10 @@
             </table>
         </div>
 
-      
-    
+
+
         <!-- Port List -->
-     
+
         </div>
       </div>
     </div>
@@ -116,7 +118,7 @@
       <b>${nameOlt}</b><br>
       <a href="${googleMapsUrl}" target="_blank" class="text-blue-500">Buka di Google Maps</a>
     `;
-    
+
     // Event hover untuk menampilkan popup dengan link ke Google Maps
     marker.on('mouseover', function() {
       marker.bindPopup(popupContent).openPopup();

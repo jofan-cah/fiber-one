@@ -63,7 +63,7 @@
            <div id="portFields" class="mt-6"></div>
 
         <div class="mt-8 flex justify-end">
-          <button type="submit"
+          <button type="submit"  id="submitButtonOlt"
             class="bg-teal-500 text-white px-4 py-2 rounded-lg hover:bg-teal-700 dark:bg-teal-600 dark:text-white dark:hover:bg-teal-700">Submit</button>
         </div>
         </form>
@@ -107,7 +107,7 @@
   $('#userForm').on('submit', function(e) {
     event.preventDefault(); // Mencegah pengiriman form standar
      // Disable tombol submit dan ubah teksnya menjadi "Loading"
-        const submitButton = $(this).find('button[type="submit"]');
+        const submitButton = $('#submitButtonOlt');
         submitButton.prop('disabled', true).text('Loading...');
 
 

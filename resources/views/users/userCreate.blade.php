@@ -1,3 +1,5 @@
+
+
 @extends('layouts.main')
 
 @section('content')
@@ -151,6 +153,7 @@ const submitButton = $(this).find('button[type="submit"]');
                     });
                 }
             }
+
         });
     });
 });

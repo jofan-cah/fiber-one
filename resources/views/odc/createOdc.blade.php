@@ -24,7 +24,7 @@
             @csrf
             <div class="grid grid-cols-2 gap-4">
               <div>
-                <label for="odc_name" class="block text-gray-700 dark:text-gray-800 mb-1">ODC Name</label>
+                <label for="odc_name" class="block text-gray-700 dark:text-gray-800 mb-1">Name ODC </label>
                 <input type="text" placeholder="input name" id="odc_name" name="odc_name"
                   class="w-full rounded-lg border py-2 px-3 dark:bg-gray-200 dark:text-gray-900 dark:border-gray-300">
               </div>

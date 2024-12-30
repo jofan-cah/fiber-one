@@ -128,7 +128,7 @@ function deleteOlt(oltId) {
                 success: function(response) {
                     Swal.fire(
                         'Deleted!',
-                        `User ${oltId} has been deleted.`,
+                        `OLT ${oltId} has been deleted.`,
                         'success'
                     ).then(() => {
                         // Reload halaman atau perbarui data tabel

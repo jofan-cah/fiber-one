@@ -69,7 +69,7 @@
              onclick="deleteOlt('${row.olt_id}')">
              <i class='bx bx-xs bx-trash'></i>
              </a>
-           
+
           </div>
           `;
           },
@@ -109,7 +109,7 @@ function deleteOlt(oltId) {
     // Tampilkan konfirmasi dengan SweetAlert2
     Swal.fire({
         title: 'Are you sure?',
-        text: `You won't be able to revert this! User ID: ${oltId}`,
+        text: `You won't be able to revert this! OLT ID: ${oltId}`,
         icon: 'warning',
         showCancelButton: true,
         confirmButtonColor: '#3085d6',

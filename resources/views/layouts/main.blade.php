@@ -7,7 +7,7 @@
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <meta name="csrf-token" content="{{ csrf_token() }}">
   <title>  @if (Request::route() && Request::route()->getPrefix())
-    {{ ucfirst(trim(Request::route()->getPrefix(), '/')) }} - @yield('title', 'FiberOne')
+    {{ strtoupper(trim(Request::route()->getPrefix(), '/')) }} - @yield('title', 'FiberOne')
 @else
     @yield('title', 'Dashboard')
 @endif</title>

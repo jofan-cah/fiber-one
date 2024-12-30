@@ -128,7 +128,7 @@ function deleteOdc(odcId) {
                 success: function(response) {
                     Swal.fire(
                         'Deleted!',
-                        `ODC ${odcId} has been deleted.`,
+                        ` ${odcId} has been deleted.`,
                         'success'
                     ).then(() => {
                         // Reload halaman atau perbarui data tabel

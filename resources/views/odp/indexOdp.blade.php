@@ -69,7 +69,7 @@
              onclick="deleteOdp('${row.odp_id}')">
              <i class='bx bx-xs bx-trash'></i>
              </a>
-           
+
           </div>
           `;
           },
@@ -127,7 +127,7 @@ function deleteOdp(odpId) {
                 success: function(response) {
                     Swal.fire(
                         'Deleted!',
-                        `User ${odpId} has been deleted.`,
+                        `${odpId} has been deleted.`,
                         'success'
                     ).then(() => {
                         // Reload halaman atau perbarui data tabel

@@ -95,7 +95,7 @@
 </div>
 
         <div class="mt-8 flex justify-end">
-          <button type="submit"
+          <button type="submit" id="submitButtonOdp"
             class="bg-teal-500 text-white px-4 py-2 rounded-lg hover:bg-teal-700 dark:bg-teal-600 dark:text-white dark:hover:bg-teal-700">Submit</button>
         </div>
         </form>
@@ -155,7 +155,7 @@
     $('#userForm').on('submit', function(e) {
       e.preventDefault(); // Mencegah form disubmit secara default
       // Disable tombol submit dan ubah teksnya menjadi "Loading"
-      const submitButton = $(this).find('button[type="submit"]');
+      const submitButton = $('#submitButtonOdp');
       submitButton.prop('disabled', true).text('Loading...');
           // Mengambil data dari form
           var formData = $(this).serialize();

@@ -24,6 +24,7 @@ class AuthServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->registerPolicies();
+
         Gate::define('isAdmin', function ($user) {
             return $user->user_level_id === 'LVL250101001';
         });
@@ -35,13 +36,57 @@ class AuthServiceProvider extends ServiceProvider
         Gate::define('isSales', function ($user) {
             return $user->user_level_id === 'LVL250101003';
         });
+
         Gate::define('isKoor', function ($user) {
             return $user->user_level_id === 'LVL241223002';
         });
-         // Gate untuk admin dan noc saja
+
         Gate::define('isAdminOrNoc', function ($user) {
             $allowedLevels = ['LVL250101001', 'LVL250101002']; // Admin dan NOC
             return in_array($user->user_level_id, $allowedLevels);
         });
+
+        // Kombinasi Gates
+        Gate::define('isAdminAndSales', function ($user) {
+            return in_array($user->user_level_id, ['LVL250101001', 'LVL250101003']);
+        });
+
+        Gate::define('isNocAndSales', function ($user) {
+            return in_array($user->user_level_id, ['LVL250101002', 'LVL250101003']);
+        });
+
+        Gate::define('isAdminAndKoor', function ($user) {
+            return in_array($user->user_level_id, ['LVL250101001', 'LVL241223002']);
+        });
+
+        Gate::define('isNocAndKoor', function ($user) {
+            return in_array($user->user_level_id, ['LVL250101002', 'LVL241223002']);
+        });
+
+        Gate::define('isSalesAndKoor', function ($user) {
+            return in_array($user->user_level_id, ['LVL250101003', 'LVL241223002']);
+        });
+
+        Gate::define('isAdminAndNocAndSales', function ($user) {
+            return in_array($user->user_level_id, ['LVL250101001', 'LVL250101002', 'LVL250101003']);
+        });
+
+        Gate::define('isAdminAndNocAndKoor', function ($user) {
+            return in_array($user->user_level_id, ['LVL250101001', 'LVL250101002', 'LVL241223002']);
+        });
+
+        Gate::define('isAdminAndSalesAndKoor', function ($user) {
+            return in_array($user->user_level_id, ['LVL250101001', 'LVL250101003', 'LVL241223002']);
+        });
+
+        Gate::define('isNocAndSalesAndKoor', function ($user) {
+            return in_array($user->user_level_id, ['LVL250101002', 'LVL250101003', 'LVL241223002']);
+        });
+
+        Gate::define('isAllLevels', function ($user) {
+            $allowedLevels = ['LVL250101001', 'LVL250101002', 'LVL250101003', 'LVL241223002'];
+            return in_array($user->user_level_id, $allowedLevels);
+        });
     }
+
 }

@@ -7,7 +7,7 @@
   <div class="bg-white shadow-[0_4px_12px_-5px_rgba(0,0,0,0.4)] p-6 max-w-screen-xl mx-auto rounded-lg overflow-hidden">
     <div class="container mx-auto px-4 py-8">
       <div class="flex justify-between">
-        <h2 class="text-2xl font-bold mb-6">Add Subs</h2>
+        <h2 class="text-2xl font-bold mb-6">Add Pelanggan</h2>
         <div>
 
           <a href="javascript:history.back()"
@@ -67,7 +67,7 @@
                   name="port"
                   class="w-full rounded-lg border py-2 px-3 dark:bg-gray-200 dark:text-gray-900 dark:border-gray-300">
               </div>
-         
+
             </div>
         </div>
 

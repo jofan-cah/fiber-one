@@ -69,7 +69,7 @@
              onclick="deleteOdc('${row.odc_id}')">
              <i class='bx bx-xs bx-trash'></i>
              </a>
-           
+
           </div>
           `;
           },
@@ -109,7 +109,7 @@ function deleteOdc(odcId) {
     // Tampilkan konfirmasi dengan SweetAlert2
     Swal.fire({
         title: 'Are you sure?',
-        text: `You won't be able to revert this! User ID: ${odcId}`,
+        text: `You won't be able to revert this! ODC ID: ${odcId}`,
         icon: 'warning',
         showCancelButton: true,
         confirmButtonColor: '#3085d6',
@@ -128,7 +128,7 @@ function deleteOdc(odcId) {
                 success: function(response) {
                     Swal.fire(
                         'Deleted!',
-                        `User ${odcId} has been deleted.`,
+                        `ODC ${odcId} has been deleted.`,
                         'success'
                     ).then(() => {
                         // Reload halaman atau perbarui data tabel

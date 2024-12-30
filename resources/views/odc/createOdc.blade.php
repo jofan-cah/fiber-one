@@ -72,7 +72,7 @@
                 <label for="parent_odc_id" class="block text-gray-700 dark:text-gray-800 mb-1">ODC Parent</label>
                 <select name="parent_odc_id" id="parent_odc_id"
                   class="w-full rounded-lg border py-2 px-3 dark:bg-gray-200 dark:text-gray-900 dark:border-gray-300">
-                  <option value="" disabled selected>Select ODC</option>
+                  <option value=""  selected>Select ODC</option>
                   @foreach($odcs as $odc)
                   <option value="{{ $odc->odc_id }}">{{ $odc->odc_name }}</option>
                   @endforeach
@@ -85,7 +85,7 @@
         </div>
 
         <div class="mt-8 flex justify-end">
-          <button type="submit"
+          <button type="submit"  id="submitButton"
             class="bg-teal-500 text-white px-4 py-2 rounded-lg hover:bg-teal-700 dark:bg-teal-600 dark:text-white dark:hover:bg-teal-700">Submit</button>
         </div>
         </form>
@@ -101,7 +101,7 @@
         e.preventDefault(); // Mencegah form disubmit secara default
 
         // Disable tombol submit dan ubah teksnya menjadi "Loading"
-        const submitButton = $(this).find('button[type="submit"]');
+        const submitButton = $('#submitButton');
         submitButton.prop('disabled', true).text('Loading...');
         // Mengambil data dari form
         var formData = $(this).serialize();
@@ -147,8 +147,13 @@
                         text: 'Something went wrong, please try again.', // Pesan fallback jika tidak ada error detail
                     });
                 }
+            },
+            complete: function() {
+                // Mengaktifkan kembali tombol submit setelah proses selesai
+                submitButton.prop('disabled', false).text('Submit');
             }
         });
+
     });
 });
 </script>

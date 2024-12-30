@@ -25,18 +25,28 @@ class AuthController extends Controller
             'username' => $validate['username'],
             'password' => $validate['password']
         ], $request->filled('remember'))) {
+            // Log aktivitas login sukses
+            logActivity('login', 'User logged in successfully', $request);
+
             return redirect()->intended('/');
         }
 
+        // Log aktivitas login gagal
+        logActivity('login_error', 'Failed login attempt for username: ' . $validate['username'], $request);
 
         return back()->with([
             'error' => 'Username atau Password Salah'
         ]);
     }
 
-    public function logout()
+
+    public function logout(Request $request)
     {
+        // Log aktivitas logout
+        logActivity('logout', 'User logged out successfully', $request);
+
         Auth::logout();
+
         return redirect()->route('login');
     }
 }

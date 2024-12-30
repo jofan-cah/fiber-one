@@ -6,7 +6,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <meta name="csrf-token" content="{{ csrf_token() }}">
-  <title>Dashboard</title>
+  <title>  @if (Request::route() && Request::route()->getPrefix())
+    {{ ucfirst(trim(Request::route()->getPrefix(), '/')) }} - @yield('title', 'FiberOne')
+@else
+    @yield('title', 'Dashboard')
+@endif</title>
+  <link rel="icon" href="{{ asset('imgfavicon.png')  }}" sizes="192x192" />
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://unpkg.com/@alpinejs/collapse@3.x.x/dist/cdn.min.js" defer></script>
   <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
@@ -88,7 +93,7 @@
         });
       });
 
-      
+
       let sidebarToggleBtn = document.getElementById('toggle-sidebar');
       let sidebarCollapseMenu = document.getElementById('sidebar-collapse-menu');
 

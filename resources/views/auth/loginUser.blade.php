@@ -6,6 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Login</title>
+  <link rel="icon" href="{{ asset('imgfavicon.png')  }}" sizes="192x192" />
   <link href="https://cdn.jsdelivr.net/npm/flowbite@2.5.2/dist/flowbite.min.css" rel="stylesheet" />
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://unpkg.com/@alpinejs/collapse@3.x.x/dist/cdn.min.js" defer></script>
@@ -56,7 +57,7 @@
       </div>
     </div>
   </section>
-  
+
   <!-- Menambahkan versi di bawah form login -->
   <footer class="absolute bottom-0 w-full text-center text-sm text-gray-500 dark:text-gray-400">
     <p>Uhuy Version 1.0.0</p>
@@ -69,7 +70,7 @@
 <script>
   document.addEventListener('DOMContentLoaded', () => {
       const closeButtons = document.querySelectorAll('[data-dismiss-target]');
-  
+
       closeButtons.forEach(button => {
         button.addEventListener('click', () => {
           const target = document.querySelector(button.getAttribute('data-dismiss-target'));
@@ -83,7 +84,7 @@
     document.getElementById('togglePassword').addEventListener('click', function () {
       const passwordInput = document.getElementById('passwordInput');
       const currentType = passwordInput.getAttribute('type');
-      
+
       // Toggle input type between 'password' and 'text'
       if (currentType === 'password') {
         passwordInput.setAttribute('type', 'text');

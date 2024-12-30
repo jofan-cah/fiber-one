@@ -64,10 +64,9 @@
                   <label for="port_{{ $index+1 }}" class="block text-gray-700 dark:text-gray-800 mb-1">Port {{ $index+1 }} - Status</label>
                   <select name="port_{{ $index+1 }}" id="port_{{ $index+1 }}"
                     class="w-full rounded-lg border py-2 px-3 dark:bg-gray-200 dark:text-gray-900 dark:border-gray-300">
-                    <option value="available" {{ $port->status == 'available' ? 'selected' : '' }}>Active</option>
-                    <option value="occupied" {{ $port->status == 'occupied' ? 'selected' : '' }}>Occupied</option>
-                    <option value="inactive" {{ $port->status == 'inactive' ? 'selected' : '' }}>Inactive</option>
-                  </select>
+                    <option value="enabled" {{ $port->status == 'enabled' ? 'selected' : '' }}>Enabled</option>
+                    <option value="disabled" {{ $port->status == 'disabled' ? 'selected' : '' }}>Disabled</option>
+                   </select>
                 </div>
                 <div class="mb-4">
                   <label for="directions_{{ $index+1 }}" class="block text-gray-700 dark:text-gray-800 mb-1">Port {{ $index+1 }} - Direction</label>
@@ -94,7 +93,7 @@
     $('#olt_port_capacity').on('input', function() {
       let portCapacity = $(this).val(); // Get the port capacity value
       let currentPortCount = $('#portFields').children().length;
-      
+
       if (portCapacity > currentPortCount) {
         // Add more port fields if needed
         for (let i = currentPortCount + 1; i <= portCapacity; i++) {

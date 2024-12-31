@@ -182,7 +182,7 @@
 
         @can('isAdminOrNoc')
         @php
-        $activeRoutes = ['subs', 'createSubs', 'editSubsById'];
+        $activeRoutes = ['subs', 'createSubs', 'editSubsById', 'indexSubs'];
         $isActive = in_array(Request::route()->getName(), $activeRoutes);
         @endphp
         <li>

@@ -357,6 +357,7 @@ class OltController extends Controller
             'odcs.childOdcs.odpss.port_odps'
         ])->get();
 
+
         $nodes = [];
         $edges = [];
 
@@ -415,6 +416,7 @@ class OltController extends Controller
                             'label' => $splitter ?
                                 "Splitter Port {$splitter->port_start}-{$splitter->port_end}" :
                                 "ODC to ODP"
+
                         ];
 
                         foreach ($odp->subs as $subs) {
@@ -447,6 +449,7 @@ class OltController extends Controller
                         'group' => 'ODP'
                     ];
 
+
                     if ($odp->odc_id == $odc->odc_id) {
                         $splitter = $odc->splitters
                             ->where('odp_id', $odp->odp_id)
@@ -460,6 +463,7 @@ class OltController extends Controller
                                 "ODC to ODP"
                         ];
                     }
+
 
                     foreach ($odp->subs as $subs) {
                         $nodes[] = [

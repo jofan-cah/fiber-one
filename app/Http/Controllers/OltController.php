@@ -476,12 +476,15 @@ class OltController extends Controller
                         $port_odp = $odp->port_odps
                             ->where('subs_id', $subs->subs_id)
                             ->first();
+                        $countPort = $odp->port_odps
+                        ->where('odp_id', $subs->odp_id)
+                        ->count();
 
                         $edges[] = [
                             'from' => "{$odp->odp_id}",
                             'to' => "{$subs->subs_id}",
                             'label' => $port_odp ?
-                                "Port {$port_odp->port_number}" :
+                                "Port  {$countPort} : {$port_odp->port_number}" :
                                 "ODP to Subs"
                         ];
                     }

@@ -6,6 +6,7 @@ use App\Models\Odc;
 use App\Models\Odp;
 use App\Models\Olt;
 use App\Models\Port;
+use App\Models\Splitter;
 use App\Models\Subscription;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -344,17 +345,21 @@ class OltController extends Controller
 
     public function getTopologyData()
     {
-        // Ambil data OLT dengan semua relasi terkait
-        // $olts = Olt::with(['ports.odcs.childOdcs.odpss.subs', 'odps.subs','ports'])->get();
-        $olts = Olt::with(['ports.odc.childOdcs.odpss.subs', 'odps.subs', 'ports'])->get();
 
-        // dd($olts);
+        // Update eager loading to include splitters
+        $olts = Olt::with([
+            'ports.odc.childOdcs.odpss.subs',
+            'odps.subs',
+            'ports',
+            'odcs.splitters', // Add splitters relation
+            'odcs.childOdcs.splitters', // Add splitters for child ODCs
+        ])->get();
+
 
         $nodes = [];
         $edges = [];
 
         foreach ($olts as $olt) {
-            // Node untuk OLT
             $nodes[] = [
                 'id' => "{$olt->olt_id}",
                 'label' => $olt->olt_name,
@@ -362,7 +367,6 @@ class OltController extends Controller
                 'splliter'=> $olt->olt_port_capacity
             ];
 
-            // ODC yang langsung terhubung ke OLT
             foreach ($olt->odcs as $odc) {
                 $nodes[] = [
                     'id' => "{$odc->odc_id}",
@@ -370,7 +374,6 @@ class OltController extends Controller
                     'group' => 'ODC'
                 ];
 
-                // Edge dari OLT ke ODC
                 foreach ($olt->ports as $port) {
                     if ($port->odc_id == $odc->odc_id) {
                         $edges[] = [
@@ -381,7 +384,6 @@ class OltController extends Controller
                     }
                 }
 
-                // ODC child
                 foreach ($odc->childOdcs as $childOdc) {
                     $nodes[] = [
                         'id' => "{$childOdc->odc_id}",
@@ -395,7 +397,6 @@ class OltController extends Controller
                         'label' => "ODC to ODC"
                     ];
 
-                    // ODP yang terhubung ke child ODC
                     foreach ($childOdc->odpss as $odp) {
                         $nodes[] = [
                             'id' => "{$odp->odp_id}",
@@ -403,13 +404,20 @@ class OltController extends Controller
                             'group' => 'ODP'
                         ];
 
+                        // Get splitter info from the loaded relation
+                        $splitter = $childOdc->splitters
+                            ->where('odp_id', $odp->odp_id)
+                            ->first();
+
                         $edges[] = [
                             'from' => "{$childOdc->odc_id}",
                             'to' => "{$odp->odp_id}",
-                            'label' => "ODC to ODP"
+                            'label' => $splitter ?
+                                "Splitter Port {$splitter->port_start}-{$splitter->port_end}" :
+                                "ODC to ODP"
+
                         ];
 
-                        // Subs yang terhubung ke ODP ini
                         foreach ($odp->subs as $subs) {
                             $nodes[] = [
                                 'id' => "{$subs->subs_id}",
@@ -426,7 +434,6 @@ class OltController extends Controller
                     }
                 }
 
-                // ODP yang terhubung ke ODC ini
                 foreach ($odc->odpss as $odp) {
                     $nodes[] = [
                         'id' => "{$odp->odp_id}",
@@ -434,13 +441,23 @@ class OltController extends Controller
                         'group' => 'ODP'
                     ];
 
-                    $edges[] = [
-                        'from' => "{$odc->odc_id}",
-                        'to' => "{$odp->odp_id}",
-                        'label' => "Splliter {$odc->odc_port_capacity}"
-                    ];
 
-                    // Subs yang terhubung ke ODP ini
+                    if ($odp->odc_id == $odc->odc_id) {
+                        // Get splitter info from the loaded relation
+                        $splitter = $odc->splitters
+                            ->where('odp_id', $odp->odp_id)
+                            ->first();
+
+                        $edges[] = [
+                            'from' => "{$odc->odc_id}",
+                            'to' => "{$odp->odp_id}",
+                            'label' => $splitter ?
+                                "Splitter {$splitter->port_start}:{$splitter->port_end}" :
+                                "ODC to ODP"
+                        ];
+                    }
+
+
                     foreach ($odp->subs as $subs) {
                         $nodes[] = [
                             'id' => "{$subs->subs_id}",

@@ -47,4 +47,10 @@ class Odc extends Model
     {
         return $this->hasMany(Port::class, 'odc_id');
     }
+
+      // Definisikan relasi ke model Splitter
+      public function splitters()
+      {
+          return $this->hasMany(Splitter::class, 'odc_id');
+      }
 }

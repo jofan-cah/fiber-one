@@ -7,7 +7,7 @@
   <div class="bg-white shadow-[0_4px_12px_-5px_rgba(0,0,0,0.4)] p-6 max-w-screen-xl mx-auto rounded-lg overflow-hidden">
     <div class="container mx-auto px-4 py-8">
       <div class="flex justify-between">
-        <h2 class="text-2xl font-bold mb-6">Edit Subs</h2>
+        <h2 class="text-2xl font-bold mb-6">Edit Pelanggan</h2>
         <div>
 
           <a href="javascript:history.back()"
@@ -63,13 +63,16 @@
               </div>
             </div>
             <div class="grid grid-cols-2 gap-4 mt-4">
-              <div>
-                <label for="port" class="block text-gray-700 dark:text-gray-800 mb-1">Port</label>
-                <input placeholder="Input Port" type="number" min="0" id="port"
-                  name="port" value="{{ $subs->port }}"
-                  class="w-full rounded-lg border py-2 px-3 dark:bg-gray-200 dark:text-gray-900 dark:border-gray-300">
-              </div>
-         
+
+                <div id="splitter-container" class="hidden">
+                    <label for="splitter_id" class="block text-gray-700 dark:text-gray-800 mb-1"> Pilih
+                        Port</label>
+                    <select name="splitter_id" id="splitter_id"
+                        class="w-full rounded-lg border py-2 px-3 dark:bg-gray-200 dark:text-gray-900 dark:border-gray-300">
+                        <option value="" disabled selected>Select Port</option>
+                    </select>
+                </div>
+
             </div>
         </div>
 
@@ -86,6 +89,57 @@
 
 <script>
   $(document).ready(function() {
+    $('#odp_id').on('change', function() {
+        var odcId = $(this).val();
+        console.log('Selected ODC ID:', odcId);
+
+        if (odcId) {
+            // Tampilkan div splitter setelah memilih ODC
+            $('#splitter-container').removeClass('hidden');
+
+            $.ajax({
+                url: '/odp/portOdps/' + odcId, // URL ke route splitterOdp
+                method: 'GET',
+                success: function(response) {
+                    var splitterSelect = $('#splitter_id');
+                    splitterSelect.empty(); // Hapus semua opsi sebelumnya
+
+                    // Tambahkan opsi pertama (Select Splitter)
+                    splitterSelect.append('<option value="" disabled selected>Select Port</option>');
+
+              // Tambahkan opsi splitter dari respons
+                response.forEach(function(splitter) {
+                    var option = $('<option></option>').attr('value', splitter.id).text(splitter.port_number);
+
+                    // Cek jika splitter.odp_id !== null dan disable opsi
+                    if (splitter.subs_id !== null && splitter.subs_id !== `{{ $subs->subs_id}}`) {
+                        option.prop('disabled', true);  // Menonaktifkan opsi jika odp_id tidak null
+                    }
+
+                    if (splitter.subs_id == `{{ $subs->subs_id}}`) {
+                        option.prop('selected', true);  // Menonaktifkan opsi jika odp_id tidak null
+                    }
+
+                    splitterSelect.append(option);
+                });
+
+                },
+                error: function(xhr, status, error) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: 'Something went wrong, please try again.',
+                    });
+                }
+            });
+        } else {
+            // Sembunyikan div splitter jika ODC tidak dipilih
+            $('#splitter-container').addClass('hidden');
+        }
+    });
+
+
+
     $('#userForm').on('submit', function(e) {
         e.preventDefault(); // Mencegah form disubmit secara default
 

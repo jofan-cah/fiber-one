@@ -41,10 +41,15 @@
 
             <div class="grid grid-cols-2 gap-4 mt-4">
               <div>
-                <label for="odc_port_capacity" class="block text-gray-700 dark:text-gray-800 mb-1">Port</label>
-                <input type="number" min="0" value="{{$odc->odc_port_capacity}}" name="odc_port_capacity"
-                  id="odc_port_capacity" placeholder="input port"
-                  class="w-full rounded-lg border py-2 px-3 dark:bg-gray-200 dark:text-gray-900 dark:border-gray-300">
+                <label for="odc_port_capacity" class="block text-gray-700 dark:text-gray-800 mb-1">Splitter ODC</label>
+                <select name="odc_port_capacity" id="odc_port_capacity"
+                    class="w-full rounded-lg border py-2 px-3 dark:bg-gray-200 dark:text-gray-900 dark:border-gray-300">
+                    <option value=""  selected  disabled>Splitter </option>
+                    <option value="2"{{$odc->odc_port_capacity == 2 ? 'selected' : ''}} >1 : 2 </option>
+                    <option value="4" {{$odc->odc_port_capacity == 4 ? 'selected' : ''}}  >1 : 4 </option>
+                    <option value="8"  {{$odc->odc_port_capacity == 8 ? 'selected' : ''}}>1 : 8 </option>
+                    <option value="16" {{$odc->odc_port_capacity == 16 ? 'selected' : ''}}  >1 : 16 </option>
+                </select>
               </div>
               <div>
                 <label for="odc_addres" class="block text-gray-700 dark:text-gray-800 mb-1">Address </label>

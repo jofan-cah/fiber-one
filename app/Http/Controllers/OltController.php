@@ -6,6 +6,7 @@ use App\Models\Odc;
 use App\Models\Odp;
 use App\Models\Olt;
 use App\Models\Port;
+use App\Models\PortOdps;
 use App\Models\Splitter;
 use App\Models\Subscription;
 use Illuminate\Http\Request;
@@ -345,13 +346,15 @@ class OltController extends Controller
 
     public function getTopologyData()
     {
-        // Update eager loading to include splitters
+        // Update eager loading to include port_odps
         $olts = Olt::with([
             'ports.odc.childOdcs.odpss.subs',
             'odps.subs',
             'ports',
-            'odcs.splitters', // Add splitters relation
-            'odcs.childOdcs.splitters', // Add splitters for child ODCs
+            'odcs.splitters',
+            'odcs.childOdcs.splitters',
+            'odcs.odpss.port_odps',
+            'odcs.childOdcs.odpss.port_odps'
         ])->get();
 
         $nodes = [];
@@ -402,7 +405,6 @@ class OltController extends Controller
                             'group' => 'ODP'
                         ];
 
-                        // Get splitter info from the loaded relation
                         $splitter = $childOdc->splitters
                             ->where('odp_id', $odp->odp_id)
                             ->first();
@@ -422,10 +424,17 @@ class OltController extends Controller
                                 'group' => 'Subs'
                             ];
 
+                            // Get port information from the loaded relation
+                            $port_odp = $odp->port_odps
+                                ->where('subs_id', $subs->subs_id)
+                                ->first();
+
                             $edges[] = [
                                 'from' => "{$odp->odp_id}",
                                 'to' => "{$subs->subs_id}",
-                                'label' => "ODP to Subs"
+                                'label' => $port_odp ?
+                                    "Port {$port_odp->port_number}" :
+                                    "ODP to Subs"
                             ];
                         }
                     }
@@ -439,7 +448,6 @@ class OltController extends Controller
                     ];
 
                     if ($odp->odc_id == $odc->odc_id) {
-                        // Get splitter info from the loaded relation
                         $splitter = $odc->splitters
                             ->where('odp_id', $odp->odp_id)
                             ->first();
@@ -460,10 +468,17 @@ class OltController extends Controller
                             'group' => 'Subs'
                         ];
 
+                        // Get port information from the loaded relation
+                        $port_odp = $odp->port_odps
+                            ->where('subs_id', $subs->subs_id)
+                            ->first();
+
                         $edges[] = [
                             'from' => "{$odp->odp_id}",
                             'to' => "{$subs->subs_id}",
-                            'label' => "ODP to Subs"
+                            'label' => $port_odp ?
+                                "Port {$port_odp->port_number}" :
+                                "ODP to Subs"
                         ];
                     }
                 }

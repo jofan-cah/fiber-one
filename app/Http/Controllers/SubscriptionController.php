@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Odp;
+use App\Models\PortOdps;
 use App\Models\Subscription;
 use Illuminate\Contracts\Validation\Rule;
 use Illuminate\Http\Request;
@@ -34,15 +35,21 @@ class SubscriptionController extends Controller
     // Menyimpan data subscription baru
     public function store(Request $request)
     {
-        $request->validate([
+        $validatedData = $request->validate([
             'subs_id' => 'required|string|unique:subscriptions',
             'subs_name' => 'required|string|max:255',
             'subs_location_maps' => 'required|string',
             'odp_id' => 'required|string|exists:odps,odp_id',
-            'port' => 'required',
+            'splitter_id' => 'required',
         ]);
 
         $data = Subscription::create($request->all());
+        if ($validatedData['splitter_id']) {
+            $portODCtoOLT = PortOdps::find($validatedData['splitter_id']);
+            $portODCtoOLT->subs_id = $validatedData['subs_id'];
+            $portODCtoOLT->save();
+        }
+
         logActivity('create', Auth::user()->full_name .' Created a new Pelanggan with ID: ' . $request->subs_id);
 
         return response()->json(['message' => 'Subs created successfully', 'data' => $data], 201);

@@ -40,9 +40,16 @@
 
             <div class="grid grid-cols-2 gap-4 mt-4">
               <div>
-                <label for="odp_port_capacity" class="block text-gray-700 dark:text-gray-800 mb-1">Port</label>
-                <input type="number" min="0" name="odp_port_capacity" id="odp_port_capacity" placeholder="input port"
-                  class="w-full rounded-lg border py-2 px-3 dark:bg-gray-200 dark:text-gray-900 dark:border-gray-300">
+                <label for="odp_port_capacity" class="block text-gray-700 dark:text-gray-800 mb-1">Splitter Odp</label>
+                <select name="odp_port_capacity" id="odp_port_capacity"
+                    class="w-full rounded-lg border py-2 px-3 dark:bg-gray-200 dark:text-gray-900 dark:border-gray-300">
+                    <option value=""  selected  disabled>Splitter Odp </option>
+                    <option value="2"  >1 : 2 </option>
+                    <option value="4"  >1 : 4 </option>
+                    <option value="8"  >1 : 8 </option>
+                    <option value="16"  >1 : 16 </option>
+                </select>
+
               </div>
               <div>
                 <label for="odp_addres" class="block text-gray-700 dark:text-gray-800 mb-1">Address </label>
@@ -58,7 +65,7 @@
               </div>
 
               <div>
-                <label for="odc_id" class="block text-gray-700 dark:text-gray-800 mb-1"> Select ODC</label>
+                <label for="odc_id" class="block text-gray-700 dark:text-gray-800 mb-1">  ODC</label>
                 <select name="odc_id" id="odc_id"
                   class="w-full rounded-lg border py-2 px-3 dark:bg-gray-200 dark:text-gray-900 dark:border-gray-300">
                   <option value="" disabled selected>Select ODC</option>
@@ -84,13 +91,13 @@
               </div>
 
                <!-- Input Splitter yang akan muncul setelah memilih ODC -->
-              <div id="splitter-container" class="hidden">
-                <label for="splitter_id" class="block text-gray-700 dark:text-gray-800 mb-1">Select Splitter</label>
-                <select name="splitter_id" id="splitter_id"
-                    class="w-full rounded-lg border py-2 px-3 dark:bg-gray-200 dark:text-gray-900 dark:border-gray-300">
-                    <option value="" disabled selected>Select Splitter</option>
-                </select>
-            </div>
+                <div id="splitter-container" class="hidden">
+                    <label for="splitter_id" class="block text-gray-700 dark:text-gray-800 mb-1"> Splitter ODC</label>
+                    <select name="splitter_id" id="splitter_id"
+                        class="w-full rounded-lg border py-2 px-3 dark:bg-gray-200 dark:text-gray-900 dark:border-gray-300">
+                        <option value="" disabled selected>Select Splitter</option>
+                    </select>
+                </div>
             </div>
 </div>
 

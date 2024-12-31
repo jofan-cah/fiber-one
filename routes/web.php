@@ -90,6 +90,7 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('/splitter/{id}', [OdpController::class, 'splitterOdp'])->name('splitterOdp');
         Route::put('/update/{id}', [OdpController::class, 'update'])->name('updateOdp');
         Route::get('/edit/{id}', [OdpController::class, 'show'])->name('editOdpById');
+        Route::get('/portOdps/{id}', [OdpController::class, 'portOdps'])->name('portOdps');
         Route::post('/', [OdpController::class, 'store'])->name('storeOdp');
         Route::delete('/{id}', [OdpController::class, 'destroy'])->name('destroyOdp');
     });

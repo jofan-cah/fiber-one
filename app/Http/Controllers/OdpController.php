@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Odc;
 use App\Models\Odp;
 use App\Models\Olt;
-use App\Models\POrtOdps;
+use App\Models\PortOdps;
 use App\Models\Splitter;
 use App\Models\Subscription;
 use Illuminate\Http\Request;

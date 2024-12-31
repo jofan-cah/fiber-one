@@ -85,7 +85,21 @@
                   @endforeach
                 </select>
               </div>
+              <div  >
+                <label for="port_number" class="block text-gray-700 dark:text-gray-800 mb-1">PON</label>
+                <select name="port_number" id="port_number"
+                    class="w-full rounded-lg border py-2 px-3 dark:bg-gray-200 dark:text-gray-900 dark:border-gray-300">
+                    <option value=""  selected  disabled>PON </option>
+                    @foreach ($ports as $port )
 
+                    <option value="{{ $port->id }}" {{ $port->odc_id == $odc->odc_id ? 'selected' : '' }}>
+                        {{ $port->port_number }}</option>
+
+                    @endforeach
+
+                </select>
+
+              </div>
 
 
             </div>
@@ -104,6 +118,20 @@
 
 <script>
   $(document).ready(function() {
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     $('#userForm').on('submit', function(e) {
         e.preventDefault(); // Mencegah form disubmit secara default
       // Disable tombol submit dan ubah teksnya menjadi "Loading"

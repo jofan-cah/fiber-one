@@ -20,7 +20,7 @@ class SubscriptionController extends Controller
     }
     public function getAllData()
     {
-        $subscriptions = Subscription::all();
+        $subscriptions = Subscription::with('odp')->get();
         return response()->json($subscriptions);
     }
 

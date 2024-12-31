@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Odc;
 use App\Models\Odp;
 use App\Models\Olt;
+use App\Models\Port;
 use App\Models\Splitter;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -45,6 +46,12 @@ class OdcController extends Controller
         return view('odc.createOdc', compact('olts', 'odcs'));
     }
 
+    public function getPorts($id)
+    {
+        $ports = Port::where('olt_id', $id)->get();
+        return response()->json($ports);
+    }
+
     // Menampilkan detail Odp berdasarkan ID
     public function show($id)
     {
@@ -55,7 +62,10 @@ class OdcController extends Controller
         $odcs = Odc::all();
         $olts = Olt::all();
 
-        return view('odc.editOdc', compact('odc', 'olts', 'odcs'));
+        $ports = Port::where('olt_id', $odc->olt_id)->get();
+        // dd($ports);
+
+        return view('odc.editOdc', compact('odc', 'olts', 'odcs','ports'));
     }
 
     public function showOdc($id)
@@ -89,6 +99,7 @@ class OdcController extends Controller
             'olt_id' => 'nullable|exists:olts,olt_id',
             'odc_port_capacity' => 'required|integer|min:1',
             'parent_odc_id' => 'nullable|string',
+            'port_number' => 'required|string',
         ]);
 
         $OdpId = $this->generateOdcId();
@@ -103,10 +114,18 @@ class OdcController extends Controller
             'parent_odc_id' => $validatedData['parent_odc_id'] ?? null,
         ]);
 
+
+        if ($validatedData['port_number']) {
+            $portODCtoOLT = Port::find($validatedData['port_number']);
+            $portODCtoOLT->odc_id = $OdpId;
+            $portODCtoOLT->save();
+        }
+
+
         for ($i = 1; $i <= $validatedData['odc_port_capacity']; $i++) {
             Splitter::create([
                 'odc_id' =>   $OdpId,
-                'port_start' => 1,
+                'port_start' => $validatedData['odc_port_capacity'],
                 'port_end' => $i,
                 'port_number' => $i,
                 'direction' => 'Arah ODP '
@@ -137,7 +156,15 @@ class OdcController extends Controller
             'olt_id' => 'nullable|exists:olts,olt_id',
             'odc_port_capacity' => 'required|integer|min:1',
             'parent_odc_id' => 'nullable|string',
+            'port_number' => 'required|string',
         ]);
+
+        if ($validatedData['port_number']) {
+            $portODCtoOLT = Port::find($validatedData['port_number']);
+            $portODCtoOLT->odc_id = $id;
+            $portODCtoOLT->save();
+        }
+
 
         $Odp->update([
             'odc_name' => $validatedData['odc_name'],
@@ -148,6 +175,7 @@ class OdcController extends Controller
             'odc_port_capacity' => $validatedData['odc_port_capacity'],
             'parent_odc_id' => $validatedData['parent_odc_id'] ?? null,
         ]);
+
 
         logActivity('update', Auth::user()->full_name .' Updated a new ODC with ID: ' . $id);
 

@@ -49,7 +49,7 @@
         columns: [
             { data: 'subs_id' },
             { data: 'subs_name' },
-            { data: 'odp_name' },
+            { data: 'odp.odp_name' },
 
            {
           data: null,

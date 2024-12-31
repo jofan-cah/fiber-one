@@ -345,6 +345,7 @@ class OltController extends Controller
 
     public function getTopologyData()
     {
+
         // Update eager loading to include splitters
         $olts = Olt::with([
             'ports.odc.childOdcs.odpss.subs',
@@ -353,6 +354,7 @@ class OltController extends Controller
             'odcs.splitters', // Add splitters relation
             'odcs.childOdcs.splitters', // Add splitters for child ODCs
         ])->get();
+
 
         $nodes = [];
         $edges = [];
@@ -413,6 +415,7 @@ class OltController extends Controller
                             'label' => $splitter ?
                                 "Splitter Port {$splitter->port_start}-{$splitter->port_end}" :
                                 "ODC to ODP"
+
                         ];
 
                         foreach ($odp->subs as $subs) {
@@ -438,6 +441,7 @@ class OltController extends Controller
                         'group' => 'ODP'
                     ];
 
+
                     if ($odp->odc_id == $odc->odc_id) {
                         // Get splitter info from the loaded relation
                         $splitter = $odc->splitters
@@ -452,6 +456,7 @@ class OltController extends Controller
                                 "ODC to ODP"
                         ];
                     }
+
 
                     foreach ($odp->subs as $subs) {
                         $nodes[] = [

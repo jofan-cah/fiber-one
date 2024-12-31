@@ -127,7 +127,7 @@ class OdpController extends Controller
 
         // Menambahkan port sesuai dengan jumlah yang diberikan
             for ($i = 1; $i <= $validatedData['odp_port_capacity']; $i++) {
-                POrtOdps::create([
+                PortOdps::create([
                     'odp_id' => $OdpId,
                     'port_number' => $i, // Nomor port yang berurutan
                     'is_available' => true, // Status awal port yang tersedia

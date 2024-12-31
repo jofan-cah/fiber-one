@@ -61,4 +61,9 @@ class Odp extends Model
         return $this->subscriptions()->where('subs_id', $subscriptionId)->first()->port;
     }
 
+    public function port_odps()
+    {
+        return $this->hasMany(PortOdps::class, 'odp_id');
+    }
+
 }

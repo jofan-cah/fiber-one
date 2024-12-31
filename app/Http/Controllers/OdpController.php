@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Odc;
 use App\Models\Odp;
 use App\Models\Olt;
+use App\Models\POrtOdps;
 use App\Models\Splitter;
 use App\Models\Subscription;
 use Illuminate\Http\Request;
@@ -124,6 +125,16 @@ class OdpController extends Controller
             'parent_odp_id' => $validatedData['parent_odp_id'] ?? null,
         ]);
 
+        // Menambahkan port sesuai dengan jumlah yang diberikan
+            for ($i = 1; $i <= $validatedData['odp_port_capacity']; $i++) {
+                POrtOdps::create([
+                    'odp_id' => $OdpId,
+                    'port_number' => $i, // Nomor port yang berurutan
+                    'is_available' => true, // Status awal port yang tersedia
+                ]);
+            }
+
+
         Splitter::where('id', $request->splitter_id)->update(['odp_id' => $Odp->odp_id]);
         logActivity('create', Auth::user()->full_name .' Created a new ODP with ID: ' . $OdpId);
 
@@ -190,5 +201,17 @@ class OdpController extends Controller
     {
         $OdpId = 'ODP-' . rand(1000, 9999);
         return $OdpId;
+    }
+
+
+    public function portOdps($id)
+    {
+        // if (Gate::denies('isAdminOrNoc')) {
+        //     abort(403, 'Unauthorized action.');
+        // }
+
+        $portOdps = PortOdps::where('odp_id', $id)->get();
+
+        return response()->json($portOdps);
     }
 }

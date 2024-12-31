@@ -101,6 +101,7 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('/{id}', [OdcController::class, 'showOdc'])->name('showOdc');
         Route::put('/update/{id}', [OdcController::class, 'update'])->name('updateOdc');
         Route::get('/edit/{id}', [OdcController::class, 'show'])->name('editOdcById');
+        Route::get('/getPorts/{id}', [OdcController::class, 'getPorts'])->name('getPorts');
         Route::post('/', [OdcController::class, 'store'])->name('storeOdc');
         Route::delete('/{id}', [OdcController::class, 'destroy'])->name('destroyOdc');
     });

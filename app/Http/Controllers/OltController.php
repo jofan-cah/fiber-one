@@ -345,7 +345,9 @@ class OltController extends Controller
     public function getTopologyData()
     {
         // Ambil data OLT dengan semua relasi terkait
-        $olts = Olt::with(['odcs.childOdcs.odpss.subs', 'odps.subs','ports'])->get();
+        // $olts = Olt::with(['ports.odcs.childOdcs.odpss.subs', 'odps.subs','ports'])->get();
+        $olts = Olt::with(['ports.odc.childOdcs.odpss.subs', 'odps.subs', 'ports'])->get();
+
         // dd($olts);
 
         $nodes = [];
@@ -368,12 +370,16 @@ class OltController extends Controller
                     'group' => 'ODC'
                 ];
 
-                $edges[] = [
-                    'from' => "{$olt->olt_id}",
-                    'to' => "{$odc->odc_id}",
-                    'label' => "PON $olt->olt_port_capacity"
-
-                ];
+                // Edge dari OLT ke ODC
+                foreach ($olt->ports as $port) {
+                    if ($port->odc_id == $odc->odc_id) {
+                        $edges[] = [
+                            'from' => "{$olt->olt_id}",
+                            'to' => "{$odc->odc_id}",
+                            'label' => "PON {$port->port_number}"
+                        ];
+                    }
+                }
 
                 // ODC child
                 foreach ($odc->childOdcs as $childOdc) {
@@ -401,7 +407,6 @@ class OltController extends Controller
                             'from' => "{$childOdc->odc_id}",
                             'to' => "{$odp->odp_id}",
                             'label' => "ODC to ODP"
-
                         ];
 
                         // Subs yang terhubung ke ODP ini
@@ -432,7 +437,7 @@ class OltController extends Controller
                     $edges[] = [
                         'from' => "{$odc->odc_id}",
                         'to' => "{$odp->odp_id}",
-                        'label' =>"Splliter $odc->odc_port_capacity"
+                        'label' => "Splliter {$odc->odc_port_capacity}"
                     ];
 
                     // Subs yang terhubung ke ODP ini

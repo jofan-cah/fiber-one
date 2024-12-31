@@ -38,9 +38,16 @@
 
             <div class="grid grid-cols-2 gap-4 mt-4">
               <div>
-                <label for="odc_port_capacity" class="block text-gray-700 dark:text-gray-800 mb-1">Port</label>
-                <input type="number" min="0" name="odc_port_capacity" id="odc_port_capacity" placeholder="input port"
-                  class="w-full rounded-lg border py-2 px-3 dark:bg-gray-200 dark:text-gray-900 dark:border-gray-300">
+                <label for="odc_port_capacity" class="block text-gray-700 dark:text-gray-800 mb-1">Splitter</label>
+                <select name="odc_port_capacity" id="odc_port_capacity"
+                    class="w-full rounded-lg border py-2 px-3 dark:bg-gray-200 dark:text-gray-900 dark:border-gray-300">
+                    <option value=""  selected  disabled>Splitter </option>
+                    <option value="2"  >1 : 2 </option>
+                    <option value="4"  >1 : 4 </option>
+                    <option value="8"  >1 : 8 </option>
+                    <option value="16"  >1 : 16 </option>
+                </select>
+
               </div>
               <div>
                 <label for="odc_addres" class="block text-gray-700 dark:text-gray-800 mb-1">Address </label>
@@ -79,7 +86,15 @@
                 </select>
               </div>
 
+              <div  id="odc-container" class="hidden">
+                <label for="port_number" class="block text-gray-700 dark:text-gray-800 mb-1">PON</label>
+                <select name="port_number" id="port_number"
+                    class="w-full rounded-lg border py-2 px-3 dark:bg-gray-200 dark:text-gray-900 dark:border-gray-300">
+                    <option value=""  selected  disabled>PON </option>
 
+                </select>
+
+              </div>
 
             </div>
         </div>
@@ -97,6 +112,64 @@
 
 <script>
   $(document).ready(function() {
+    // var odcId = $('#parent_odc_id').val();
+    // console.log('ODC ID:', odcId);
+
+
+    $('#olt_id').on('change', function() {
+    var odcId = $(this).val();
+    console.log('Selected ODC ID:', odcId);
+
+    if (odcId) {
+        // Tampilkan div ODC jika ODC dipilih
+        $('#odc-container').removeClass('hidden');
+
+        // Panggil AJAX untuk mendapatkan data splitter
+        $.ajax({
+            url: '/odc/getPorts/' + odcId, // URL ke route splitterOdp
+            method: 'GET',
+            success: function(response) {
+                var portSelect = $('#port_number');
+                portSelect.empty(); // Hapus semua opsi sebelumnya
+
+                // Tambahkan opsi pertama (Select PON)
+                portSelect.append('<option value="" disabled selected>Select PON</option>');
+
+                // Tambahkan opsi berdasarkan respons
+                response.forEach(function(port) {
+                    var option = $('<option></option>')
+                        .attr('value', port.id)
+                        .text('No Pon :' + port.port_number + ' |  Status : ' + port.status);
+
+                    // Disable opsi jika port.odp_id !== null
+                    if (port.odp_id !== null) {
+                        option.prop('disabled', true);
+                    }
+
+                    portSelect.append(option);
+                });
+            },
+            error: function(xhr, status, error) {
+                console.error('Error fetching PON data:', error);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Something went wrong, please try again.',
+                });
+            }
+        });
+    } else {
+        // Sembunyikan div ODC jika tidak ada ODC yang dipilih
+        $('#odc-container').addClass('hidden');
+    }
+});
+
+
+
+
+
+
+
     $('#userForm').on('submit', function(e) {
         e.preventDefault(); // Mencegah form disubmit secara default
 

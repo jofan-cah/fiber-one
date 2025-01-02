@@ -97,6 +97,7 @@ class OltController extends Controller
                 'olt_port_capacity' => 'required|integer|min:1',
                 'ports' => 'required|array', // Validasi array ports
                 'directions' => 'required|array', // Validasi array directions
+                'type_olt' => 'required',
             ]);
 
             // Pastikan jumlah ports dan directions sama
@@ -115,6 +116,7 @@ class OltController extends Controller
                 'olt_location_maps' => $validatedData['olt_location_maps'],
                 'olt_addres' => $validatedData['olt_addres'],
                 'olt_port_capacity' => $validatedData['olt_port_capacity'],
+                'type_olt' => $validatedData['type_olt'],
             ]);
 
             // Loop untuk menyimpan data ports dan directions
@@ -156,6 +158,7 @@ class OltController extends Controller
             'olt_port_capacity' => 'required|integer|min:0',
             'ports' => 'required|array',
             'directions' => 'required|array',
+            'type_olt' => 'required',
         ]);
 
         try {
@@ -167,6 +170,7 @@ class OltController extends Controller
             $olt->olt_location_maps = $request->olt_location_maps;
             $olt->olt_addres = $request->olt_addres;
             $olt->olt_port_capacity = $request->olt_port_capacity;
+            $olt->type_olt = $request->type_olt;
             $olt->save();
 
             // Update port data

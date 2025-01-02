@@ -19,7 +19,8 @@ class Olt extends Model
         'olt_description',
         'olt_location_maps',
         'olt_addres',
-        'olt_port_capacity'
+        'olt_port_capacity',
+        'type_olt'
     ];
 
     // Relasi ke ODC

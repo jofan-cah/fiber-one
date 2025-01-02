@@ -18,7 +18,9 @@ class Subscription extends Model
         'subs_name',
         'subs_location_maps',
         'odp_id',
-        'port'
+        'port',
+        'sn',
+        'type_modem',
     ];
 
     public function odp()

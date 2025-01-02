@@ -67,6 +67,24 @@
                                     </select>
                                 </div>
                             </div>
+
+                            <div class="grid grid-cols-2 gap-4 mt-4">
+                                <div>
+                                    <label for="sn" class="block text-gray-700 dark:text-gray-800 mb-1">SN
+                                        Modem</label>
+                                    <input placeholder="input SN Modem" value="{{ $subs->sn }}"
+                                        class="w-full rounded-lg border py-2 px-3 dark:bg-gray-200 dark:text-gray-900 dark:border-gray-300"
+                                        type="text" name="sn" id="sn">
+                                </div>
+                                <div>
+                                    <label for="type_modem" class="block text-gray-700 dark:text-gray-800 mb-1">Type
+                                        Modem</label>
+                                    <input placeholder="input type modem" value="{{ $subs->type_modem }}"
+                                        class="w-full rounded-lg border py-2 px-3 dark:bg-gray-200 dark:text-gray-900 dark:border-gray-300"
+                                        type="text" name="type_modem" id="type_modem">
+                                </div>
+
+                            </div>
                             <div class="grid grid-cols-2 gap-4 mt-4">
 
                                 <div id="splitter-container" class="hidden">
@@ -122,12 +140,14 @@
                                 if (splitter.subs_id !== null && splitter.subs_id !==
                                     `{{ $subs->subs_id }}`) {
                                     option.prop('disabled',
-                                    true); // Menonaktifkan opsi jika odp_id tidak null
+                                        true
+                                        ); // Menonaktifkan opsi jika odp_id tidak null
                                 }
 
                                 if (splitter.subs_id == `{{ $subs->subs_id }}`) {
                                     option.prop('selected',
-                                    true); // Menonaktifkan opsi jika odp_id tidak null
+                                        true
+                                        ); // Menonaktifkan opsi jika odp_id tidak null
                                 }
 
                                 splitterSelect.append(option);
@@ -156,7 +176,7 @@
                 // Mengambil data dari form
                 var formData = $(this).serialize();
                 var userId = $('#subs_id')
-            .val(); // Ambil ID user dari form (pastikan input ini ada di form)
+                    .val(); // Ambil ID user dari form (pastikan input ini ada di form)
 
                 $.ajax({
                     url: '/subs/update/' + userId, // Route dengan ID user

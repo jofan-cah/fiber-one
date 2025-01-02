@@ -63,7 +63,21 @@
                                     </select>
                                 </div>
                             </div>
+
                             <div class="grid grid-cols-2 gap-4 mt-4">
+                                <div>
+                                    <label for="sn" class="block text-gray-700 dark:text-gray-800 mb-1">SN Modem</label>
+                                    <input placeholder="input SN Modem" class="w-full rounded-lg border py-2 px-3 dark:bg-gray-200 dark:text-gray-900 dark:border-gray-300" type="text" name="sn" id="sn">
+                                </div>
+                                <div>
+                                    <label for="type_modem"  class="block text-gray-700 dark:text-gray-800 mb-1">Type Modem</label>
+                                    <input placeholder="input type modem" class="w-full rounded-lg border py-2 px-3 dark:bg-gray-200 dark:text-gray-900 dark:border-gray-300" type="text" name="type_modem" id="type_modem">
+                                </div>
+
+                            </div>
+                            <div class="grid grid-cols-2 gap-4 mt-4">
+
+
 
                                 <div id="splitter-container" class="hidden">
                                     <label for="splitter_id" class="block text-gray-700 dark:text-gray-800 mb-1"> Pilih

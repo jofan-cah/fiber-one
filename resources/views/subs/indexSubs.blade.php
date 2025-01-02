@@ -26,7 +26,7 @@
               <th class="p-4 text-left text-sm font-semibold text-white">Pelangan ID</th>
               <th class="p-4 text-left text-sm font-semibold text-white">Pelangan Name</th>
               <th class="p-4 text-left text-sm font-semibold text-white">Nama Odp</th>
-              {{-- <th class="p-4 text-left text-sm font-semibold text-white">Address</th> --}}
+              <th class="p-4 text-left text-sm font-semibold text-white">Route</th>
               <th class="p-4 text-left text-sm font-semibold text-white">Actions</th>
             </tr>
           </thead>

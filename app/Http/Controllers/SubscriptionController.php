@@ -22,7 +22,7 @@ class SubscriptionController extends Controller
     }
     public function getAllData()
     {
-        $subscriptions = Subscription::with('odp')->get();
+        $subscriptions = Subscription::with('odp.odc.olt')->get();
         return response()->json($subscriptions);
     }
 
@@ -44,7 +44,9 @@ class SubscriptionController extends Controller
                 'subs_name' => 'required|string|max:255',
                 'subs_location_maps' => 'required|string',
                 'odp_id' => 'required|string|exists:odps,odp_id',
-                'splitter_id' => 'required|exists:port_odps,id', // Pastikan splitter_id valid
+                'splitter_id' => 'required|exists:port_odps,id', // Pastikan splitter_id valid,
+                'sn' => 'required|string',
+                'type_modem'=> 'required|string',
             ]);
 
             // Buat data baru di tabel Subscription
@@ -53,6 +55,8 @@ class SubscriptionController extends Controller
                 'subs_name' => $validatedData['subs_name'],
                 'subs_location_maps' => $validatedData['subs_location_maps'],
                 'odp_id' => $validatedData['odp_id'],
+                'sn'=> $validatedData['sn'],
+                'type_modem'=> $validatedData['type_modem'],
             ]);
 
             // Update splitter jika splitter_id tersedia
@@ -96,11 +100,12 @@ class SubscriptionController extends Controller
             'subs_name' => 'required|string|max:255',
             'subs_location_maps' => 'required|string',
             'odp_id' => 'required|string|exists:odps,odp_id',
+            'sn' => 'required|string',
+            'type_modem'=> 'required|string',
             'subs_id' => [
                 'required',
                 ValidationRule::unique('subscriptions', 'subs_id')->ignore($subscription->subs_id, 'subs_id'),
             ],
-            'port' => 'required',
         ]);
 
         // Update the subscription

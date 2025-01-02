@@ -20,8 +20,12 @@ class SubscriptionController extends Controller
         $subscriptions = Subscription::all();
         return view('subs.indexSubs', compact('subscriptions'));
     }
-    public function getAllData()
+    public function getAllData(Request $request)
     {
+        // harus request Ajax
+        if (!$request->ajax()) {
+            return abort(403, 'Forbidden');
+        };
         $subscriptions = Subscription::with('odp.odc.olt')->get();
         return response()->json($subscriptions);
     }

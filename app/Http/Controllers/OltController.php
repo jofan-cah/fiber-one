@@ -54,9 +54,10 @@ class OltController extends Controller
     {
         // Ambil data Olt berdasarkan ID dan relasi Ports
         $olt = Olt::with('ports')->find($id);
+        $odcs = Odc::where('olt_id', $id)->get();
 
         if (!$olt) {
-            return redirect()->route('olts.index')->with('error', 'OLT tidak ditemukan');
+            return redirect()->route('indexOlt')->with('error', 'OLT tidak ditemukan');
         }
 
         // Hitung jumlah port berdasarkan status
@@ -64,7 +65,7 @@ class OltController extends Controller
         $occupiedPorts = $olt->ports->where('status', 'occupied')->count();
         $inactivePorts = $olt->ports->where('status', 'inactive')->count();
 
-        return view('olt.showOlt', compact('olt', 'availablePorts', 'occupiedPorts', 'inactivePorts'));
+        return view('olt.showOlt', compact('olt', 'availablePorts', 'occupiedPorts', 'inactivePorts','odcs'));
     }
     // Menampilkan detail OLT berdasarkan ID
     public function show($id)

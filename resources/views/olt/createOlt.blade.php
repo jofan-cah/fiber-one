@@ -57,6 +57,15 @@
                   class="w-full rounded-lg border py-2 px-3 dark:bg-gray-200 dark:text-gray-900 dark:border-gray-300">
               </div>
 
+              <div>
+                <label for="type_olt" class="block text-gray-700 dark:text-gray-800 mb-1">Type OLT</label>
+                <select name="type_olt" id="type_olt"
+                  class="w-full rounded-lg border py-2 px-3 dark:bg-gray-200 dark:text-gray-900 dark:border-gray-300">
+                  <option value="GPON">GPON</option>
+                  <option value="EPON">EPON</option>
+                </select>
+              </div>
+
             </div>
         </div>
            <!-- Port Dynamic Inputs -->
@@ -135,10 +144,13 @@
             olt_description: $('#olt_description').val(),
             olt_location_maps: $('#olt_location_maps').val(),
             olt_addres: $('#olt_addres').val(),
+            type_olt: $('#type_olt').val(),
             olt_port_capacity: portCapacity,
             'ports[]': ports,  // Array data
             'directions[]': directions
         };
+
+        console.log(formData);
 
 
 
@@ -149,10 +161,12 @@
       url: '{{ route('storeOlt') }}', // Ubah dengan route yang sesuai
       method: 'POST',
       data: formData,
+
       headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             },
       success: function(response) {
+        console.log(formData),
         Swal.fire({
           icon: 'success',
           title: 'Success!',

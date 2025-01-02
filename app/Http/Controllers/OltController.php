@@ -72,8 +72,8 @@ class OltController extends Controller
         if (Gate::denies('isAdminOrNoc')) {
             abort(403, 'Unauthorized action.');
         }
-      // Find the OLT and eager load related ports
-      $olt = Olt::with('ports')->find($id);
+        // Find the OLT and eager load related ports
+        $olt = Olt::with('ports')->find($id);
 
         // dd($olt);
 
@@ -82,52 +82,67 @@ class OltController extends Controller
     // Menyimpan data OLT baru
     public function store(Request $request)
     {
-        // Validasi data
-        $validatedData = $request->validate([
-            'olt_name' => 'required|string|max:255',
-            'olt_description' => 'nullable|string',
-            'olt_location_maps' => 'nullable|string',
-            'olt_addres' => 'nullable|string',
-            'olt_port_capacity' => 'required|integer|min:1',
-            'ports' => 'array', // Validasi array ports
-            'directions' => 'array', // Validasi array directions
-        ]);
 
-      // Loop untuk menyimpan data port
-        $ports = $validatedData['ports'];
-        $directions = $validatedData['directions'];
-
-        // Pastikan data ports dan directions memiliki jumlah yang sama
-        if (count($ports) !== count($directions)) {
-            return response()->json(['error' => 'Ports and directions count mismatch'], 400);
+        if (Gate::denies('isAdminOrNoc')) {
+            abort(403, 'Unauthorized action.');
         }
+        DB::beginTransaction(); // Memulai transaction
+        try {
+            // Validasi data
+            $validatedData = $request->validate([
+                'olt_name' => 'required|string|max:255',
+                'olt_description' => 'nullable|string',
+                'olt_location_maps' => 'nullable|string',
+                'olt_addres' => 'nullable|string',
+                'olt_port_capacity' => 'required|integer|min:1',
+                'ports' => 'required|array', // Validasi array ports
+                'directions' => 'required|array', // Validasi array directions
+            ]);
 
-        $oltid = $this->generateOltId();
-        // Proses pembuatan OLT
-        $olt = Olt::create([
-            'olt_id' => $oltid,
-            'olt_name' => $validatedData['olt_name'],
-            'olt_description' => $validatedData['olt_description'],
-            'olt_location_maps' => $validatedData['olt_location_maps'],
-            'olt_addres' => $validatedData['olt_addres'],
-            'olt_port_capacity' => $validatedData['olt_port_capacity'],
-        ]);
+            // Pastikan jumlah ports dan directions sama
+            if (count($validatedData['ports']) !== count($validatedData['directions'])) {
+                return response()->json(['error' => 'Ports and directions count mismatch'], 400);
+            }
 
-        // Simpan data port dan description sesuai dengan capacity
+            // Generate OLT ID
+            $oltId = $this->generateOltId();
 
+            // Buat data OLT
+            $olt = Olt::create([
+                'olt_id' => $oltId,
+                'olt_name' => $validatedData['olt_name'],
+                'olt_description' => $validatedData['olt_description'],
+                'olt_location_maps' => $validatedData['olt_location_maps'],
+                'olt_addres' => $validatedData['olt_addres'],
+                'olt_port_capacity' => $validatedData['olt_port_capacity'],
+            ]);
 
-       foreach ($request->ports as $index => $status) {
-        $port = $olt->ports()->updateOrCreate(
-            ['port_number' => $index + 1],
-            ['status' => $status, 'directions' => $request->directions[$index]]
-        );
+            // Loop untuk menyimpan data ports dan directions
+            foreach ($validatedData['ports'] as $index => $status) {
+                $olt->ports()->updateOrCreate(
+                    ['port_number' => $index + 1],
+                    [
+                        'status' => $status,
+                        'directions' => $validatedData['directions'][$index],
+                    ]
+                );
+            }
 
+            // Log aktivitas
+            logActivity('create', Auth::user()->full_name . ' Created a new OLT with ID: ' . $oltId);
 
-        logActivity('create', Auth::user()->full_name .' Created a new OLT with ID: ' . $oltid);
+            DB::commit(); // Commit transaction jika semua berhasil
+            return response()->json(['message' => 'OLT created successfully', 'data' => $olt], 201);
+
+        } catch (\Exception $e) {
+            DB::rollBack(); // Rollback jika terjadi error
+            return response()->json([
+                'error' => 'Something went wrong',
+                'message' => $e->getMessage(),
+            ], 500);
+        }
     }
 
-        return response()->json(['message' => 'OLT created successfully', 'data' => $olt], 201);
-    }
 
 
     // Memperbarui data OLTuse Illuminate\Support\Facades\Log;
@@ -158,12 +173,14 @@ class OltController extends Controller
             foreach ($request->ports as $index => $status) {
                 $port = $olt->ports()->updateOrCreate(
                     ['port_number' => $index + 1],
-                    ['status' => $status,
-                     'directions' => $request->directions[$index]]
+                    [
+                        'status' => $status,
+                        'directions' => $request->directions[$index]
+                    ]
                 );
             }
 
-            logActivity('update', Auth::user()->full_name .' Updated a new OLT with ID: ' . $id);
+            logActivity('update', Auth::user()->full_name . ' Updated a new OLT with ID: ' . $id);
 
             return response()->json(['message' => 'Data has been updated successfully.'], 200);
         } catch (\Exception $e) {
@@ -185,7 +202,7 @@ class OltController extends Controller
         }
 
         $olt->delete();
-        logActivity('delete', Auth::user()->full_name .' Deleted a new OLT with ID: ' . $id);
+        logActivity('delete', Auth::user()->full_name . ' Deleted a new OLT with ID: ' . $id);
         return response()->json(['message' => 'OLT deleted successfully']);
     }
 
@@ -366,7 +383,7 @@ class OltController extends Controller
                 'id' => "{$olt->olt_id}",
                 'label' => $olt->olt_name,
                 'group' => 'OLT',
-                'splliter'=> $olt->olt_port_capacity
+                'splliter' => $olt->olt_port_capacity
             ];
 
             foreach ($olt->odcs as $odc) {
@@ -477,8 +494,8 @@ class OltController extends Controller
                             ->where('subs_id', $subs->subs_id)
                             ->first();
                         $countPort = $odp->port_odps
-                        ->where('odp_id', $subs->odp_id)
-                        ->count();
+                            ->where('odp_id', $subs->odp_id)
+                            ->count();
 
                         $edges[] = [
                             'from' => "{$odp->odp_id}",

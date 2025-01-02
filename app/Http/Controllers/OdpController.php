@@ -10,6 +10,7 @@ use App\Models\Splitter;
 use App\Models\Subscription;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 
 class OdpController extends Controller
@@ -94,38 +95,42 @@ class OdpController extends Controller
         return view('odp.editOdp', compact('odp', 'odcs', 'odps'));
     }
 
-
     public function store(Request $request)
     {
         if (Gate::denies('isAdminOrNoc')) {
             abort(403, 'Unauthorized action.');
         }
-        $validatedData = $request->validate([
-            'odp_name' => 'required|string|max:255',
-            'odp_description' => 'nullable|string',
-            'odp_location_maps' => 'nullable|string',
-            'odp_addres' => 'nullable|string',
-            'parent_odp_id' => 'nullable|string',
-            'odc_id' => 'nullable|exists:odcs,odc_id', // Pastikan `odc_id` valid di tabel `odcs`
-            'odp_port_capacity' => 'required|integer|min:1',
-        ]);
 
-        // Generate ID untuk ODP
-        $OdpId = $this->generateOdpId();
+        DB::beginTransaction(); // Memulai transaction
+        try {
+            // Validasi data
+            $validatedData = $request->validate([
+                'odp_name' => 'required|string|max:255',
+                'odp_description' => 'nullable|string',
+                'odp_location_maps' => 'nullable|string',
+                'odp_addres' => 'nullable|string',
+                'parent_odp_id' => 'nullable|string',
+                'odc_id' => 'nullable|exists:odcs,odc_id', // Pastikan `odc_id` valid di tabel `odcs`
+                'odp_port_capacity' => 'required|integer|min:1',
+                'splitter_id' => 'required|exists:splitters,id', // Validasi bahwa splitter_id valid di tabel splitters
+            ]);
 
-        // Buat data baru di tabel ODP
-        $Odp = Odp::create([
-            'odp_id' => $OdpId,
-            'odp_name' => $validatedData['odp_name'],
-            'odp_description' => $validatedData['odp_description'],
-            'odp_location_maps' => $validatedData['odp_location_maps'],
-            'odp_addres' => $validatedData['odp_addres'],
-            'odc_id' => $validatedData['odc_id'] ?? null,
-            'odp_port_capacity' => $validatedData['odp_port_capacity'],
-            'parent_odp_id' => $validatedData['parent_odp_id'] ?? null,
-        ]);
+            // Generate ID untuk ODP
+            $OdpId = $this->generateOdpId();
 
-        // Menambahkan port sesuai dengan jumlah yang diberikan
+            // Buat data baru di tabel ODP
+            $Odp = Odp::create([
+                'odp_id' => $OdpId,
+                'odp_name' => $validatedData['odp_name'],
+                'odp_description' => $validatedData['odp_description'],
+                'odp_location_maps' => $validatedData['odp_location_maps'],
+                'odp_addres' => $validatedData['odp_addres'],
+                'odc_id' => $validatedData['odc_id'] ?? null,
+                'odp_port_capacity' => $validatedData['odp_port_capacity'],
+                'parent_odp_id' => $validatedData['parent_odp_id'] ?? null,
+            ]);
+
+            // Menambahkan port sesuai dengan jumlah yang diberikan
             for ($i = 1; $i <= $validatedData['odp_port_capacity']; $i++) {
                 PortOdps::create([
                     'odp_id' => $OdpId,
@@ -134,12 +139,24 @@ class OdpController extends Controller
                 ]);
             }
 
+            // Update splitter untuk menghubungkan ke ODP yang baru
+            Splitter::where('id', $validatedData['splitter_id'])->update(['odp_id' => $Odp->odp_id]);
 
-        Splitter::where('id', $request->splitter_id)->update(['odp_id' => $Odp->odp_id]);
-        logActivity('create', Auth::user()->full_name .' Created a new ODP with ID: ' . $OdpId);
+            // Log aktivitas
+            logActivity('create', Auth::user()->full_name . ' Created a new ODP with ID: ' . $OdpId);
 
-        return response()->json(['message' => 'Odp created successfully', 'data' => $Odp], 201);
+            DB::commit(); // Commit transaction jika semua berhasil
+            return response()->json(['message' => 'ODP created successfully', 'data' => $Odp], 201);
+
+        } catch (\Exception $e) {
+            DB::rollBack(); // Rollback transaction jika terjadi error
+            return response()->json([
+                'error' => 'Something went wrong',
+                'message' => $e->getMessage()
+            ], 500);
+        }
     }
+
 
 
     public function update(Request $request, $id)

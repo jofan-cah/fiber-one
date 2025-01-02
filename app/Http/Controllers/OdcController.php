@@ -9,6 +9,7 @@ use App\Models\Port;
 use App\Models\Splitter;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 
 class OdcController extends Controller
@@ -91,49 +92,69 @@ class OdcController extends Controller
         if (Gate::denies('isAdminOrNoc')) {
             abort(403, 'Unauthorized action.');
         }
-        $validatedData = $request->validate([
-            'odc_name' => 'required|string|max:255',
-            'odc_description' => 'nullable|string',
-            'odc_location_maps' => 'nullable|string',
-            'odc_addres' => 'nullable|string',
-            'olt_id' => 'nullable|exists:olts,olt_id',
-            'odc_port_capacity' => 'required|integer|min:1',
-            'parent_odc_id' => 'nullable|string',
-            'port_number' => 'required|string',
-        ]);
 
-        $OdpId = $this->generateOdcId();
-        $Odp = Odc::create([
-            'odc_id' => $OdpId,
-            'odc_name' => $validatedData['odc_name'],
-            'odc_description' => $validatedData['odc_description'],
-            'odc_location_maps' => $validatedData['odc_location_maps'],
-            'odc_addres' => $validatedData['odc_addres'],
-            'olt_id' => $validatedData['olt_id'] ?? null, // Tetapkan null jika tidak ada
-            'odc_port_capacity' => $validatedData['odc_port_capacity'],
-            'parent_odc_id' => $validatedData['parent_odc_id'] ?? null,
-        ]);
-
-
-        if ($validatedData['port_number']) {
-            $portODCtoOLT = Port::find($validatedData['port_number']);
-            $portODCtoOLT->odc_id = $OdpId;
-            $portODCtoOLT->save();
-        }
-
-
-        for ($i = 1; $i <= $validatedData['odc_port_capacity']; $i++) {
-            Splitter::create([
-                'odc_id' =>   $OdpId,
-                'port_start' => $validatedData['odc_port_capacity'],
-                'port_end' => $i,
-                'port_number' => $i,
-                'direction' => 'Arah ODP '
+        DB::beginTransaction(); // Memulai transaction
+        try {
+            // Validasi data
+            $validatedData = $request->validate([
+                'odc_name' => 'required|string|max:255',
+                'odc_description' => 'nullable|string',
+                'odc_location_maps' => 'nullable|string',
+                'odc_addres' => 'nullable|string',
+                'olt_id' => 'nullable|exists:olts,olt_id',
+                'odc_port_capacity' => 'required|integer|min:1',
+                'parent_odc_id' => 'nullable|string',
+                'port_number' => 'required|string',
             ]);
-        }
-        logActivity('create', Auth::user()->full_name .' Created a new ODC with ID: ' . $OdpId);
 
-        return response()->json(['message' => 'Odp created successfully', 'data' => $Odp], 201);
+            // Generate ID dan buat data ODC
+            $OdpId = $this->generateOdcId();
+            $Odp = Odc::create([
+                'odc_id' => $OdpId,
+                'odc_name' => $validatedData['odc_name'],
+                'odc_description' => $validatedData['odc_description'],
+                'odc_location_maps' => $validatedData['odc_location_maps'],
+                'odc_addres' => $validatedData['odc_addres'],
+                'olt_id' => $validatedData['olt_id'] ?? null,
+                'odc_port_capacity' => $validatedData['odc_port_capacity'],
+                'parent_odc_id' => $validatedData['parent_odc_id'] ?? null,
+            ]);
+
+            // Update port ODC to OLT
+            if ($validatedData['port_number']) {
+                $portODCtoOLT = Port::find($validatedData['port_number']);
+                if ($portODCtoOLT) {
+                    $portODCtoOLT->odc_id = $OdpId;
+                    $portODCtoOLT->save();
+                } else {
+                    throw new \Exception('Port number not found.');
+                }
+            }
+
+            // Buat splitter
+            for ($i = 1; $i <= $validatedData['odc_port_capacity']; $i++) {
+                Splitter::create([
+                    'odc_id' => $OdpId,
+                    'port_start' => $validatedData['odc_port_capacity'],
+                    'port_end' => $i,
+                    'port_number' => $i,
+                    'direction' => 'Arah ODP '
+                ]);
+            }
+
+            // Log aktivitas
+            logActivity('create', Auth::user()->full_name . ' Created a new ODC with ID: ' . $OdpId);
+
+            DB::commit(); // Commit transaction jika semua berhasil
+            return response()->json(['message' => 'ODC created successfully', 'data' => $Odp], 201);
+
+        } catch (\Exception $e) {
+            DB::rollBack(); // Rollback transaction jika terjadi error
+            return response()->json([
+                'error' => 'Something went wrong',
+                'message' => $e->getMessage()
+            ], 500);
+        }
     }
 
     // Memperbarui data Odpuse Illuminate\Support\Facades\Log;

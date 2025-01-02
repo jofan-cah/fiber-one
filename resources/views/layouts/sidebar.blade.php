@@ -211,6 +211,13 @@
             <span>Log</span>
             </a>
         </li>
+        <li>
+            <a href="{{route('adminLogs')}}"
+            class="menu-item  {{Request::route()->getName() == 'adminLogs' ? 'text-green-700 bg-[#d9f3ea]' : 'text-gray-800'}}  text-sm flex items-center cursor-pointer  hover:bg-[#d9f3ea] rounded-md px-3 py-3 transition-all duration-300">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" class="mr-4" height="18"  viewBox="0 0 24 24" style="fill: rgba(0, 0, 0, 1);transform: ;msFilter:;"><path d="M4 6h2v2H4zm0 5h2v2H4zm0 5h2v2H4zm16-8V6H8.023v2H18.8zM8 11h12v2H8zm0 5h12v2H8z"></path></svg>
+            <span>Paket </span>
+            </a>
+        </li>
         @endcan
 
 

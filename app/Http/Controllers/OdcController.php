@@ -77,13 +77,15 @@ class OdcController extends Controller
         // Ambil data OLT berdasarkan olt_id
         $odc = Odc::find($id);
 
+        $odps = Odp::where('odc_id', $odc->odc_id)->get();
+
         $odp = Odp::where('odc_id', $odc->odc_id)->get();
 
         // Hitung jumlah port yang sudah digunakan
         $usedPorts = $odp->count();
         $availablePorts = $odc->odc_port_capacity - $usedPorts;
 
-        return view('odc.showOdc', compact('odc', 'availablePorts'));
+        return view('odc.showOdc', compact('odc', 'availablePorts','odps'));
     }
 
     // Menyimpan data Odp baru

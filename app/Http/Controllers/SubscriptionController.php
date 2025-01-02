@@ -8,6 +8,7 @@ use App\Models\Subscription;
 use Illuminate\Contracts\Validation\Rule;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule as ValidationRule;
 
 class SubscriptionController extends Controller
@@ -35,25 +36,46 @@ class SubscriptionController extends Controller
     // Menyimpan data subscription baru
     public function store(Request $request)
     {
-        $validatedData = $request->validate([
-            'subs_id' => 'required|string|unique:subscriptions',
-            'subs_name' => 'required|string|max:255',
-            'subs_location_maps' => 'required|string',
-            'odp_id' => 'required|string|exists:odps,odp_id',
-            'splitter_id' => 'required',
-        ]);
+        DB::beginTransaction(); // Memulai transaction
+        try {
+            // Validasi data
+            $validatedData = $request->validate([
+                'subs_id' => 'required|string|unique:subscriptions',
+                'subs_name' => 'required|string|max:255',
+                'subs_location_maps' => 'required|string',
+                'odp_id' => 'required|string|exists:odps,odp_id',
+                'splitter_id' => 'required|exists:port_odps,id', // Pastikan splitter_id valid
+            ]);
 
-        $data = Subscription::create($request->all());
-        if ($validatedData['splitter_id']) {
+            // Buat data baru di tabel Subscription
+            $data = Subscription::create([
+                'subs_id' => $validatedData['subs_id'],
+                'subs_name' => $validatedData['subs_name'],
+                'subs_location_maps' => $validatedData['subs_location_maps'],
+                'odp_id' => $validatedData['odp_id'],
+            ]);
+
+            // Update splitter jika splitter_id tersedia
             $portODCtoOLT = PortOdps::find($validatedData['splitter_id']);
-            $portODCtoOLT->subs_id = $validatedData['subs_id'];
-            $portODCtoOLT->save();
+            if ($portODCtoOLT) {
+                $portODCtoOLT->update(['subs_id' => $validatedData['subs_id']]);
+            }
+
+            // Log aktivitas
+            logActivity('create', Auth::user()->full_name . ' Created a new Pelanggan with ID: ' . $validatedData['subs_id']);
+
+            DB::commit(); // Commit transaction jika semua berhasil
+            return response()->json(['message' => 'Subscription created successfully', 'data' => $data], 201);
+
+        } catch (\Exception $e) {
+            DB::rollBack(); // Rollback jika terjadi error
+            return response()->json([
+                'error' => 'Something went wrong',
+                'message' => $e->getMessage(),
+            ], 500);
         }
-
-        logActivity('create', Auth::user()->full_name .' Created a new Pelanggan with ID: ' . $request->subs_id);
-
-        return response()->json(['message' => 'Subs created successfully', 'data' => $data], 201);
     }
+
 
     // Menampilkan form untuk mengedit subscription
     public function show($subs_id)

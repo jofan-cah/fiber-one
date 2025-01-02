@@ -117,7 +117,8 @@
                                 // Cek jika splitter.odp_id !== null dan disable opsi
                                 if (splitter.subs_id !== null) {
                                     option.prop('disabled',
-                                    true); // Menonaktifkan opsi jika odp_id tidak null
+                                        true
+                                        ); // Menonaktifkan opsi jika odp_id tidak null
                                 }
 
                                 splitterSelect.append(option);
@@ -158,7 +159,7 @@
                         }).then((result) => {
                             // Redirect ke route indexUsers setelah alert ditutup
                             window.location.href =
-                            '/subs'; // Ubah dengan route yang sesuai
+                                '/subs'; // Ubah dengan route yang sesuai
                         });
                     },
                     error: function(xhr, status, error) {
@@ -186,6 +187,8 @@
                                 text: 'Something went wrong, please try again.', // Pesan fallback jika tidak ada error detail
                             });
                         }
+                        // Mengaktifkan tombol submit kembali jika terjadi error
+                        submitButton.prop('disabled', false).text('Submit');
                     }
                 });
             });

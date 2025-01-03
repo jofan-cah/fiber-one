@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Odp;
+use App\Models\Paket;
 use App\Models\PortOdps;
 use App\Models\Subscription;
 use Illuminate\Contracts\Validation\Rule;
@@ -34,7 +35,8 @@ class SubscriptionController extends Controller
     public function create()
     {
         $odps = Odp::all();
-        return view('subs.createSubs', compact('odps'));
+        $pakets = Paket::all();
+        return view('subs.createSubs', compact('odps', 'pakets'));
     }
 
     // Menyimpan data subscription baru
@@ -51,6 +53,7 @@ class SubscriptionController extends Controller
                 'splitter_id' => 'required|exists:port_odps,id', // Pastikan splitter_id valid,
                 'sn' => 'required|string',
                 'type_modem'=> 'required|string',
+                'pakets_id' => 'required',
             ]);
 
             // Buat data baru di tabel Subscription
@@ -61,6 +64,7 @@ class SubscriptionController extends Controller
                 'odp_id' => $validatedData['odp_id'],
                 'sn'=> $validatedData['sn'],
                 'type_modem'=> $validatedData['type_modem'],
+                'pakets_id' => $validatedData['pakets_id'],
             ]);
 
             // Update splitter jika splitter_id tersedia
@@ -90,7 +94,8 @@ class SubscriptionController extends Controller
     {
         $subs = Subscription::findOrFail($subs_id);
         $odps = Odp::all();
-        return view('subs.editSubs', compact('subs', 'odps'));
+        $pakets = Paket::all();
+        return view('subs.editSubs', compact('subs', 'odps', 'pakets'));
     }
 
     // Memperbarui data subscription
@@ -110,6 +115,7 @@ class SubscriptionController extends Controller
                 'required',
                 ValidationRule::unique('subscriptions', 'subs_id')->ignore($subscription->subs_id, 'subs_id'),
             ],
+            'pakets_id' => 'required',
         ]);
 
         // Update the subscription

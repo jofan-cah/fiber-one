@@ -9,6 +9,7 @@ use App\Http\Controllers\UserLevelController;
 use App\Http\Controllers\OltController;
 use App\Http\Controllers\OdpController;
 use App\Http\Controllers\OdcController;
+use App\Http\Controllers\PaketController;
 use App\Http\Controllers\SubscriptionController;
 use App\Http\Controllers\UncoverageController;
 use App\Models\Odc;
@@ -45,7 +46,6 @@ Route::group(['middleware' => ['auth']], function () {
         Route::put('/update/{id}', [UserController::class, 'update'])->name('updateUsers');
         Route::get('/editProfile/{id}', [UserController::class, 'showbyID'])->name('showbyID');
         Route::put('/editProfile/{id}', [UserController::class, 'updateByID'])->name('editProfile');
-
         Route::delete('/{id}', [UserController::class, 'destroy'])->name('destroyUsers');
     });
 
@@ -129,6 +129,17 @@ Route::group(['middleware' => ['auth']], function () {
 
         Route::get('/topology', [OltController::class, 'topology'])->name('topology');
         Route::get('/topology-data', [OltController::class, 'getTopologyData'])->name('topologyData');
+    });
+
+
+    Route::prefix('paket')->group(function () {
+        Route::get('/', [PaketController::class, 'index'])->name('indexPaket'); // Menampilkan semua paket
+        Route::get('/getAllData', [PaketController::class, 'getAllData'])->name('getAllDataPaket'); // Menampilkan semua paket
+        Route::get('/create', [PaketController::class, 'create'])->name('createPaket'); // Menampilkan semua paket
+        Route::post('/storePaket', [PaketController::class, 'store'])->name('storePaket'); // Menyimpan paket baru
+        Route::delete('{id}', [PaketController::class, 'destroy']); // Menghapus paket
+        Route::put('/update/{id}', [PaketController::class, 'update'])->name('updatePaket'); // Mengupdate paket
+        Route::get('/edit/{id}', [PaketController::class, 'show'])->name('editPaketById'); // Menampilkan paket berdasarkan ID
     });
 
     Route::get('/admin/logs', [ActivityLogController::class, 'index'])->name('adminLogs');

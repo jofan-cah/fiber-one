@@ -21,6 +21,7 @@ class Subscription extends Model
         'port',
         'sn',
         'type_modem',
+        'pakets_id'
     ];
 
     public function odp()
@@ -31,4 +32,11 @@ class Subscription extends Model
     {
         return $this->belongsTo(Port::class, 'port');
     }
+    public function paket()
+    {
+        return $this->belongsTo(Paket::class, 'pakets_id');
+    }
+
+    // Menentukan bahwa model Paket memiliki banyak Subscription
+
 }

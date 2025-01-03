@@ -16,6 +16,8 @@
         @yield('title', 'Dashboard')
     @endif
 </title>
+<script src="https://cdn.jsdelivr.net/npm/alpinejs@2.8.2/dist/alpine.min.js" defer></script>
+
   <link rel="icon" href="{{ asset('imgfavicon.png')  }}" sizes="192x192" />
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://unpkg.com/@alpinejs/collapse@3.x.x/dist/cdn.min.js" defer></script>

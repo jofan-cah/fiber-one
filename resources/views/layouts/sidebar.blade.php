@@ -4,7 +4,7 @@
     <div class="pt-8 pb-2 px-6 sticky top-0 bg-slate-100 min-h-[80px] z-[100]">
       <a href="javascript:void(0)" class="outline-none">
         <img
-          src="{{ asset('fiberOne.png') }}" loading="lazy"  alt="logo"
+          src="{{ asset('download.svg') }}" loading="lazy"  alt="logo"
           class='w-[170px]' />
       </a>
     </div>
